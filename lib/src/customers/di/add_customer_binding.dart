@@ -25,7 +25,7 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut(() => CreateCustomerUseCase(repository: Get.find()));
 
-    Get.lazyPut(() => AddCustomerController(
+    Get.lazyReplace(() => AddCustomerController(
       getTypesDocumentUseCase: Get.find(),
       createCustomerUseCase: Get.find(),
     ),);

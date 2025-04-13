@@ -48,6 +48,8 @@ class LoansPage extends StatelessWidget {
     required LoanEntity loan,
   }) {
     return ListTile(
+      onTap: ()=> controller.goToDetail(loan),
+      leading: Text('${loan.id}'),
       title: Text(loan.formatTitle),
       subtitle: Text(loan.customerEntity?.fullName ?? emptyString),
       trailing: Text(loan.date.formatDMMYYY() ?? emptyString),

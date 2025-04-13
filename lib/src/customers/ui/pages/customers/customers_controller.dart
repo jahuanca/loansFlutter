@@ -10,6 +10,7 @@ class CustomersController extends GetxController {
 
   GetCustomersUseCase getCustomersUseCase;
   List<CustomerEntity> customers = [];
+  bool validando = false;
 
   CustomersController({
     required this.getCustomersUseCase,
@@ -22,6 +23,8 @@ class CustomersController extends GetxController {
   }
 
   Future<void> getCustomers() async {
+    validando = true;
+    update([validandoIdGet]);
     ResultType<List<CustomerEntity>, ErrorEntity> resultType = await getCustomersUseCase.execute();
     if(resultType is Success){
       customers = resultType.data as List<CustomerEntity>;
@@ -31,11 +34,12 @@ class CustomersController extends GetxController {
         typeSnackbar: TypeSnackbar.error, 
         message: 'Ocurrio un error');
     }
-    update([pageIdGet]);
+    validando = false;
+    update([pageIdGet, validandoIdGet]);
   }
 
   void goToAddCustomer(){
-    Get.to(()=> const AddCustomerPage(), binding: AddCustomerBinding());
+    Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
   }
 
   

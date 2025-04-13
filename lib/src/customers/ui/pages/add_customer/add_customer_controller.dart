@@ -11,6 +11,7 @@ class AddCustomerController extends GetxController {
   CreateCustomerUseCase createCustomerUseCase;
 
   List<TypeDocumentEntity> typesDocument = [];
+  TypeDocumentEntity? typeDocumentSelected;
   bool isLoading = false;
   CreateCustomerRequest createCustomerRequest = CreateCustomerRequest();
   ValidateResult? validateDocument,
@@ -32,12 +33,11 @@ class AddCustomerController extends GetxController {
   void getTypesDocument() async {
     isLoading = true;
     update([validandoIdGet]);
-
     ResultType<List<TypeDocumentEntity>, ErrorEntity> resultType =
         await getTypesDocumentUseCase.execute();
     if (resultType is Success) {
       typesDocument = resultType.data as List<TypeDocumentEntity>;
-      update(['typesDocument']);
+      if(typesDocument.isNotEmpty) onChangedTypeDocument(typesDocument.first.id);
     } else {
       ErrorEntity errorEntity = resultType.error as ErrorEntity;
       showSnackbarWidget(
@@ -50,7 +50,12 @@ class AddCustomerController extends GetxController {
   }
 
   void onChangedTypeDocument(dynamic value) {
-    createCustomerRequest.idTypeDocument = value;
+    int index = typesDocument.indexWhere((e) => e.id == value,);
+    if(index != notFoundPosition){
+      typeDocumentSelected = typesDocument[index];
+      createCustomerRequest.idTypeDocument = value;
+    }
+    update(['typesDocument']);
   }
 
   void onChangedDocument(String value) {
@@ -58,9 +63,7 @@ class AddCustomerController extends GetxController {
         rules: {RuleValidator.isRequired: true},
         text: value,
         label: 'Documento');
-
-    if (validateDocument!.hasError) {
-    } else {
+    if (validateDocument!.hasError.not()) {
       createCustomerRequest.document = validateDocument?.value;
     }
     update();

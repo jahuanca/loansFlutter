@@ -13,25 +13,32 @@ class CustomersPage extends StatelessWidget {
 
     final Size size = MediaQuery.sizeOf(context);
 
-    return GetBuilder<CustomersController>(
-      init: Get.find<CustomersController>(),
-      id: pageIdGet,
-      builder: (controller)=> Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: controller.goToAddCustomer,
-          child: const Icon(Icons.add),
+    return Stack(
+      children: [
+        GetBuilder<CustomersController>(
+          init: Get.find<CustomersController>(),
+          id: pageIdGet,
+          builder: (controller)=> Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: controller.goToAddCustomer,
+              child: const Icon(Icons.add),
+            ),
+            appBar: appBarWidget(
+              text: 'Clientes',
+              hasArrowBack: true,
+            ),
+            body: ListView.builder(
+              itemCount: controller.customers.length,
+              itemBuilder: (context, index) => _item(
+                size: size,
+                index: index, customer: controller.customers[index],
+              ),),
+          ),
         ),
-        appBar: appBarWidget(
-          text: 'Clientes',
-          hasArrowBack: true,
-        ),
-        body: ListView.builder(
-          itemCount: controller.customers.length,
-          itemBuilder: (context, index) => _item(
-            size: size,
-            index: index, customer: controller.customers[index],
-          ),),
-      ),
+        GetBuilder<CustomersController>(
+          id: validandoIdGet,
+          builder: (controller) => LoadingWidget(show: controller.validando),)
+      ],
     );
   }
 
