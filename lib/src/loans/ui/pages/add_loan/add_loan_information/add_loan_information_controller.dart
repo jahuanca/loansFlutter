@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_home/add_loan_home_controller.dart';
+import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
+import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencies_use_case.dart';
@@ -28,8 +30,6 @@ class AddLoanInformationController extends GetxController {
   TextEditingController ganancyTextController = TextEditingController();
   TextEditingController startDateTextController = TextEditingController();
 
-  get contentController => Get.find<AddLoanHomeController>();
-
   ValidateResult? startDateValidationResult,
       idCustomerValidationResult,
       idFrequencyValidationResult,
@@ -50,15 +50,11 @@ class AddLoanInformationController extends GetxController {
   }
 
   void getData() async {
-    contentController.validando = true;
-    contentController.update([validandoIdGet]);
     await Future.wait([
       getCustomers(),
       getPaymentFrecuencies(),
       getMethodsPayment(),
     ]);
-    contentController.validando = false;
-    contentController.update([validandoIdGet]);
   }
 
   Future<void> getCustomers() async {
@@ -120,7 +116,7 @@ class AddLoanInformationController extends GetxController {
     }
   }
 
-  void onChangedMethods(dynamic value) {
+  void onChangedMethodsPayment(dynamic value) {
     idMethodValidationResult =
         validateText(text: value, label: 'Método de pago', rules: {
       RuleValidator.isRequired: true,
@@ -131,7 +127,7 @@ class AddLoanInformationController extends GetxController {
     if (index != notFoundPosition) {
       methodSelected = methods[index];
       addLoanRequest.paymentMethodEntity = methodSelected;
-      addLoanRequest.idPaymenyMethod = idMethodValidationResult?.value;
+      addLoanRequest.idPaymentMethod = idMethodValidationResult?.value;
     }
   }
 
@@ -202,18 +198,48 @@ class AddLoanInformationController extends GetxController {
     onChangedFrequency(addLoanRequest.idPaymentFrequency);
     onChangedPercentage(addLoanRequest.percentage.toString());
     onChangeAmount(addLoanRequest.amount.toString());
-    onChangedMethods(addLoanRequest.idPaymenyMethod);
+    onChangedMethodsPayment(addLoanRequest.idPaymentMethod);
 
     if (startDateValidationResult!.hasError) return startDateValidationResult!;
-    if (idCustomerValidationResult!.hasError)
+    if (idCustomerValidationResult!.hasError) {
       return idCustomerValidationResult!;
-    if (idFrequencyValidationResult!.hasError)
+    }
+    if (idFrequencyValidationResult!.hasError) {
       return idFrequencyValidationResult!;
-    if (percentageValidationResult!.hasError)
+    }
+    if (percentageValidationResult!.hasError) {
       return percentageValidationResult!;
+    }
     if (amountValidationResult!.hasError) return amountValidationResult!;
     if (idMethodValidationResult!.hasError) return idMethodValidationResult!;
 
     return ValidateResult(error: null, hasError: false, value: addLoanRequest);
+  }
+
+  void goNext() {
+    ValidateResult resultInformation = validate();
+    if (resultInformation.hasError) {
+      showSnackbarWidget(
+          context: Get.overlayContext!,
+          typeSnackbar: TypeSnackbar.error,
+          message: resultInformation.error ?? emptyString);
+      return;
+    }
+    addLoanRequest = resultInformation.value as AddLoanRequest;
+    Get.to(
+      ()=> AddLoanQuotasPage(), 
+      transition: Transition.noTransition,
+      opaque: false,
+      binding: AddLoanQuotasBinding(),
+    arguments: {
+      addLoanRequestArgument: addLoanRequest,
+    });
+  }
+
+  void goBack() async {
+    bool? result = await showDialogWidget(context: Get.context!, message: '¿Está seguro de salir de la creación?');
+    if (result.orFalse()) {
+      Get.back();
+    }
   }
 }

@@ -1,0 +1,18 @@
+
+import 'package:loands_flutter/src/home/data/responses/dashboard_summary_response.dart';
+import 'package:loands_flutter/src/home/domain/repositories/dashboard_repository.dart';
+import 'package:utils/utils.dart';
+
+class GetSummaryDasboardUseCase {
+
+  DashboardRepository repository;
+
+  GetSummaryDasboardUseCase({
+    required this.repository
+  });
+
+  Future<ResultType<DashboardSummaryResponse, ErrorEntity>> execute() async {
+    return repository.getSummary();
+  }
+
+}

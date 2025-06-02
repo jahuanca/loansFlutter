@@ -7,7 +7,9 @@ import 'package:utils/utils.dart';
 class LoansPage extends StatelessWidget {
   LoansPage({super.key});
 
-  final LoansController controller = Get.find<LoansController>();
+  final LoansController controller = LoansController(
+    getLoansUseCase: Get.find(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -16,29 +18,32 @@ class LoansPage extends StatelessWidget {
     return GetBuilder<LoansController>(
       init: controller,
       id: pageIdGet,
-      builder: (controller) => Stack(
-        children: [
-          Scaffold(
-            appBar: appBarWidget(
-              text: 'Créditos',
-              hasArrowBack: true,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: controller.goToAddLoanHome,
-              child: const Icon(Icons.add),
-            ),
-            body: ListView.builder(
-              itemCount: controller.loans.length,
-              itemBuilder: (context, index) => _item(
-                size: size,
-                loan: controller.loans[index],
+      builder: (controller) => RefreshIndicator(
+        onRefresh: controller.getLoans,
+        child: Stack(
+          children: [
+            Scaffold(
+              appBar: appBarWidget(
+                text: 'Créditos',
+                hasArrowBack: true,
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: controller.goToAddLoanInformation,
+                child: const Icon(Icons.add),
+              ),
+              body: ListView.builder(
+                itemCount: controller.loans.length,
+                itemBuilder: (context, index) => _item(
+                  size: size,
+                  loan: controller.loans[index],
+                ),
               ),
             ),
-          ),
-          GetBuilder<LoansController>(
-            id: validandoIdGet,
-            builder: (controller) => LoadingWidget(show: controller.validando))
-        ],
+            GetBuilder<LoansController>(
+              id: validandoIdGet,
+              builder: (controller) => LoadingWidget(show: controller.validando))
+          ],
+        ),
       ),
     );
   }

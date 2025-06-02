@@ -11,7 +11,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       localizationsDelegates: localizationsDelegates,
-      supportedLocales: const [ Locale('es')],
+      supportedLocales: const [Locale('es')],
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       home: const DashboardPage(),

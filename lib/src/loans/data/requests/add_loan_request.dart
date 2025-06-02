@@ -7,7 +7,7 @@ class AddLoanRequest {
 
   int? idCustomer;
   int? idPaymentFrequency;
-  int? idPaymenyMethod;
+  int? idPaymentMethod;
   double? percentage;
   double? amount;
   double? ganancy;
@@ -20,7 +20,7 @@ class AddLoanRequest {
   AddLoanRequest({
     this.idCustomer,
     this.idPaymentFrequency,
-    this.idPaymenyMethod,
+    this.idPaymentMethod,
     this.percentage,
     this.amount,
     this.ganancy,
@@ -33,7 +33,7 @@ class AddLoanRequest {
   Map<String, dynamic> toJson() => {
     'id_customer': idCustomer,
     'id_payment_frequency': idPaymentFrequency,
-    'id_payment_method': idPaymenyMethod,
+    'id_payment_method': idPaymentMethod,
     'percentage': percentage,
     'amount': amount,
     'ganancy': ganancy,
@@ -42,6 +42,4 @@ class AddLoanRequest {
     'paymentFrequencyEntity': paymentFrequencyEntity?.toJson(),
     'paymentMethodEntity': paymentMethodEntity?.toJson(),
   };
-
-
 }

@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loands_flutter/src/app.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/config.dart';
 import 'package:utils/utils.dart';
 
 void main() {
-  
-  loadConfig(
-    DataConfig(
+  Get.put(LoadingService());
+
+  loadConfig(DataConfig(
       showLog: false,
       inputBorder: InputBorder.none,
       primaryColor: Colors.black,
       urlServer: serverUrl,
       labelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+        fontWeight: FontWeight.bold,
+      ),
       wrapperWidgetInputs: (Widget child) => Card(
-                  elevation: 1,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: child,
-                  ),
-                )
-    )
-  );
+            elevation: 1,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: child,
+            ),
+          )));
 
   runApp(const App());
 }

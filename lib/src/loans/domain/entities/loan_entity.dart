@@ -63,7 +63,7 @@ class LoanEntity {
         evidence: json["evidence"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        customerEntity: CustomerEntity.fromJson(json['Customer']),
+        customerEntity: json['Customer'] == null ? null : CustomerEntity.fromJson(json['Customer']),
     );
 
     Map<String, dynamic> toJson() => {

@@ -1,75 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_controller.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
 
-enum Types {
-  day,
-  week,
-}
-
 class DashboardPage extends GetView<DashboardController> {
+
   const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: appBarWidget(text: 'Inicio'),
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
-        child: Column(
-          children: [
-            _cards(),
-            _details(),
-          ],
+    return GetBuilder<DashboardController>(
+      id: pageIdGet,
+      init: Get.find<DashboardController>(),
+      builder: (controller) => Scaffold(
+        backgroundColor: Colors.white,
+        appBar: appBarWidget(text: 'Inicio'),
+        body: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Column(
+            children: [
+              _cards(size: size),
+              _details(size: size),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _cards() {
-    return GridView.count(
-      controller: ScrollController(keepScrollOffset: false),
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      childAspectRatio: (6 / 4),
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      children: [
-        _card(
-          icon: Icons.numbers,
-          title: 'Créditos',
-          mount: 120,
-          onTap: controller.goToLoans
-        ),
-        _card(
-          icon: Icons.monetization_on,
-          title: 'Total prestado',
-          mount: 120,
-        ),
-        _card(
-          icon: Icons.upload_rounded,
-          title: 'Ganancia',
-          mount: 120,
-        ),
-        _card(
-          icon: Icons.people,
-          title: 'Clientes',
-          mount: 120,
-          onTap: controller.goToCustomers,
-        ),
-      ],
+  Widget _cards({
+    required Size size,
+  }) {
+    return SizedBox(
+      height: size.height * 0.15,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _card(
+              size: size,
+              icon: Icons.numbers,
+              title: 'Créditos',
+              mount: controller.dashboardSummaryResponse?.loansCount.toString(),
+              onTap: controller.goToLoans),
+          _card(
+            size: size,
+            icon: Icons.monetization_on,
+            title: 'Total prestado',
+            mount:
+                controller.dashboardSummaryResponse?.allAmount.formatDecimals(),
+          ),
+          _card(
+            size: size,
+            icon: Icons.upload_rounded,
+            title: 'Ganancia',
+            mount: controller.dashboardSummaryResponse?.allGanancy
+                .formatDecimals(),
+          ),
+          _card(
+            size: size,
+            icon: Icons.people,
+            title: 'Clientes',
+            mount:
+                controller.dashboardSummaryResponse?.customersCount.toString(),
+            onTap: controller.goToCustomers,
+          ),
+        ],
+      ),
     );
   }
 
   Widget _card({
     required IconData icon,
     required String title,
-    required double mount,
+    required String? mount,
+    required Size size,
     void Function()? onTap,
   }) {
     const TextStyle amountStyle = TextStyle(
@@ -82,6 +91,7 @@ class DashboardPage extends GetView<DashboardController> {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
+          width: size.width * 0.4,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -101,7 +111,7 @@ class DashboardPage extends GetView<DashboardController> {
                     width: 30,
                   ),
                   Text(
-                    mount.formatDecimals(),
+                    mount ?? emptyString,
                     style: amountStyle,
                   ),
                 ],
@@ -114,8 +124,9 @@ class DashboardPage extends GetView<DashboardController> {
     );
   }
 
-  Widget _details() {
-
+  Widget _details({
+    required Size size,
+  }) {
     const TextStyle subtitleStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16,
@@ -129,25 +140,132 @@ class DashboardPage extends GetView<DashboardController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Pagos pendientes', style: subtitleStyle,),
-                SegmentedButton(segments: const <ButtonSegment<Types>>[
-                  ButtonSegment<Types>(
-                    value: Types.day,
-                    label: Text('Día'),
-                    icon: Icon(Icons.calendar_view_day),
-                  ),
-                  ButtonSegment<Types>(
-                    value: Types.week,
-                    label: Text('Semana'),
-                    icon: Icon(Icons.calendar_view_week),
-                  ),
-                ], selected: <Types>{
-                  controller.selected
-                }),
+                const Text(
+                  'Pagos pendientes',
+                  style: subtitleStyle,
+                ),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.search))
               ],
             ),
-          )
+          ),
+          _listDays(size: size),
+          Expanded(child: _contentQuotas(size: size))
         ],
+      ),
+    );
+  }
+
+  Widget _listDays({
+    required Size size,
+  }) {
+    return SizedBox(
+      height: 90,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 30,
+        itemBuilder: (context, index) => _itemDay(day: index),
+      ),
+    );
+  }
+
+  Widget _itemDay({
+    required int day,
+  }) {
+    final date = DateTime.now().add(Duration(days: day));
+    return Container(
+      padding: const EdgeInsets.all(2),
+      child: GestureDetector(
+        onTap: () => controller.getQuotasByDay(date),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  date
+                      .format(formatDate: 'MMMM')
+                      .orEmpty()
+                      .capitalizeFirst
+                      .toString(),
+                ),
+                Text(
+                  date.day.toString(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _contentQuotas({required Size size}) {
+    return GetBuilder<DashboardController>(
+      id: quotasIdGet,
+      builder: (controller) => ListView.builder(
+        itemCount: controller.quotasByDate.length,
+        itemBuilder: (context, index) => _itemQuota(
+          index: index,
+          quota: controller.quotasByDate[index],
+        ),
+      ),
+    );
+  }
+
+  Widget _itemQuota({
+    required int index,
+    required DashboardQuotaResponse quota,
+  }) {
+    
+    String name = quota.name;
+    String amountValue = quota.amount.formatDecimals();
+    String nameStateQuota = quota.stateQuota['name'];
+    Color colorStateQuota = quota.stateQuota['color'];
+
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: GestureDetector(
+        onTap: () => controller.goToQuota(quota),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(borderRadius()),
+            border: Border.all(),
+          ),
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'S/ ',
+                      style: const TextStyle(color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: amountValue,
+                            style: const TextStyle( fontSize: 24)),
+                      ],
+                    ),
+                  )),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name),
+                    Text(quota.customerName),
+                    const Text('Direccion del deudor'),
+                  ],
+                ),
+              ),
+              Expanded(flex: 1, child: TagWidget(
+                backgroundColor: colorStateQuota,
+                textColorAndIcon: Colors.white,
+                title: nameStateQuota)),
+            ],
+          ),
+        ),
       ),
     );
   }

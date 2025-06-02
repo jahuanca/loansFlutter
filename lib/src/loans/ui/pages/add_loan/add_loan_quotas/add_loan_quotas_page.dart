@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_controller.dart';
-import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanQuotasPage extends StatelessWidget {
   AddLoanQuotasPage({super.key});
 
-  final controller = Get.find<AddLoanQuotasController>();
+  final AddLoanQuotasController controller =  AddLoanQuotasController(
+        createLoanUseCase: Get.find(),
+      );
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
 
-    final AddLoanRequest addLoanRequest = controller.addLoanRequest;
-    final PaymentFrequencyEntity? paymentFrequency =
-        addLoanRequest.paymentFrequencyEntity;
-
     return GetBuilder<AddLoanQuotasController>(
       init: controller,
       id: pageIdGet,
       builder: (controller) => Scaffold(
+          bottomNavigationBar: _bottomButtons(),
+          appBar: appBarWidget(text: 'Calendario', hasArrowBack: true),
           body: ListView.builder(
-            itemCount: paymentFrequency?.monthlyInstallments ?? defaultInt,
+            itemCount: controller.addLoanRequest.paymentFrequencyEntity
+                    ?.monthlyInstallments ??
+                defaultInt,
             itemBuilder: (context, index) => _item(
-              total: paymentFrequency?.monthlyInstallments ?? defaultInt,
-              amount: addLoanRequest.amount ?? defaultDouble,
-              percentage: addLoanRequest.percentage ?? defaultDouble,
+              total: controller.addLoanRequest.paymentFrequencyEntity
+                      ?.monthlyInstallments ??
+                  defaultInt,
+              amount: controller.addLoanRequest.amount ?? defaultDouble,
+              percentage: controller.addLoanRequest.percentage ?? defaultDouble,
               size: size,
               value: index + 1,
-              date: addLoanRequest.startDate.orNow(),
-              daysToAdd: paymentFrequency?.daysInstallment ?? defaultInt,
+              date: controller.addLoanRequest.startDate.orNow(),
+              daysToAdd: controller
+                      .addLoanRequest.paymentFrequencyEntity?.daysInstallment ??
+                  defaultInt,
             ),
           )),
     );
@@ -107,15 +111,17 @@ class AddLoanQuotasPage extends StatelessWidget {
         color: Colors.white,
         child: ExpansionTile(
           shape: const Border(),
-          initiallyExpanded: true,
+          initiallyExpanded: (value == 1),
           title: header,
           children: [
-            _childItem(title: 'Fecha de pago', value: '${expirationDate.formatDMMYYY()}'),
-            _childItem(title: 'Amortización', value: 's/ ${amortization.formatDecimals()}'),
-            _childItem(title: 'Interés', value: 's/ ${interest.formatDecimals()}'),
-            _childItem(title: 'Días de mora', value: '0'),
-            _childItem(title: 'Mora', value: 's/ 0.00'),
-            _childItem(title: 'Estado', value: 'PENDIENTE'),
+            _childItem(
+                title: 'Fecha de pago',
+                value: '${expirationDate.formatDMMYYY()}'),
+            _childItem(
+                title: 'Amortización',
+                value: 's/ ${amortization.formatDecimals()}'),
+            _childItem(
+                title: 'Interés', value: 's/ ${interest.formatDecimals()}'),
           ],
         ),
       ),
@@ -137,6 +143,16 @@ class AddLoanQuotasPage extends StatelessWidget {
           Text(title),
           Text(value),
         ],
+      ),
+    );
+  }
+
+  Widget _bottomButtons() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ButtonWidget(
+        text: 'Crear',
+        onTap: controller.create,
       ),
     );
   }

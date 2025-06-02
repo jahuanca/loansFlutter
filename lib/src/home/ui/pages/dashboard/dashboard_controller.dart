@@ -1,20 +1,74 @@
-
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/customers_binding.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customers/customers_page.dart';
-import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_page.dart';
+import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/home/data/responses/dashboard_summary_response.dart';
+import 'package:loands_flutter/src/home/domain/use_cases/get_summary_dasboard_use_case.dart';
+import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
 import 'package:loands_flutter/src/loans/di/loans_binding.dart';
+import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_page.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
+import 'package:utils/utils.dart';
 
 class DashboardController extends GetxController {
-  Types selected = Types.week;
+  final GetSummaryDasboardUseCase getSummaryDasboardUseCase;
+  final GetQuotasByDateUseCase getQuotasByDateUseCase;
+  DashboardSummaryResponse? dashboardSummaryResponse;
+  List<DashboardQuotaResponse> quotasByDate = [];
 
+  DashboardController({
+    required this.getSummaryDasboardUseCase,
+    required this.getQuotasByDateUseCase,
+  });
 
-  void goToLoans(){
-    Get.to(()=> LoansPage(), binding: LoansBinding());
+  @override
+  void onReady() {
+    getSummary();
+    super.onReady();
   }
 
-  void goToCustomers(){
-    Get.to(()=> const CustomersPage(), binding: CustomersBinding());
+  void getSummary() async {
+    showLoading();
+    ResultType<DashboardSummaryResponse, ErrorEntity> resultType =
+        await getSummaryDasboardUseCase.execute();
+    if (resultType is Success) {
+      dashboardSummaryResponse = resultType.data;
+    }
+    update([pageIdGet]);
+    hideLoading();
+  }
+
+  void getQuotasByDay(DateTime dateTime) async {
+    showLoading();
+    ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+        await getQuotasByDateUseCase.execute(dateTime);
+    if (resultType is Success) {
+      quotasByDate = resultType.data;
+      update([quotasIdGet]);
+      update();
+    } else {
+      showSnackbarWidget(
+          typeSnackbar: TypeSnackbar.error,
+          context: Get.context!,
+          message: resultType.error.toString());
+    }
+    hideLoading();
+  }
+
+  void goToLoans() {
+    Get.to(() => LoansPage(), binding: LoansBinding());
+  }
+
+  void goToCustomers() {
+    Get.to(() => const CustomersPage(), binding: CustomersBinding());
+  }
+
+  void goToQuota(DashboardQuotaResponse quotaResponse) {
+    Get.to(() => const PayQuotaPage(), arguments: {
+      dashboardQuotaResponseArgument: quotaResponse,
+    });
   }
 }

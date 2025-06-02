@@ -16,6 +16,16 @@ class LoanDetailPage extends StatelessWidget {
     return GetBuilder<LoanDetailController>(
       init: controller,
       builder: (controller) => Scaffold(
+        bottomNavigationBar: GetBuilder<LoanDetailController>(
+          id: 'quotas',
+          builder: (controller) =>ChildOrElseWidget(
+              condition: controller.quotas.any((e) => e.idStateQuota == 1,), 
+              child: ButtonWidget(
+              padding: const EdgeInsets.all(8.0),
+              text: 'Pagar cuota')
+              
+          ),
+        ),
         appBar: appBarWidget(
             hasArrowBack: true,
             text: 'Préstamo ${controller.loanSelected?.id}'),
@@ -123,16 +133,20 @@ class LoanDetailPage extends StatelessWidget {
     quotas.add(
       const Text('Cuotas: '),
     );
+    int i = 1;
     quotas.addAll(controller.quotas
-        .map((e) => QuotaWidget(
-              value: 1,
+        .map((e) {
+          return QuotaWidget(
+              value: i++,
               size: size,
-              total: quotas.length,
-              date: e.dateToPay,
-              daysToAdd: 7,
-              amount: e.amount,
+              total: controller.quotas.length,
+              expirationDate: e.dateToPay,
+              amountQuota: e.amount,
+              amortization: e.amount - e.ganancy,
+              ganancy: e.ganancy,
               percentage: controller.loanSelected?.percentage ?? defaultDouble,
-            ))
+            );
+        })
         .toList());
 
     return Column(

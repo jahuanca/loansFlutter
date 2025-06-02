@@ -1,11 +1,12 @@
 
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/loans/di/add_loan_home_binding.dart';
+import 'package:loands_flutter/src/loans/di/add_loan_information_binding.dart';
 import 'package:loands_flutter/src/loans/di/loan_detail_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_home/add_loan_home_page.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_page.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loan_detail/loan_detail_page.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:utils/utils.dart';
 
 class LoansController extends GetxController {
@@ -24,19 +25,18 @@ class LoansController extends GetxController {
     super.onReady();
   }
 
-  void getLoans() async {
-    validando = true;
-    update([validandoIdGet]);
+  Future<void> getLoans() async {
+    showLoading();
     ResultType<List<LoanEntity>, ErrorEntity> resultType = await getLoansUseCase.execute();
     if(resultType is Success){
       loans = resultType.data as List<LoanEntity>;
     }
-    validando = false;
-    update([pageIdGet, validandoIdGet]);
+    hideLoading();
+    update([pageIdGet]);
   }
 
-  void goToAddLoanHome(){
-    Get.to(()=> AddLoanHomePage(), binding: AddLoanHomeBinding(),);
+  void goToAddLoanInformation(){
+    Get.to(()=> AddLoanInformationPage(), binding: AddLoanInformationBinding());
   }
 
   void goToDetail(LoanEntity loanSelected) {
