@@ -5,18 +5,21 @@ import 'package:loands_flutter/src/customers/ui/pages/customers/customers_contro
 import 'package:utils/utils.dart';
 
 class CustomersPage extends StatelessWidget {
-  const CustomersPage({super.key});
+  final CustomersController controller =
+      CustomersController(getCustomersUseCase: Get.find());
+
+  CustomersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
 
     return GetBuilder<CustomersController>(
-        init: Get.find<CustomersController>(),
+        init: controller,
         id: pageIdGet,
         builder: (controller) => RefreshIndicator(
-          onRefresh: controller.getCustomers,
-          child: Scaffold(
+              onRefresh: controller.getCustomers,
+              child: Scaffold(
                 floatingActionButton: FloatingActionButton(
                   onPressed: controller.goToAddCustomer,
                   child: const Icon(Icons.add),
@@ -34,7 +37,7 @@ class CustomersPage extends StatelessWidget {
                   ),
                 ),
               ),
-        ));
+            ));
   }
 
   Widget _item({
@@ -54,6 +57,20 @@ class CustomersPage extends StatelessWidget {
       storageType: StorageType.localStorage,
       title: customer.fullName,
       subtitle: customer.address,
+      alignmentOfActions: MainAxisAlignment.center,
+      actions: [
+        CircleAvatar(
+            backgroundColor: infoColor(),
+            child: IconButton(
+                onPressed: controller.goToEditCustomer,
+                icon: const Icon(Icons.edit))),
+        IconButtonWidget(
+          onPressed: controller.goToEditCustomer,
+          iconData: Icons.edit,
+          shape: BoxShape.circle,
+          backgroundColor: infoColor(),
+        ),
+      ],
     );
   }
 }

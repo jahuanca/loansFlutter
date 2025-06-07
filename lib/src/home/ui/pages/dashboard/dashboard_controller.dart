@@ -68,7 +68,7 @@ class DashboardController extends GetxController {
   }
 
   void goToCustomers() {
-    Get.to(() => const CustomersPage(), binding: CustomersBinding());
+    Get.to(() => CustomersPage(), binding: CustomersBinding());
   }
 
   void goToQuota(DashboardQuotaResponse quotaResponse) {

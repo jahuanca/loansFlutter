@@ -40,4 +40,8 @@ class CustomersController extends GetxController {
   void goToAddCustomer(){
     Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
   } 
+
+  void goToEditCustomer(){
+    Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+  }
 }
