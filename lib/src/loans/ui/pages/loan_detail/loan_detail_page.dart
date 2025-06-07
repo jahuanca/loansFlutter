@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loan_detail/loan_detail_controller.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/quota_widget.dart';
 import 'package:utils/utils.dart';
 
@@ -15,34 +16,29 @@ class LoanDetailPage extends StatelessWidget {
     final Size size = MediaQuery.sizeOf(context);
     return GetBuilder<LoanDetailController>(
       init: controller,
-      builder: (controller) => Scaffold(
-        bottomNavigationBar: GetBuilder<LoanDetailController>(
-          id: 'quotas',
-          builder: (controller) =>ChildOrElseWidget(
-              condition: controller.quotas.any((e) => e.idStateQuota == 1,), 
-              child: ButtonWidget(
-              padding: const EdgeInsets.all(8.0),
-              text: 'Pagar cuota')
-              
+      id: pageIdGet,
+      builder: (controller) => RefreshIndicator(
+        onRefresh: controller.getQuotas,
+        child: Scaffold(
+          bottomNavigationBar: _bottomButtons(),
+          appBar: appBarWidget(
+              hasArrowBack: true,
+              text: 'Préstamo ${controller.loanSelected?.id}'),
+          body: ListView(
+            children: [
+              if (controller.loanSelected != null)
+                _detailLoan(
+                  size: size,
+                  loan: controller.loanSelected!,
+                ),
+              GetBuilder<LoanDetailController>(
+                id: quotasIdGet,
+                builder: (controller) => _detailQuotas(
+                  size: size,
+                ),
+              ),
+            ],
           ),
-        ),
-        appBar: appBarWidget(
-            hasArrowBack: true,
-            text: 'Préstamo ${controller.loanSelected?.id}'),
-        body: ListView(
-          children: [
-            if (controller.loanSelected != null)
-              _detailLoan(
-                size: size,
-                loan: controller.loanSelected!,
-              ),
-            GetBuilder<LoanDetailController>(
-              id: 'quotas',
-              builder: (controller) => _detailQuotas(
-                size: size,
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -145,12 +141,28 @@ class LoanDetailPage extends StatelessWidget {
               amortization: e.amount - e.ganancy,
               ganancy: e.ganancy,
               percentage: controller.loanSelected?.percentage ?? defaultDouble,
+              idStateQuota: e.idStateQuota,
+              paidDate: e.paidDate,
             );
         })
         .toList());
 
     return Column(
       children: quotas,
+    );
+  }
+
+  Widget? _bottomButtons() {
+    bool condition = controller.quotas.any((element) => element.idStateQuota == 1);
+    if(condition == false) {
+      return null;
+    }
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ButtonWidget(
+        text: 'Pagar cuota',
+        onTap: controller.goToPayQuota,
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loands_flutter/src/utils/core/colors.dart';
 import 'package:utils/utils.dart';
 
 class QuotaWidget extends StatelessWidget {
@@ -11,6 +12,9 @@ class QuotaWidget extends StatelessWidget {
   final double ganancy;
   final double percentage;
   final bool initiallyExpanded;
+  final int idStateQuota;
+  final DateTime? paidDate;
+  final void Function()? onTapButton; 
 
   const QuotaWidget({
     super.key,
@@ -22,7 +26,10 @@ class QuotaWidget extends StatelessWidget {
     required this.percentage,
     required this.amortization,
     required this.ganancy,
+    required this.idStateQuota,
     this.initiallyExpanded = false,
+    this.onTapButton,
+    this.paidDate,
   });
 
   @override
@@ -64,7 +71,7 @@ class QuotaWidget extends StatelessWidget {
               vertical: 3,
             ),
             decoration: BoxDecoration(
-                color: alertColor(), borderRadius: BorderRadius.circular(12)),
+                color: colorOfStateColor(idStateQuota), borderRadius: BorderRadius.circular(12)),
             child: Text(
               ' S/ ${amountQuota.formatDecimals()}',
               style: const TextStyle(
@@ -95,7 +102,19 @@ class QuotaWidget extends StatelessWidget {
                 title: 'Interés', value: 's/ ${ganancy.formatDecimals()}'),
             _childItem(title: 'Días de mora', value: '0'),
             _childItem(title: 'Mora', value: 's/ 0.00'),
-            _childItem(title: 'Estado', value: 'PENDIENTE'),
+            _childItem(title: 'Estado', value: idStateQuota == 1 ? 'PENDIENTE' : 'PAGADO'),
+            if(paidDate != null)
+            _childItem(title: 'Pagado', value: paidDate!.formatDMMYYY().orEmpty() ),
+            if(onTapButton != null)
+            Container(
+                padding: defaultPadding,
+                width: 150,
+                height: 50,
+                child: ButtonWidget(
+                  onTap: onTapButton,
+                  fontSize: 14,
+                  text: 'Pagar'),
+              )
           ],
         ),
       ),

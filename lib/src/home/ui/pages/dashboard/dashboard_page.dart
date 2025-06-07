@@ -6,7 +6,6 @@ import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
 
 class DashboardPage extends GetView<DashboardController> {
-
   const DashboardPage({super.key});
 
   @override
@@ -16,17 +15,20 @@ class DashboardPage extends GetView<DashboardController> {
     return GetBuilder<DashboardController>(
       id: pageIdGet,
       init: Get.find<DashboardController>(),
-      builder: (controller) => Scaffold(
-        backgroundColor: Colors.white,
-        appBar: appBarWidget(text: 'Inicio'),
-        body: SizedBox(
-          width: size.width,
-          height: size.height,
-          child: Column(
-            children: [
-              _cards(size: size),
-              _details(size: size),
-            ],
+      builder: (controller) => RefreshIndicator(
+        onRefresh: controller.getSummary,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: appBarWidget(text: 'Inicio'),
+          body: SizedBox(
+            width: size.width,
+            height: size.height,
+            child: Column(
+              children: [
+                _cards(size: size),
+                _details(size: size),
+              ],
+            ),
           ),
         ),
       ),
@@ -158,26 +160,37 @@ class DashboardPage extends GetView<DashboardController> {
   Widget _listDays({
     required Size size,
   }) {
-    return SizedBox(
-      height: 90,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: 30,
-        itemBuilder: (context, index) => _itemDay(day: index),
+    return GetBuilder<DashboardController>(
+      id: calendarIdGet,
+      builder: (controller) => SizedBox(
+        height: 90,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 30,
+          itemBuilder: (context, index) => _itemDay(day: index, context: context),
+        ),
       ),
     );
   }
 
   Widget _itemDay({
     required int day,
+    required BuildContext context,
   }) {
-    final date = DateTime.now().add(Duration(days: day));
+    final dateOfResponse = controller.dashboardSummaryResponse?.dateToSearch ?? defaultDate;
+    final date = dateOfResponse.add(Duration(days: day));
+    final isSelected = (date.formatDMMYYY() == controller.dateSelected.formatDMMYYY());
+    final TextStyle textStyle = TextStyle(
+                        color: isSelected ? Colors.white : Colors.black
+                      );
+
     return Container(
       padding: const EdgeInsets.all(2),
       child: GestureDetector(
         onTap: () => controller.getQuotasByDay(date),
         child: Card(
-          child: Padding(
+          color: isSelected ? successColor() : CardTheme.of(context).color,
+          child: Container(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -188,9 +201,11 @@ class DashboardPage extends GetView<DashboardController> {
                       .orEmpty()
                       .capitalizeFirst
                       .toString(),
+                      style: textStyle,
                 ),
                 Text(
                   date.day.toString(),
+                  style: textStyle,
                 ),
               ],
             ),
@@ -203,11 +218,19 @@ class DashboardPage extends GetView<DashboardController> {
   Widget _contentQuotas({required Size size}) {
     return GetBuilder<DashboardController>(
       id: quotasIdGet,
-      builder: (controller) => ListView.builder(
-        itemCount: controller.quotasByDate.length,
-        itemBuilder: (context, index) => _itemQuota(
-          index: index,
-          quota: controller.quotasByDate[index],
+      builder: (controller) => ChildOrElseWidget(
+        condition: controller.quotasByDate.isNotEmpty,
+        elseWidget: Container(
+          alignment: Alignment.center,
+          height: 200,
+          child: const Text('No se encontraron cuotas'),
+        ),
+        child: ListView.builder(
+          itemCount: controller.quotasByDate.length,
+          itemBuilder: (context, index) => _itemQuota(
+            index: index,
+            quota: controller.quotasByDate[index],
+          ),
         ),
       ),
     );
@@ -217,7 +240,6 @@ class DashboardPage extends GetView<DashboardController> {
     required int index,
     required DashboardQuotaResponse quota,
   }) {
-    
     String name = quota.name;
     String amountValue = quota.amount.formatDecimals();
     String nameStateQuota = quota.stateQuota['name'];
@@ -236,7 +258,7 @@ class DashboardPage extends GetView<DashboardController> {
           child: Row(
             children: [
               Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: RichText(
                     text: TextSpan(
                       text: 'S/ ',
@@ -244,12 +266,12 @@ class DashboardPage extends GetView<DashboardController> {
                       children: <TextSpan>[
                         TextSpan(
                             text: amountValue,
-                            style: const TextStyle( fontSize: 24)),
+                            style: const TextStyle(fontSize: 24)),
                       ],
                     ),
                   )),
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -259,10 +281,12 @@ class DashboardPage extends GetView<DashboardController> {
                   ],
                 ),
               ),
-              Expanded(flex: 1, child: TagWidget(
-                backgroundColor: colorStateQuota,
-                textColorAndIcon: Colors.white,
-                title: nameStateQuota)),
+              Expanded(
+                  flex: 2,
+                  child: TagWidget(
+                      backgroundColor: colorStateQuota,
+                      textColorAndIcon: Colors.white,
+                      title: nameStateQuota)),
             ],
           ),
         ),

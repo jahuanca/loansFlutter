@@ -99,7 +99,7 @@ class AddLoanInformationController extends GetxController {
     }
   }
 
-  void onChangedFrequency(dynamic value) {
+  void onChangedFrequency(dynamic value, [bool setPercentage = true]) {
     idFrequencyValidationResult =
         validateText(text: value, label: 'Frecuencia de pago', rules: {
       RuleValidator.isRequired: true,
@@ -112,7 +112,7 @@ class AddLoanInformationController extends GetxController {
       frequencySelected = frequencies[index];
       addLoanRequest.paymentFrequencyEntity = frequencySelected;
       addLoanRequest.idPaymentFrequency = frequencySelected?.id;
-      changePercentage();
+      if(setPercentage) changePercentage();
     }
   }
 
@@ -188,6 +188,9 @@ class AddLoanInformationController extends GetxController {
     );
     if (percentageValidationResult!.hasError.not()) {
       addLoanRequest.percentage = percentageValidationResult?.value;
+      if(addLoanRequest.amount != null){
+        onChangeAmount(addLoanRequest.amount.toString());
+      }
     }
     update(['percentage']);
   }
@@ -195,7 +198,7 @@ class AddLoanInformationController extends GetxController {
   ValidateResult validate() {
     onChangedStartDate(addLoanRequest.startDate);
     onChangedCustomer(addLoanRequest.idCustomer);
-    onChangedFrequency(addLoanRequest.idPaymentFrequency);
+    onChangedFrequency(addLoanRequest.idPaymentFrequency, false);
     onChangedPercentage(addLoanRequest.percentage.toString());
     onChangeAmount(addLoanRequest.amount.toString());
     onChangedMethodsPayment(addLoanRequest.idPaymentMethod);

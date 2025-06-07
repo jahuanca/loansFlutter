@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/create_customer_use_case.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/domain/entities/type_document_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_types_document_use_case.dart';
 import 'package:utils/utils.dart';
@@ -12,7 +14,6 @@ class AddCustomerController extends GetxController {
 
   List<TypeDocumentEntity> typesDocument = [];
   TypeDocumentEntity? typeDocumentSelected;
-  bool isLoading = false;
   CreateCustomerRequest createCustomerRequest = CreateCustomerRequest();
   ValidateResult? validateDocument,
       validateName,
@@ -31,8 +32,7 @@ class AddCustomerController extends GetxController {
   }
 
   void getTypesDocument() async {
-    isLoading = true;
-    update([validandoIdGet]);
+    showLoading();
     ResultType<List<TypeDocumentEntity>, ErrorEntity> resultType =
         await getTypesDocumentUseCase.execute();
     if (resultType is Success) {
@@ -45,8 +45,7 @@ class AddCustomerController extends GetxController {
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.title);
     }
-    isLoading = false;
-    update([validandoIdGet]);
+    hideLoading();
   }
 
   void onChangedTypeDocument(dynamic value) {
@@ -55,7 +54,7 @@ class AddCustomerController extends GetxController {
       typeDocumentSelected = typesDocument[index];
       createCustomerRequest.idTypeDocument = value;
     }
-    update(['typesDocument']);
+    update([typesDocumentIdGet]);
   }
 
   void onChangedDocument(String value) {

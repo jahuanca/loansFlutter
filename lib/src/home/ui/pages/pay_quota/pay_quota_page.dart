@@ -22,8 +22,20 @@ class PayQuotaPage extends StatelessWidget {
           children: [
             _cardDetail(quota: controller.quota),
             InputWidget(
-              hintText: 'Fecha',
+              hintText: 'Elija la fecha de pago',
               label: 'Fecha de pago',
+              onTap: () async {
+                      DateTime? dateSelected = await showDatePicker(
+                          context: context,
+                          currentDate: controller.quota.dateToPay,
+                          firstDate:
+                              DateTime.now().subtract(const Duration(days: 180)),
+                          lastDate: DateTime.now().add(const Duration(days: 1)));
+                      controller.onChangedStartDate(dateSelected);
+                    },
+                    textEditingController: controller.dateToPayTextController,
+                    enabled: false,
+                    
             ),
             InputWidget(
               hintText: 'Evidencia',
@@ -58,7 +70,7 @@ class PayQuotaPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${quota.name}: ${quota.dateToPay.formatDMMYYY()}',
+                  'Cuota: ${quota.name} - ${quota.dateToPay.formatDMMYYY()}',
                   style: const TextStyle(
                     color: Colors.black54,
                     fontSize: 12,

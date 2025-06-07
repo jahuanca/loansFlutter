@@ -35,8 +35,9 @@ class LoansController extends GetxController {
     update([pageIdGet]);
   }
 
-  void goToAddLoanInformation(){
-    Get.to(()=> AddLoanInformationPage(), binding: AddLoanInformationBinding());
+  Future<void> goToAddLoanInformation() async {
+    await Get.to(()=> AddLoanInformationPage(), binding: AddLoanInformationBinding());
+    getLoans();
   }
 
   void goToDetail(LoanEntity loanSelected) {

@@ -33,7 +33,7 @@ class DashboardOnlineDatastore extends DashboardDatastore {
     final AppResponseHttp response = await appHttpManager.get(
         url: '/quota/byDate',
         query: {
-          'date': /*dateTime.format(formatDate: 'yyyy-MM-dd')*/ '2025-05-09'
+          'date': date.format(formatDate: 'yyyy-MM-dd')
         });
     if (response.isSuccessful) {
       return Success(data: dashboardQuotasResponseFromJson(response.body));

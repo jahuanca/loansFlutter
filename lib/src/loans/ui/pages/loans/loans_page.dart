@@ -55,7 +55,17 @@ class LoansPage extends StatelessWidget {
     return ListTile(
       onTap: ()=> controller.goToDetail(loan),
       leading: Text('${loan.id}'),
-      title: Text(loan.formatTitle),
+      title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(loan.formatTitle),
+          if(loan.idStateLoan == 2)
+          IconWidget(
+            padding: const EdgeInsets.only(left: 8.0),
+            color: successColor(),
+            iconData: Icons.check)
+        ],
+      ),
       subtitle: Text(loan.customerEntity?.fullName ?? emptyString),
       trailing: Text(loan.date.formatDMMYYY() ?? emptyString),
     );

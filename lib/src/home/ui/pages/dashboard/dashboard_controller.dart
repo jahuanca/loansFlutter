@@ -18,6 +18,7 @@ class DashboardController extends GetxController {
   final GetQuotasByDateUseCase getQuotasByDateUseCase;
   DashboardSummaryResponse? dashboardSummaryResponse;
   List<DashboardQuotaResponse> quotasByDate = [];
+  DateTime dateSelected = DateTime.now();
 
   DashboardController({
     required this.getSummaryDasboardUseCase,
@@ -30,18 +31,22 @@ class DashboardController extends GetxController {
     super.onReady();
   }
 
-  void getSummary() async {
+  Future<void> getSummary() async {
     showLoading();
     ResultType<DashboardSummaryResponse, ErrorEntity> resultType =
         await getSummaryDasboardUseCase.execute();
     if (resultType is Success) {
       dashboardSummaryResponse = resultType.data;
+      dateSelected = dashboardSummaryResponse?.dateToSearch ?? defaultDate;
     }
     update([pageIdGet]);
+    await getQuotasByDay(dateSelected);
     hideLoading();
   }
 
-  void getQuotasByDay(DateTime dateTime) async {
+  Future<void> getQuotasByDay(DateTime dateTime) async {
+    dateSelected = dateTime;
+    update([calendarIdGet]);
     showLoading();
     ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getQuotasByDateUseCase.execute(dateTime);
