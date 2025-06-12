@@ -1,4 +1,5 @@
 class CreateCustomerRequest {
+  int? id;
   int? idTypeDocument;
   String? name;
   String? lastName;
@@ -6,6 +7,7 @@ class CreateCustomerRequest {
   String? address;
 
   CreateCustomerRequest({
+    this.id,
     this.idTypeDocument,
     this.name,
     this.lastName,
@@ -14,7 +16,8 @@ class CreateCustomerRequest {
   });
 
   Map<String, dynamic> toJson() => {
-        'idTypeDocument': idTypeDocument,
+        'id': id,
+        'id_type_document': idTypeDocument,
         'name': name,
         'lastName': lastName,
         'document': document,
@@ -23,7 +26,8 @@ class CreateCustomerRequest {
 
   factory CreateCustomerRequest.fromJson(Map<String, dynamic> json) =>
       CreateCustomerRequest(
-        idTypeDocument: json['idTypeDocument'],
+        id: json['id'],
+        idTypeDocument: json['id_type_document'],
         name: json['name'],
         lastName: json['lastName'],
         document: json['document'],

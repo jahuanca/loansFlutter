@@ -19,7 +19,7 @@ class LoanEntity {
     double amount;
     double percentage;
     DateTime date;
-    int ganancy;
+    double ganancy;
     int idPaymentMethod;
     String? observation;
     int idStateLoan;
@@ -56,7 +56,7 @@ class LoanEntity {
         amount: (json["amount"] as num).toDouble(),
         percentage: (json["percentage"] as num).toDouble(),
         date: DateTime.parse(json["date"]),
-        ganancy: json["ganancy"],
+        ganancy: (json["ganancy"] as num).toDouble(),
         idPaymentMethod: json["id_payment_method"],
         observation: json["observation"],
         idStateLoan: json["id_state_loan"],

@@ -22,8 +22,8 @@ class AddLoanQuotasController extends GetxController {
   }
 
   void create() async {
-    bool? result = await showDialogWidget(context: Get.context!, message: '¿Esta seguro de crear el préstamo?');
-    if(result.orFalse() == false) return;
+    bool result = await showDialogWidget(context: Get.context!, message: '¿Esta seguro de crear el préstamo?');
+    if(result == false) return;
     showLoading();
     ResultType<LoanEntity, ErrorEntity> resultType =
         await createLoanUseCase.execute(addLoanRequest);

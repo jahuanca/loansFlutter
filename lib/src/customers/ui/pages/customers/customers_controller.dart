@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class CustomersController extends GetxController {
@@ -39,9 +40,25 @@ class CustomersController extends GetxController {
 
   void goToAddCustomer(){
     Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
-  } 
+  }
 
-  void goToEditCustomer(){
-    Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+  void goToEditCustomer(CustomerEntity customer){
+    Get.to(
+      ()=> AddCustomerPage(), 
+      binding: AddCustomerBinding(),
+      arguments: {
+        customerArgument: customer
+      }
+    );
+  }
+
+  void goToDeleteCustomer() async {
+    bool result = await showDialogWidget(
+      context: Get.context!, 
+      message: '¿Está seguro de eliminar el cliente?'
+    );
+    if(result) {
+
+    }
   }
 }

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_controller.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanInformationPage extends StatelessWidget {
   AddLoanInformationPage({super.key});
 
-  final AddLoanInformationController controller =
-      AddLoanInformationController(
-        getCustomersUseCase: Get.find(),
-        getPaymentFrequenciesUseCase: Get.find(),
-        getPaymentMethodsUseCase: Get.find(),
-      );
+  final AddLoanInformationController controller = AddLoanInformationController(
+    getCustomersUseCase: Get.find(),
+    getPaymentFrequenciesUseCase: Get.find(),
+    getPaymentMethodsUseCase: Get.find(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +32,20 @@ class AddLoanInformationPage extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 GetBuilder<AddLoanInformationController>(
                   id: 'start_day',
                   builder: (controller) => InputWidget(
                     onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
+                          currentDate: controller.addLoanRequest.startDate,
                           context: context,
-                          firstDate:
-                              DateTime.now().subtract(const Duration(days: 180)),
-                          lastDate: DateTime.now().add(const Duration(days: 1)));
+                          firstDate: DateTime.now()
+                              .subtract(const Duration(days: 180)),
+                          lastDate:
+                              DateTime.now().add(const Duration(days: 1)));
                       controller.onChangedStartDate(dateSelected);
                     },
                     textEditingController: controller.startDateTextController,
@@ -50,15 +54,27 @@ class AddLoanInformationPage extends StatelessWidget {
                     hintText: 'Fecha de inicio',
                   ),
                 ),
-                GetBuilder<AddLoanInformationController>(
-                  id: 'customers',
-                    builder: (controller) => DropdownMenuWidget(
-                          hintText: 'Seleccione el cliente',
-                          label: 'Cliente',
-                          items: controller.customers,
-                          idLabel: 'fullName',
-                          onChanged: controller.onChangedCustomer,
-                        )),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: GetBuilder<AddLoanInformationController>(
+                          id: customersIdGet,
+                          builder: (controller) => DropdownMenuWidget(
+                                wrapperWidget: (p0) => Container(child: p0,),
+                                hintText: 'Seleccione el cliente',
+                                label: 'Cliente',
+                                items: controller.customers,
+                                idLabel: 'fullName',
+                                onChanged: controller.onChangedCustomer,
+                              )),
+                    ),
+                    Expanded(
+                        child: IconButtonWidget(
+                            onPressed: controller.goAddCustomer,
+                            iconData: Icons.add))
+                  ],
+                ),
                 Row(
                   children: [
                     Expanded(
@@ -81,7 +97,7 @@ class AddLoanInformationPage extends StatelessWidget {
                         builder: (controller) => InputWidget(
                             textEditingController:
                                 controller.percentageTextController,
-                                onChanged: controller.onChangedPercentage,
+                            onChanged: controller.onChangedPercentage,
                             hintText: 'Porcentaje',
                             label: 'Porcentaje'),
                       ),
@@ -101,19 +117,21 @@ class AddLoanInformationPage extends StatelessWidget {
                 GetBuilder<AddLoanInformationController>(
                     id: 'ganancy',
                     builder: (controller) => InputWidget(
-                          textEditingController: controller.ganancyTextController,
+                          textEditingController:
+                              controller.ganancyTextController,
                           hintText: 'Ganancia',
                           icon: const Icon(Icons.monetization_on),
                           label: 'Ganancia calculada',
                           enabled: false,
                         )),
                 GetBuilder<AddLoanInformationController>(
-                  id: 'methods',
+                  id: methodsIdGet,
                   builder: (controller) => DropdownMenuWidget(
                     hintText: 'Seleccione el método de pago',
                     label: 'Método de pago',
                     items: controller.methods,
                     idLabel: 'name',
+                    value: controller.addLoanRequest.idPaymentMethod,
                     onChanged: controller.onChangedMethodsPayment,
                   ),
                 ),

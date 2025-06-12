@@ -5,7 +5,7 @@ import 'package:loands_flutter/src/customers/data/repositories/customer_reposito
 import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/create_customer_use_case.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/update_customer_use_case.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
 import 'package:loands_flutter/src/utils/domain/datastore/utils_datastore.dart';
@@ -24,11 +24,7 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut<CustomerDatastore>(() => CustomerOnlineDatastore());
     Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut(() => CreateCustomerUseCase(repository: Get.find()));
-
-    Get.lazyReplace(() => AddCustomerController(
-      getTypesDocumentUseCase: Get.find(),
-      createCustomerUseCase: Get.find(),
-    ),);
+    Get.lazyPut(() => UpdateCustomerUseCase(repository: Get.find()));
   }
 
 }

@@ -1,13 +1,19 @@
 
 class PayQuotaRequest {
 
-  int idOfQuota;
-  DateTime paidDate;
+  int? idOfQuota;
+  DateTime? paidDate;
 
   PayQuotaRequest({
-    required this.idOfQuota,
-    required this.paidDate,
+    this.idOfQuota,
+    this.paidDate,
   });
+
+  String? get messageError {
+    if(idOfQuota == null) return 'idOfQuota es un valor necesario';
+    if(paidDate == null) return 'Fecha de pago es un valor necesario';
+    return null;
+  }
 
   factory PayQuotaRequest.fromJson(Map<String, dynamic> json) => PayQuotaRequest(
     idOfQuota: json['idOfQuota'], 
@@ -16,6 +22,6 @@ class PayQuotaRequest {
 
   Map<String, dynamic> toJson() => {
     'idOfQuota': idOfQuota,
-    'paidDate': paidDate.toIso8601String(),
+    'paidDate': paidDate?.toIso8601String(),
   };
 }

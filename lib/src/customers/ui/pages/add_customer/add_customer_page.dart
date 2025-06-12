@@ -7,7 +7,11 @@ import 'package:utils/utils.dart';
 class AddCustomerPage extends StatelessWidget {
   AddCustomerPage({super.key});
 
-  final AddCustomerController controller = Get.find<AddCustomerController>();
+  final AddCustomerController controller = AddCustomerController(
+    getTypesDocumentUseCase: Get.find(),
+    createCustomerUseCase: Get.find(),
+    updateCustomerUseCase: Get.find(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +20,13 @@ class AddCustomerPage extends StatelessWidget {
       id: pageIdGet,
       builder: (controller) => Scaffold(
         appBar: appBarWidget(
-          text: 'Agregar cliente',
+          text: controller.isEditing ? 'Editar cliente' : 'Agregar cliente',
           hasArrowBack: true,
         ),
         bottomNavigationBar: ButtonWidget(
           padding: const EdgeInsets.all(8),
-          text: 'Agregar',
-          onTap: controller.create,
+          text: 'Confirmar',
+          onTap: controller.goConfirm,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -42,6 +46,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    initialValue: controller.createCustomerRequest.document,
                     isAlignLabel: true,
                     onChanged: controller.onChangedDocument,
                     label: 'Documento',
@@ -50,6 +55,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    initialValue: controller.createCustomerRequest.name,
                     textInputType: TextInputType.name,
                     onChanged: controller.onChangedName,
                     isAlignLabel: true,
@@ -58,6 +64,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    initialValue: controller.createCustomerRequest.lastName,
                     textInputType: TextInputType.name,
                     onChanged: controller.onChangedLastname,
                     isAlignLabel: true,
@@ -66,6 +73,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    initialValue: controller.createCustomerRequest.address,
                     textInputType: TextInputType.streetAddress,
                     onChanged: controller.onChangedAddress,
                     isAlignLabel: true,

@@ -15,7 +15,7 @@ class CustomerEntity {
     String address;
     String? latitude;
     String? longitude;
-    String idTypeDocument;
+    int idTypeDocument;
     String document;
     DateTime createdAt;
     DateTime updatedAt;

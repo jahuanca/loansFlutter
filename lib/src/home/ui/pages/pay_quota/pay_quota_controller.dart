@@ -5,15 +5,16 @@ import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.
 import 'package:loands_flutter/src/home/domain/use_cases/pay_quota_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaController extends GetxController {
   late DashboardQuotaResponse quota;
   PayQuotaUseCase payQuotaUseCase;
-  ValidateResult? dateToPayValidationResult;
   TextEditingController dateToPayTextController = TextEditingController();
   
+  PayQuotaRequest payQuotaRequest = PayQuotaRequest();
 
   PayQuotaController({
     required this.payQuotaUseCase,
@@ -22,36 +23,36 @@ class PayQuotaController extends GetxController {
   @override
   void onInit() {
     quota = Get.setArgument(dashboardQuotaResponseArgument);
+    payQuotaRequest.idOfQuota = quota.id;
     super.onInit();
   }
 
   void onChangedStartDate(DateTime? date) {
-    dateToPayValidationResult =
+    ValidateResult dateToPayValidationResult =
         validateText(text: date, label: 'Fecha de pago', rules: {
       RuleValidator.isRequired: true,
       RuleValidator.isDatetime: true,
     });
-    if (dateToPayValidationResult!.hasError) {
-    } else {
+    if (dateToPayValidationResult.hasError.not()) {
       dateToPayTextController.text = date.formatDMMYYY().orEmpty();
+      payQuotaRequest.paidDate = date;
     }
-    update(['start_date']);
+    update([startDateIdGet]);
   }
 
   void payQuota() async {
-    if(dateToPayValidationResult?.hasError ?? false ){
+    String? message = payQuotaRequest.messageError;
+    if(message != null){
       return showSnackbarWidget(
         context: Get.context!, 
         typeSnackbar: TypeSnackbar.error, 
-        message: 'Registre una fecha de pago');
+        message: message);
     }
-    bool? result = await showDialogWidget(
+    bool result = await showDialogWidget(
         context: Get.context!,
         message: 'Se registrara la cuota como pagada, ¿desea continuar?');
-    if (result.orFalse()) {
+    if (result) {
       showLoading();
-      PayQuotaRequest payQuotaRequest =
-          PayQuotaRequest(idOfQuota: quota.id, paidDate: dateToPayValidationResult?.value);
       ResultType resultType = await payQuotaUseCase.execute(payQuotaRequest);
       hideLoading();
       if (resultType is Success) {

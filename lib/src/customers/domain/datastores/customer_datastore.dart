@@ -6,4 +6,5 @@ import 'package:utils/utils.dart';
 abstract class CustomerDatastore {
   Future<ResultType<List<CustomerEntity>, ErrorEntity>> getAll();
   Future<ResultType<CustomerEntity, ErrorEntity>> create(CreateCustomerRequest request);
+  Future<ResultType<CustomerEntity, ErrorEntity>> update(CreateCustomerRequest request);
 }

@@ -1,0 +1,1 @@
+const int idOfMethodPaymentDefault = 1;

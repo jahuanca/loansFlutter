@@ -57,18 +57,19 @@ class CustomersPage extends StatelessWidget {
       storageType: StorageType.localStorage,
       title: customer.fullName,
       subtitle: customer.address,
-      alignmentOfActions: MainAxisAlignment.center,
+      alignmentOfActions: MainAxisAlignment.spaceEvenly,
       actions: [
-        CircleAvatar(
-            backgroundColor: infoColor(),
-            child: IconButton(
-                onPressed: controller.goToEditCustomer,
-                icon: const Icon(Icons.edit))),
         IconButtonWidget(
-          onPressed: controller.goToEditCustomer,
+          onPressed: () => controller.goToEditCustomer(customer),
           iconData: Icons.edit,
           shape: BoxShape.circle,
           backgroundColor: infoColor(),
+        ),
+        IconButtonWidget(
+          onPressed: controller.goToDeleteCustomer,
+          iconData: Icons.delete,
+          shape: BoxShape.circle,
+          backgroundColor: dangerColor(),
         ),
       ],
     );

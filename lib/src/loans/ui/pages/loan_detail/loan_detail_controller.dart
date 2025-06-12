@@ -55,7 +55,7 @@ class LoanDetailController extends GetxController {
         return;
     }
 
-    bool? result = await showDialogWidget(
+    bool result = await showDialogWidget(
       context: Get.context!, 
       message: '¿Desea iniciar el pago de la cuota ${quota.name}, Vence: ${quota.dateToPay.formatDMMYYY()}?'
       );

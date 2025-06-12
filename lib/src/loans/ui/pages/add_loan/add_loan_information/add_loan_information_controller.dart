@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
@@ -62,8 +66,8 @@ class AddLoanInformationController extends GetxController {
         await getCustomersUseCase.execute();
     if (resultType is Success) {
       customers = resultType.data;
-    } else {}
-    update(['customers']);
+    }
+    update([customersIdGet]);
   }
 
   Future<void> getPaymentFrecuencies() async {
@@ -80,8 +84,9 @@ class AddLoanInformationController extends GetxController {
         await getPaymentMethodsUseCase.execute();
     if (resultType is Success) {
       methods = resultType.data;
+      onChangedMethodsPayment(idOfMethodPaymentDefault);
     }
-    update(['methods']);
+    update([methodsIdGet]);
   }
 
   void onChangedCustomer(dynamic value) {
@@ -219,6 +224,11 @@ class AddLoanInformationController extends GetxController {
     return ValidateResult(error: null, hasError: false, value: addLoanRequest);
   }
 
+  Future<void> goAddCustomer() async {
+    await Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+    getCustomers();
+  }
+
   void goNext() {
     ValidateResult resultInformation = validate();
     if (resultInformation.hasError) {
@@ -240,8 +250,8 @@ class AddLoanInformationController extends GetxController {
   }
 
   void goBack() async {
-    bool? result = await showDialogWidget(context: Get.context!, message: '¿Está seguro de salir de la creación?');
-    if (result.orFalse()) {
+    bool result = await showDialogWidget(context: Get.context!, message: '¿Está seguro de salir de la creación?');
+    if (result) {
       Get.back();
     }
   }

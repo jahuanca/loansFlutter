@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/home/data/responses/dashboard_summary_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_controller.dart';
+import 'package:loands_flutter/src/home/ui/pages/dashboard/widgets/card_dasboard_widget.dart';
+import 'package:loands_flutter/src/home/ui/pages/dashboard/widgets/card_single_dasboard_widget.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
 
@@ -38,90 +41,43 @@ class DashboardPage extends GetView<DashboardController> {
   Widget _cards({
     required Size size,
   }) {
+    DashboardSummaryResponse? response = controller.dashboardSummaryResponse;
+
+    Map<String, dynamic> valuesOfLoans = response?.loansInfo ?? {};
+
+    Map<String, dynamic> valuesOfAmount = response?.amountsInfo ?? {};
+
+    Map<String, dynamic> valuesOfGanancy = response?.ganancyInfo ?? {};
+
     return SizedBox(
-      height: size.height * 0.15,
+      height: size.height * 0.18,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          _card(
+          cardDashboardWidget(
               size: size,
-              icon: Icons.numbers,
               title: 'Créditos',
-              mount: controller.dashboardSummaryResponse?.loansCount.toString(),
+              values: valuesOfLoans,
               onTap: controller.goToLoans),
-          _card(
+          cardDashboardWidget(
             size: size,
-            icon: Icons.monetization_on,
             title: 'Total prestado',
-            mount:
-                controller.dashboardSummaryResponse?.allAmount.formatDecimals(),
+            values: valuesOfAmount
           ),
-          _card(
+          cardDashboardWidget(
             size: size,
-            icon: Icons.upload_rounded,
             title: 'Ganancia',
-            mount: controller.dashboardSummaryResponse?.allGanancy
-                .formatDecimals(),
+            values: valuesOfGanancy,
           ),
-          _card(
+          cardSingleDashboardWidget(
             size: size,
             icon: Icons.people,
             title: 'Clientes',
-            mount:
+            value:
                 controller.dashboardSummaryResponse?.customersCount.toString(),
             onTap: controller.goToCustomers,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _card({
-    required IconData icon,
-    required String title,
-    required String? mount,
-    required Size size,
-    void Function()? onTap,
-  }) {
-    const TextStyle amountStyle = TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w500,
-    );
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: size.width * 0.4,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-            color: Colors.grey.withAlpha(50),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(icon),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    mount ?? emptyString,
-                    style: amountStyle,
-                  ),
-                ],
-              ),
-              Text(title),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -284,6 +240,7 @@ class DashboardPage extends GetView<DashboardController> {
               Expanded(
                   flex: 2,
                   child: TagWidget(
+                      alignmentOfContent: MainAxisAlignment.center,
                       backgroundColor: colorStateQuota,
                       textColorAndIcon: Colors.white,
                       title: nameStateQuota)),

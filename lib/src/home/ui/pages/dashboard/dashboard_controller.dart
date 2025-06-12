@@ -53,7 +53,6 @@ class DashboardController extends GetxController {
     if (resultType is Success) {
       quotasByDate = resultType.data;
       update([quotasIdGet]);
-      update();
     } else {
       showSnackbarWidget(
           typeSnackbar: TypeSnackbar.error,
@@ -71,9 +70,10 @@ class DashboardController extends GetxController {
     Get.to(() => CustomersPage(), binding: CustomersBinding());
   }
 
-  void goToQuota(DashboardQuotaResponse quotaResponse) {
-    Get.to(() => const PayQuotaPage(), arguments: {
+  Future<void> goToQuota(DashboardQuotaResponse quotaResponse) async {
+    await Get.to(() => const PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: quotaResponse,
     });
+    getSummary();
   }
 }
