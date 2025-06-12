@@ -107,6 +107,10 @@ class AddCustomerController extends GetxController {
     update();
   }
 
+  void onChangedAlias(String value) {
+    createCustomerRequest.alias = value;
+  }
+
   void onChangedLastname(String value) {
     validateLastname = validateText(
         rules: {RuleValidator.isRequired: true},

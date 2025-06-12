@@ -66,7 +66,7 @@ class LoansPage extends StatelessWidget {
             iconData: Icons.check)
         ],
       ),
-      subtitle: Text(loan.customerEntity?.fullName ?? emptyString),
+      subtitle: Text(loan.customerEntity?.aliasOrFullName ?? emptyString),
       trailing: Text(loan.date.formatDMMYYY() ?? emptyString),
     );
   }

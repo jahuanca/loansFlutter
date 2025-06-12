@@ -65,7 +65,7 @@ class AddLoanInformationPage extends StatelessWidget {
                                 hintText: 'Seleccione el cliente',
                                 label: 'Cliente',
                                 items: controller.customers,
-                                idLabel: 'fullName',
+                                idLabel: 'aliasOrFullName',
                                 onChanged: controller.onChangedCustomer,
                               )),
                     ),

@@ -11,6 +11,7 @@ String customerEntityToJson(List<CustomerEntity> data) => json.encode(List<dynam
 class CustomerEntity {
     int id;
     String name;
+    String? alias;
     String lastName;
     String address;
     String? latitude;
@@ -25,18 +26,22 @@ class CustomerEntity {
         required this.name,
         required this.lastName,
         required this.address,
-        this.latitude,
-        this.longitude,
         required this.idTypeDocument,
         required this.document,
         required this.createdAt,
         required this.updatedAt,
+        this.alias,
+        this.latitude,
+        this.longitude,
     });
+
+    String get aliasOrFullName => alias ?? fullName;
 
     String get fullName => '$name $lastName';
 
     factory CustomerEntity.fromJson(Map<String, dynamic> json) => CustomerEntity(
         id: json["id"],
+        alias: json["alias"],
         name: json["name"],
         lastName: json["lastName"],
         address: json["address"],
@@ -50,6 +55,7 @@ class CustomerEntity {
 
     Map<String, dynamic> toJson() => {
         "id": id,
+        "alias": alias,
         "name": name,
         "lastName": lastName,
         "address": address,
@@ -60,5 +66,9 @@ class CustomerEntity {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "fullName": fullName,
+        'aliasOrFullName': aliasOrFullName,
     };
+
+    static const int maxLenghtOfAlias = 50;
+    static const int maxLenghtOfDocument = 8;
 }

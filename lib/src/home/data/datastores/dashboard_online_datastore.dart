@@ -31,7 +31,7 @@ class DashboardOnlineDatastore extends DashboardDatastore {
       DateTime date) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
-        url: '/quota/byDate',
+        url: '/utils/quotasOfDate',
         query: {
           'date': date.format(formatDate: 'yyyy-MM-dd')
         });

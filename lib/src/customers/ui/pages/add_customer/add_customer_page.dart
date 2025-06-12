@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
@@ -51,7 +52,20 @@ class AddCustomerPage extends StatelessWidget {
                     onChanged: controller.onChangedDocument,
                     label: 'Documento',
                     textInputType: TextInputType.number,
-                    hintText: 'Ingrese el documento'),
+                    hintText: 'Ingrese el documento',
+                    maxLength: CustomerEntity.maxLenghtOfDocument,
+                ),
+              ),
+              GetBuilder<AddCustomerController>(
+                builder: (controller) => InputWidget(
+                    initialValue: controller.createCustomerRequest.alias,
+                    textInputType: TextInputType.name,
+                    onChanged: controller.onChangedAlias,
+                    isAlignLabel: true,
+                    label: 'Alias',
+                    hintText: 'Ingrese un alias para el cliente',
+                    maxLength: CustomerEntity.maxLenghtOfAlias,
+                ),
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(

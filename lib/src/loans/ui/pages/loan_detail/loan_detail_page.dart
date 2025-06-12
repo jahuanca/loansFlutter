@@ -65,6 +65,13 @@ class LoanDetailPage extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
         ),
+        Text(
+          '${customer?.alias.orEmpty()}',
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         Padding(
           padding:
               EdgeInsets.symmetric(horizontal: size.width * 0.1, vertical: 16),

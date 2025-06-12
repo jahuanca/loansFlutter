@@ -57,6 +57,7 @@ class CustomersPage extends StatelessWidget {
       storageType: StorageType.localStorage,
       title: customer.fullName,
       subtitle: customer.address,
+      detail: customer.alias,
       alignmentOfActions: MainAxisAlignment.spaceEvenly,
       actions: [
         IconButtonWidget(
