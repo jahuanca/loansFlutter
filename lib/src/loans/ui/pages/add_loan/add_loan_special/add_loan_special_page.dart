@@ -22,9 +22,7 @@ class AddLoanSpecialPage extends StatelessWidget {
       builder: (controller) => PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
-          if (didPop) {
-            return;
-          }
+          if (didPop) return;
           controller.goBack();
         },
         child: Scaffold(
@@ -60,8 +58,8 @@ class AddLoanSpecialPage extends StatelessWidget {
                       child: GetBuilder<AddLoanSpecialController>(
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
-                                hintText: 'Seleccione el cliente',
-                                label: 'Cliente',
+                                hintText: selectTheCustomer,
+                                label: customerString,
                                 items: controller.customers,
                                 idLabel: 'aliasOrFullName',
                                 onChanged: controller.onChangedCustomer,
@@ -84,7 +82,7 @@ class AddLoanSpecialPage extends StatelessWidget {
                   ),
                 ),
                 GetBuilder<AddLoanSpecialController>(
-                  id: 'percentage',
+                  id: percentageIdGet,
                   builder: (controller) => InputWidget(
                       textEditingController:
                           controller.percentageTextController,
@@ -97,27 +95,27 @@ class AddLoanSpecialPage extends StatelessWidget {
                   id: amountIdGet,
                   builder: (controller) => InputWidget(
                     hintText: 'Ingrese el monto',
-                    label: 'Monto',
+                    label: amountString,
                     icon: const Icon(Icons.monetization_on),
                     textInputType: TextInputType.number,
                     onChanged: controller.onChangeAmount,
                   ),
                 ),
                 GetBuilder<AddLoanSpecialController>(
-                  id: 'percentage',
+                  id: percentageIdGet,
                   builder: (controller) => InputWidget(
                       textEditingController:
                           controller.percentageTextController,
                       onChanged: controller.onChangedPercentage,
-                      hintText: 'Porcentaje',
-                      label: 'Porcentaje'),
+                      hintText: 'Ingrese un porcentaje',
+                      label: percentageString),
                 ),
                 GetBuilder<AddLoanSpecialController>(
                     id: ganancyIdGet,
                     builder: (controller) => InputWidget(
                           textEditingController:
                               controller.ganancyTextController,
-                          hintText: 'Ganancia',
+                          hintText: ganancyString,
                           icon: const Icon(Icons.monetization_on),
                           label: 'Ganancia calculada',
                           enabled: false,
@@ -144,7 +142,7 @@ class AddLoanSpecialPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ButtonWidget(
-        text: 'Continuar',
+        text: continueString,
         onTap: controller.goNext,
       ),
     );

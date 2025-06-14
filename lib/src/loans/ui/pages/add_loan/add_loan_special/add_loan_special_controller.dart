@@ -92,7 +92,7 @@ class AddLoanSpecialController extends GetxController {
 
   void onChangedCustomer(dynamic value) {
     idCustomerValidationResult =
-        validateText(text: value, label: 'Cliente', rules: {
+        validateText(text: value, label: customerString, rules: {
       RuleValidator.isRequired: true,
     });
 
@@ -141,13 +141,13 @@ class AddLoanSpecialController extends GetxController {
     percentageTextController.text =
         '${frequencySelected?.recommendedPercentage.formatDecimals()}';
     addLoanRequest.percentage = frequencySelected?.recommendedPercentage;
-    update(['percentage']);
+    update([percentageIdGet]);
   }
 
   void onChangeAmount(String value) {
     amountValidationResult = validateText(
       text: value,
-      label: 'Monto',
+      label: amountString,
       rules: {
         RuleValidator.isRequired: true,
         RuleValidator.isDouble: true,
@@ -185,7 +185,7 @@ class AddLoanSpecialController extends GetxController {
   void onChangedPercentage(String value) {
     percentageValidationResult = validateText(
       text: value,
-      label: 'Porcentaje',
+      label: percentageString,
       rules: {
         RuleValidator.isRequired: true,
         RuleValidator.isDouble: true,
@@ -198,7 +198,7 @@ class AddLoanSpecialController extends GetxController {
         onChangeAmount(addLoanRequest.amount.toString());
       }
     }
-    update(['percentage']);
+    update([percentageIdGet]);
   }
 
   ValidateResult validate() {
@@ -252,7 +252,7 @@ class AddLoanSpecialController extends GetxController {
   void goBack() async {
     bool result = await showDialogWidget(
         context: Get.context!,
-        message: '¿Está seguro de salir de la creación?');
+        message: alertBackString);
     if (result) {
       Get.back();
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_controller.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanQuotasPage extends StatelessWidget {
@@ -115,7 +116,7 @@ class AddLoanQuotasPage extends StatelessWidget {
           title: header,
           children: [
             _childItem(
-                title: 'Fecha de pago',
+                title: paymentDateString,
                 value: '${expirationDate.formatDMMYYY()}'),
             _childItem(
                 title: 'Amortización',
@@ -151,7 +152,7 @@ class AddLoanQuotasPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ButtonWidget(
-        text: 'Crear',
+        text: confirmString,
         onTap: controller.create,
       ),
     );

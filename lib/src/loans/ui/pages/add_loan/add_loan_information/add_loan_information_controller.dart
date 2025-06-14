@@ -9,6 +9,7 @@ import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
@@ -92,7 +93,7 @@ class AddLoanInformationController extends GetxController {
 
   void onChangedCustomer(dynamic value) {
     idCustomerValidationResult =
-        validateText(text: value, label: 'Cliente', rules: {
+        validateText(text: value, label: customerString, rules: {
       RuleValidator.isRequired: true,
     });
 
@@ -141,13 +142,13 @@ class AddLoanInformationController extends GetxController {
     percentageTextController.text =
         '${frequencySelected?.recommendedPercentage.formatDecimals()}';
     addLoanRequest.percentage = frequencySelected?.recommendedPercentage;
-    update(['percentage']);
+    update([percentageIdGet]);
   }
 
   void onChangeAmount(String value) {
     amountValidationResult = validateText(
       text: value,
-      label: 'Monto',
+      label: amountString,
       rules: {
         RuleValidator.isRequired: true,
         RuleValidator.isDouble: true,
@@ -185,7 +186,7 @@ class AddLoanInformationController extends GetxController {
   void onChangedPercentage(String value) {
     percentageValidationResult = validateText(
       text: value,
-      label: 'Porcentaje',
+      label: percentageString,
       rules: {
         RuleValidator.isRequired: true,
         RuleValidator.isDouble: true,
@@ -198,7 +199,7 @@ class AddLoanInformationController extends GetxController {
         onChangeAmount(addLoanRequest.amount.toString());
       }
     }
-    update(['percentage']);
+    update([percentageIdGet]);
   }
 
   ValidateResult validate() {
@@ -251,7 +252,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   void goBack() async {
-    bool result = await showDialogWidget(context: Get.context!, message: '¿Está seguro de salir de la creación?');
+    bool result = await showDialogWidget(context: Get.context!, message: alertBackString);
     if (result) {
       Get.back();
     }

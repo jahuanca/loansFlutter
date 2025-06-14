@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loands_flutter/src/utils/core/colors.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class QuotaWidget extends StatelessWidget {
@@ -93,7 +94,7 @@ class QuotaWidget extends StatelessWidget {
           title: header,
           children: [
             _childItem(
-                title: 'Fecha de pago',
+                title: paymentDateString,
                 value: '${expirationDate.formatDMMYYY()}'),
             _childItem(
                 title: 'Amortización',

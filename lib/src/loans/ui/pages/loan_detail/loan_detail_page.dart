@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loan_detail/loan_detail_controller.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/quota_widget.dart';
 import 'package:utils/utils.dart';
 
@@ -86,11 +87,11 @@ class LoanDetailPage extends StatelessWidget {
             child: Row(
               children: [
                 _itemLoan(
-                  label: 'Monto',
+                  label: amountString,
                   value: 'S/ ${loan.amount.formatDecimals()}',
                 ),
                 _itemLoan(
-                  label: 'Porcentaje',
+                  label: percentageString,
                   value: '${loan.percentage.formatDecimals()}%',
                 ),
                 _itemLoan(

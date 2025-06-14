@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class AddCustomerPage extends StatelessWidget {
@@ -26,7 +27,7 @@ class AddCustomerPage extends StatelessWidget {
         ),
         bottomNavigationBar: ButtonWidget(
           padding: const EdgeInsets.all(8),
-          text: 'Confirmar',
+          text: confirmString,
           onTap: controller.goConfirm,
         ),
         body: SingleChildScrollView(
@@ -39,8 +40,6 @@ class AddCustomerPage extends StatelessWidget {
                   label: 'Tipo de documento',
                   hintText: 'Seleccione el tipo de documento',
                   items: controller.typesDocument,
-                  idLabel: 'name',
-                  idValue: 'id',
                   value: controller.typeDocumentSelected?.id,
                   onChanged: controller.onChangedTypeDocument,
                 ),

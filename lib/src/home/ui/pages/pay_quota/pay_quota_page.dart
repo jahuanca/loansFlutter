@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_controller.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaPage extends StatelessWidget {
@@ -22,8 +23,8 @@ class PayQuotaPage extends StatelessWidget {
           children: [
             _cardDetail(quota: controller.quota),
             InputWidget(
-              hintText: 'Elija la fecha de pago',
-              label: 'Fecha de pago',
+              hintText: 'Seleccione la fecha de pago',
+              label: paymentDateString,
               onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
                           context: context,

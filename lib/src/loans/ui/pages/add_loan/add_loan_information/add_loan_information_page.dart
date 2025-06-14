@@ -28,7 +28,7 @@ class AddLoanInformationPage extends StatelessWidget {
           controller.goBack();
         },
         child: Scaffold(
-          appBar: appBarWidget(text: 'Préstamo mensual', hasArrowBack: true),
+          appBar: appBarWidget(text: monthlyLoanString, hasArrowBack: true),
           bottomNavigationBar: _bottomButtons(),
           body: SingleChildScrollView(
             child: Column(
@@ -37,16 +37,14 @@ class AddLoanInformationPage extends StatelessWidget {
                   height: 10,
                 ),
                 GetBuilder<AddLoanInformationController>(
-                  id: 'start_day',
+                  id: startDayIdGet,
                   builder: (controller) => InputWidget(
                     onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
                           currentDate: controller.addLoanRequest.startDate,
                           context: context,
-                          firstDate: defaultDate
-                              .subtract(const Duration(days: 180)),
-                          lastDate:
-                              defaultDate.add(const Duration(days: 1)));
+                          firstDate: defaultDate.subtract(halfYearDuration),
+                          lastDate: defaultDate.add(oneDayDuration));
                       controller.onChangedStartDate(dateSelected);
                     },
                     textEditingController: controller.startDateTextController,
@@ -62,9 +60,8 @@ class AddLoanInformationPage extends StatelessWidget {
                       child: GetBuilder<AddLoanInformationController>(
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
-                                wrapperWidget: (p0) => Container(child: p0,),
-                                hintText: 'Seleccione el cliente',
-                                label: 'Cliente',
+                                hintText: selectTheCustomer,
+                                label: customerString,
                                 items: controller.customers,
                                 idLabel: 'aliasOrFullName',
                                 onChanged: controller.onChangedCustomer,
@@ -94,13 +91,13 @@ class AddLoanInformationPage extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: GetBuilder<AddLoanInformationController>(
-                        id: 'percentage',
+                        id: percentageIdGet,
                         builder: (controller) => InputWidget(
                             textEditingController:
                                 controller.percentageTextController,
                             onChanged: controller.onChangedPercentage,
-                            hintText: 'Porcentaje',
-                            label: 'Porcentaje'),
+                            hintText: percentageString,
+                            label: percentageString),
                       ),
                     ),
                   ],
@@ -109,7 +106,7 @@ class AddLoanInformationPage extends StatelessWidget {
                   id: 'amount',
                   builder: (controller) => InputWidget(
                     hintText: 'Ingrese el monto',
-                    label: 'Monto',
+                    label: amountString,
                     icon: const Icon(Icons.monetization_on),
                     textInputType: TextInputType.number,
                     onChanged: controller.onChangeAmount,
@@ -120,7 +117,7 @@ class AddLoanInformationPage extends StatelessWidget {
                     builder: (controller) => InputWidget(
                           textEditingController:
                               controller.ganancyTextController,
-                          hintText: 'Ganancia',
+                          hintText: ganancyString,
                           icon: const Icon(Icons.monetization_on),
                           label: 'Ganancia calculada',
                           enabled: false,
@@ -148,7 +145,7 @@ class AddLoanInformationPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ButtonWidget(
-        text: 'Continuar',
+        text: continueString,
         onTap: controller.goNext,
       ),
     );

@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_controller.
 import 'package:loands_flutter/src/home/ui/pages/dashboard/widgets/card_dasboard_widget.dart';
 import 'package:loands_flutter/src/home/ui/pages/dashboard/widgets/card_single_dasboard_widget.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class DashboardPage extends GetView<DashboardController> {
@@ -60,14 +61,13 @@ class DashboardPage extends GetView<DashboardController> {
               values: valuesOfLoans,
               onTap: controller.goToLoans),
           cardDashboardWidget(
-            size: size,
-            title: 'Total prestado',
-            values: valuesOfAmount,
-            onTap: controller.goToPaymentSummary
-          ),
+              size: size,
+              title: 'Total prestado',
+              values: valuesOfAmount,
+              onTap: controller.goToPaymentSummary),
           cardDashboardWidget(
             size: size,
-            title: 'Ganancia',
+            title: ganancyString,
             values: valuesOfGanancy,
           ),
           cardSingleDashboardWidget(
@@ -124,7 +124,8 @@ class DashboardPage extends GetView<DashboardController> {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: 30,
-          itemBuilder: (context, index) => _itemDay(day: index, context: context),
+          itemBuilder: (context, index) =>
+              _itemDay(day: index, context: context),
         ),
       ),
     );
@@ -134,12 +135,13 @@ class DashboardPage extends GetView<DashboardController> {
     required int day,
     required BuildContext context,
   }) {
-    final dateOfResponse = controller.dashboardSummaryResponse?.dateToSearch ?? defaultDate;
+    final dateOfResponse =
+        controller.dashboardSummaryResponse?.dateToSearch ?? defaultDate;
     final date = dateOfResponse.add(Duration(days: day));
-    final isSelected = (date.formatDMMYYY() == controller.dateSelected.formatDMMYYY());
-    final TextStyle textStyle = TextStyle(
-                        color: isSelected ? Colors.white : Colors.black
-                      );
+    final isSelected =
+        (date.formatDMMYYY() == controller.dateSelected.formatDMMYYY());
+    final TextStyle textStyle =
+        TextStyle(color: isSelected ? Colors.white : Colors.black);
 
     return Container(
       padding: const EdgeInsets.all(2),
@@ -158,7 +160,7 @@ class DashboardPage extends GetView<DashboardController> {
                       .orEmpty()
                       .capitalizeFirst
                       .toString(),
-                      style: textStyle,
+                  style: textStyle,
                 ),
                 Text(
                   date.day.toString(),

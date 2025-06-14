@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/home/domain/use_cases/pay_quota_use_case.dart
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
@@ -29,7 +30,7 @@ class PayQuotaController extends GetxController {
 
   void onChangedStartDate(DateTime? date) {
     ValidateResult dateToPayValidationResult =
-        validateText(text: date, label: 'Fecha de pago', rules: {
+        validateText(text: date, label: paymentDateString, rules: {
       RuleValidator.isRequired: true,
       RuleValidator.isDatetime: true,
     });
@@ -37,7 +38,7 @@ class PayQuotaController extends GetxController {
       dateToPayTextController.text = date.formatDMMYYY().orEmpty();
       payQuotaRequest.paidDate = date;
     }
-    update([startDateIdGet]);
+    update([startDayIdGet]);
   }
 
   void payQuota() async {
