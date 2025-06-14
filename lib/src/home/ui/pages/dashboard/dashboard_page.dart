@@ -62,7 +62,8 @@ class DashboardPage extends GetView<DashboardController> {
           cardDashboardWidget(
             size: size,
             title: 'Total prestado',
-            values: valuesOfAmount
+            values: valuesOfAmount,
+            onTap: controller.goToPaymentSummary
           ),
           cardDashboardWidget(
             size: size,

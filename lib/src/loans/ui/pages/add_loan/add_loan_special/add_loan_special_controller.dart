@@ -9,6 +9,7 @@ import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
@@ -16,7 +17,7 @@ import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencie
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_methods_use_case.dart';
 import 'package:utils/utils.dart';
 
-class AddLoanInformationController extends GetxController {
+class AddLoanSpecialController extends GetxController {
   GetCustomersUseCase getCustomersUseCase;
   GetPaymentFrequenciesUseCase getPaymentFrequenciesUseCase;
   GetPaymentMethodsUseCase getPaymentMethodsUseCase;
@@ -41,7 +42,7 @@ class AddLoanInformationController extends GetxController {
       amountValidationResult,
       idMethodValidationResult;
 
-  AddLoanInformationController({
+  AddLoanSpecialController({
     required this.getCustomersUseCase,
     required this.getPaymentFrequenciesUseCase,
     required this.getPaymentMethodsUseCase,
@@ -75,7 +76,6 @@ class AddLoanInformationController extends GetxController {
         await getPaymentFrequenciesUseCase.execute();
     if (resultType is Success) {
       frequencies = resultType.data;
-      frequencies.removeWhere((e) => e.id == idOfSpecialFrequency);
     }
     update(['frequencies']);
   }
@@ -118,7 +118,7 @@ class AddLoanInformationController extends GetxController {
       frequencySelected = frequencies[index];
       addLoanRequest.paymentFrequencyEntity = frequencySelected;
       addLoanRequest.idPaymentFrequency = frequencySelected?.id;
-      if(setPercentage) changePercentage();
+      if (setPercentage) changePercentage();
     }
   }
 
@@ -157,7 +157,7 @@ class AddLoanInformationController extends GetxController {
     if (amountValidationResult!.hasError.not()) {
       addLoanRequest.amount = amountValidationResult!.value;
     }
-    update(['aomunt']);
+    update([amountIdGet]);
     calculateGanacy();
   }
 
@@ -165,12 +165,12 @@ class AddLoanInformationController extends GetxController {
     addLoanRequest.ganancy = (addLoanRequest.amount.orZero()) *
         (addLoanRequest.percentage.orZero() / 100);
     ganancyTextController.text = '${addLoanRequest.ganancy?.formatDecimals()}';
-    update(['ganancy']);
+    update([ganancyIdGet]);
   }
 
   void onChangedStartDate(DateTime? date) {
     startDateValidationResult =
-        validateText(text: date, label: 'Fecha de inicio', rules: {
+        validateText(text: date, label: startDateString, rules: {
       RuleValidator.isRequired: true,
       RuleValidator.isDatetime: true,
     });
@@ -194,7 +194,7 @@ class AddLoanInformationController extends GetxController {
     );
     if (percentageValidationResult!.hasError.not()) {
       addLoanRequest.percentage = percentageValidationResult?.value;
-      if(addLoanRequest.amount != null){
+      if (addLoanRequest.amount != null) {
         onChangeAmount(addLoanRequest.amount.toString());
       }
     }
@@ -226,7 +226,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> goAddCustomer() async {
-    await Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+    await Get.to(() => AddCustomerPage(), binding: AddCustomerBinding());
     getCustomers();
   }
 
@@ -240,18 +240,19 @@ class AddLoanInformationController extends GetxController {
       return;
     }
     addLoanRequest = resultInformation.value as AddLoanRequest;
-    Get.to(
-      ()=> AddLoanQuotasPage(), 
-      transition: Transition.noTransition,
-      opaque: false,
-      binding: AddLoanQuotasBinding(),
-    arguments: {
-      addLoanRequestArgument: addLoanRequest,
-    });
+    Get.to(() => AddLoanQuotasPage(),
+        transition: Transition.noTransition,
+        opaque: false,
+        binding: AddLoanQuotasBinding(),
+        arguments: {
+          addLoanRequestArgument: addLoanRequest,
+        });
   }
 
   void goBack() async {
-    bool result = await showDialogWidget(context: Get.context!, message: '¿Está seguro de salir de la creación?');
+    bool result = await showDialogWidget(
+        context: Get.context!,
+        message: '¿Está seguro de salir de la creación?');
     if (result) {
       Get.back();
     }

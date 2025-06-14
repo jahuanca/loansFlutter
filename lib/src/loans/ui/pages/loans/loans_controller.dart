@@ -4,7 +4,7 @@ import 'package:loands_flutter/src/loans/di/add_loan_information_binding.dart';
 import 'package:loands_flutter/src/loans/di/loan_detail_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_page.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_choose_type/add_loan_choose_type_page.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loan_detail/loan_detail_page.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:utils/utils.dart';
@@ -36,7 +36,7 @@ class LoansController extends GetxController {
   }
 
   Future<void> goToAddLoanInformation() async {
-    await Get.to(()=> AddLoanInformationPage(), binding: AddLoanInformationBinding());
+    await Get.to(()=> AddLoanChooseTypePage(), binding: AddLoanInformationBinding());
     getLoans();
   }
 
