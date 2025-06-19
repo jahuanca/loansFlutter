@@ -36,23 +36,6 @@ class AddLoanInformationPage extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                GetBuilder<AddLoanInformationController>(
-                  id: startDayIdGet,
-                  builder: (controller) => InputWidget(
-                    onTap: () async {
-                      DateTime? dateSelected = await showDatePicker(
-                          currentDate: controller.addLoanRequest.startDate,
-                          context: context,
-                          firstDate: defaultDate.subtract(halfYearDuration),
-                          lastDate: defaultDate.add(oneDayDuration));
-                      controller.onChangedStartDate(dateSelected);
-                    },
-                    textEditingController: controller.startDateTextController,
-                    enabled: false,
-                    label: startDateString,
-                    hintText: selectStartDateString,
-                  ),
-                ),
                 Row(
                   children: [
                     Expanded(
@@ -72,6 +55,23 @@ class AddLoanInformationPage extends StatelessWidget {
                             onPressed: controller.goAddCustomer,
                             iconData: Icons.add))
                   ],
+                ),
+                GetBuilder<AddLoanInformationController>(
+                  id: startDayIdGet,
+                  builder: (controller) => InputWidget(
+                    onTap: () async {
+                      DateTime? dateSelected = await showDatePicker(
+                          currentDate: controller.addLoanRequest.startDate,
+                          context: context,
+                          firstDate: defaultDate.subtract(halfYearDuration),
+                          lastDate: defaultDate.add(oneDayDuration));
+                      controller.onChangedStartDate(dateSelected);
+                    },
+                    textEditingController: controller.startDateTextController,
+                    enabled: false,
+                    label: startDateString,
+                    hintText: selectStartDateString,
+                  ),
                 ),
                 Row(
                   children: [

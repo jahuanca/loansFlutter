@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_special/add_loan_special_controller.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan/add_special_loan_controller.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
-class AddLoanSpecialPage extends StatelessWidget {
-  final AddLoanSpecialController controller = AddLoanSpecialController(
+class AddSpecialLoanPage extends StatelessWidget {
+  final AddSpecialLoanController controller = AddSpecialLoanController(
     getCustomersUseCase: Get.find(),
     getPaymentFrequenciesUseCase: Get.find(),
     getPaymentMethodsUseCase: Get.find(),
   );
 
-  AddLoanSpecialPage({super.key});
+  AddSpecialLoanPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AddLoanSpecialController>(
+    return GetBuilder<AddSpecialLoanController>(
       init: controller,
       id: pageIdGet,
       builder: (controller) => PopScope(
@@ -34,7 +34,27 @@ class AddLoanSpecialPage extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                GetBuilder<AddLoanSpecialController>(
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: GetBuilder<AddSpecialLoanController>(
+                          id: customersIdGet,
+                          builder: (controller) => DropdownMenuWidget(
+                                hintText: selectTheCustomer,
+                                label: customerString,
+                                items: controller.customers,
+                                idLabel: 'aliasOrFullName',
+                                onChanged: controller.onChangedCustomer,
+                              )),
+                    ),
+                    Expanded(
+                        child: IconButtonWidget(
+                            onPressed: controller.goAddCustomer,
+                            iconData: Icons.add))
+                  ],
+                ),
+                GetBuilder<AddSpecialLoanController>(
                   id: startDayIdGet,
                   builder: (controller) => InputWidget(
                     onTap: () async {
@@ -51,27 +71,7 @@ class AddLoanSpecialPage extends StatelessWidget {
                     hintText: selectStartDateString,
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: GetBuilder<AddLoanSpecialController>(
-                          id: customersIdGet,
-                          builder: (controller) => DropdownMenuWidget(
-                                hintText: selectTheCustomer,
-                                label: customerString,
-                                items: controller.customers,
-                                idLabel: 'aliasOrFullName',
-                                onChanged: controller.onChangedCustomer,
-                              )),
-                    ),
-                    Expanded(
-                        child: IconButtonWidget(
-                            onPressed: controller.goAddCustomer,
-                            iconData: Icons.add))
-                  ],
-                ),
-                GetBuilder<AddLoanSpecialController>(
+                GetBuilder<AddSpecialLoanController>(
                   id: numberOfInstallmentsIdGet,
                   builder: (controller) => InputWidget(
                     hintText: 'Número de cuotas',
@@ -81,7 +81,7 @@ class AddLoanSpecialPage extends StatelessWidget {
                     onChanged: controller.onChangeNumberOfInstallments,
                   ),
                 ),
-                GetBuilder<AddLoanSpecialController>(
+                GetBuilder<AddSpecialLoanController>(
                   id: daysBetweenInstallmentsIdGet,
                   builder: (controller) => InputWidget(
                       onChanged: controller.onChangeDaysBetweenInstallments,
@@ -89,7 +89,7 @@ class AddLoanSpecialPage extends StatelessWidget {
                       hintText: 'Ingrese dias por cuota',
                       label: 'Dias por cuota'),
                 ),
-                GetBuilder<AddLoanSpecialController>(
+                GetBuilder<AddSpecialLoanController>(
                   id: amountIdGet,
                   builder: (controller) => InputWidget(
                     hintText: 'Ingrese el monto',
@@ -99,14 +99,14 @@ class AddLoanSpecialPage extends StatelessWidget {
                     onChanged: controller.onChangeAmount,
                   ),
                 ),
-                GetBuilder<AddLoanSpecialController>(
+                GetBuilder<AddSpecialLoanController>(
                   id: percentageIdGet,
                   builder: (controller) => InputWidget(
                       onChanged: controller.onChangedPercentage,
                       hintText: 'Ingrese un porcentaje',
                       label: percentageString),
                 ),
-                GetBuilder<AddLoanSpecialController>(
+                GetBuilder<AddSpecialLoanController>(
                     id: ganancyIdGet,
                     builder: (controller) => InputWidget(
                           textEditingController:
@@ -116,7 +116,7 @@ class AddLoanSpecialPage extends StatelessWidget {
                           label: 'Ganancia calculada',
                           enabled: false,
                         )),
-                GetBuilder<AddLoanSpecialController>(
+                GetBuilder<AddSpecialLoanController>(
                   id: methodsIdGet,
                   builder: (controller) => DropdownMenuWidget(
                     hintText: 'Seleccione el método de pago',

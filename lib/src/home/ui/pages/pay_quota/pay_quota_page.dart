@@ -65,7 +65,7 @@ class PayQuotaPage extends StatelessWidget {
                 Padding(
                   padding: defaultPadding,
                   child: Text(
-                    'S/ ${quota.amount}',
+                    'S/ ${quota.amount.formatDecimals()}',
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),

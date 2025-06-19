@@ -23,24 +23,7 @@ class AddLoanQuotasPage extends StatelessWidget {
           bottomNavigationBar: _bottomButtons(),
           appBar: appBarWidget(text: 'Calendario', hasArrowBack: true),
           body: _detailQuotas(size: size),
-          /*body: ListView.builder(
-            itemCount: controller.addLoanRequest.paymentFrequencyEntity
-                    ?.monthlyInstallments ??
-                defaultInt,
-            itemBuilder: (context, index) => _item(
-              total: controller.addLoanRequest.paymentFrequencyEntity
-                      ?.monthlyInstallments ??
-                  defaultInt,
-              amount: controller.addLoanRequest.amount ?? defaultDouble,
-              percentage: controller.addLoanRequest.percentage ?? defaultDouble,
-              size: size,
-              value: index + 1,
-              date: controller.addLoanRequest.startDate.orNow(),
-              daysToAdd: controller
-                      .addLoanRequest.paymentFrequencyEntity?.daysInstallment ??
-                  defaultInt,
-            ),
-          ),*/)
+          )
     );
   }
 
@@ -67,112 +50,6 @@ class AddLoanQuotasPage extends StatelessWidget {
 
     return Column(
       children: quotas,
-    );
-  }
-
-  Widget _item({
-    required int value,
-    required Size size,
-    required int total,
-    required DateTime date,
-    required int daysToAdd,
-    required double amount,
-    required double percentage,
-  }) {
-    final double amountQuota = (amount * (1 + (percentage / 100)) / total);
-    final double amortization = (amount / total);
-    final double interest = amountQuota - amortization;
-
-    final DateTime expirationDate =
-        date.add(Duration(days: (value * daysToAdd)));
-
-    final Widget header = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryColor().withAlpha(126),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(6),
-                child: Text(
-                  '$value/$total',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Vence el: ${expirationDate.formatDMMYYY()}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-        Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 5,
-              vertical: 3,
-            ),
-            decoration: BoxDecoration(
-                color: alertColor(), borderRadius: BorderRadius.circular(12)),
-            child: Text(
-              ' S/ ${amountQuota.formatDecimals()}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            )),
-      ],
-    );
-
-    return Container(
-      padding: defaultPadding,
-      child: Card(
-        color: Colors.white,
-        child: ExpansionTile(
-          shape: const Border(),
-          initiallyExpanded: (value == 1),
-          title: header,
-          children: [
-            _childItem(
-                title: paymentDateString,
-                value: '${expirationDate.formatDMMYYY()}'),
-            _childItem(
-                title: 'Amortización',
-                value: 's/ ${amortization.formatDecimals()}'),
-            _childItem(
-                title: 'Interés', value: 's/ ${interest.formatDecimals()}'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _childItem({
-    required String title,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 25,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title),
-          Text(value),
-        ],
-      ),
     );
   }
 

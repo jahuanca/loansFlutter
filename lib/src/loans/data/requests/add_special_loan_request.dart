@@ -1,4 +1,5 @@
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
 import 'package:utils/utils.dart';
@@ -88,7 +89,7 @@ class AddSpecialLoanRequest {
 
   Map<String, dynamic> toJson() => {
     'id_customer': idCustomer,
-    'id_payment_frequency': idPaymentFrequency,
+    'id_payment_frequency': idOfSpecialFrequency,
     'id_payment_method': idPaymentMethod,
     'percentage': percentage,
     'amount': amount,

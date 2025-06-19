@@ -17,7 +17,7 @@ import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencie
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_methods_use_case.dart';
 import 'package:utils/utils.dart';
 
-class AddLoanSpecialController extends GetxController {
+class AddSpecialLoanController extends GetxController {
   GetCustomersUseCase getCustomersUseCase;
   GetPaymentFrequenciesUseCase getPaymentFrequenciesUseCase;
   GetPaymentMethodsUseCase getPaymentMethodsUseCase;
@@ -43,7 +43,7 @@ class AddLoanSpecialController extends GetxController {
       numberOfInstallmentsValidationResult,
       daysBetweenInstallmentsValidationResult;
 
-  AddLoanSpecialController({
+  AddSpecialLoanController({
     required this.getCustomersUseCase,
     required this.getPaymentFrequenciesUseCase,
     required this.getPaymentMethodsUseCase,
@@ -148,7 +148,8 @@ class AddLoanSpecialController extends GetxController {
       toConvert: ToConverter.toInt,
     );
     if (daysBetweenInstallmentsValidationResult!.hasError.not()) {
-      addSpecialLoanRequest.daysBetweenInstallments = daysBetweenInstallmentsValidationResult!.value;
+      addSpecialLoanRequest.daysBetweenInstallments =
+          daysBetweenInstallmentsValidationResult!.value;
     }
     update([daysBetweenInstallmentsIdGet]);
     calculateGanacy();
@@ -164,7 +165,8 @@ class AddLoanSpecialController extends GetxController {
       toConvert: ToConverter.toInt,
     );
     if (numberOfInstallmentsValidationResult!.hasError.not()) {
-      addSpecialLoanRequest.numberOfInstallments = numberOfInstallmentsValidationResult!.value;
+      addSpecialLoanRequest.numberOfInstallments =
+          numberOfInstallmentsValidationResult!.value;
     }
     update([numberOfInstallmentsIdGet]);
     calculateGanacy();
@@ -173,7 +175,8 @@ class AddLoanSpecialController extends GetxController {
   void calculateGanacy() {
     addSpecialLoanRequest.ganancy = (addSpecialLoanRequest.amount.orZero()) *
         (addSpecialLoanRequest.percentage.orZero() / 100);
-    ganancyTextController.text = '${addSpecialLoanRequest.ganancy?.formatDecimals()}';
+    ganancyTextController.text =
+        '${addSpecialLoanRequest.ganancy?.formatDecimals()}';
     update([ganancyIdGet]);
   }
 
@@ -224,8 +227,6 @@ class AddLoanSpecialController extends GetxController {
           message: message);
       return;
     }
-    addSpecialLoanRequest;
-    // addSpecialLoanRequest = resultInformation.value as AddLoanRequest;
     Get.to(() => AddSpecialLoanQuotasPage(),
         transition: Transition.noTransition,
         opaque: false,
@@ -236,9 +237,8 @@ class AddLoanSpecialController extends GetxController {
   }
 
   void goBack() async {
-    bool result = await showDialogWidget(
-        context: Get.context!,
-        message: alertBackString);
+    bool result =
+        await showDialogWidget(context: Get.context!, message: alertBackString);
     if (result) {
       Get.back();
     }

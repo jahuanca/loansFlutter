@@ -57,7 +57,7 @@ class AddSpecialLoanQuotasController extends GetxController {
 
   void create() async {
     bool result = await showDialogWidget(
-        context: Get.context!, message: '¿Esta seguro de crear el préstamo?');
+        context: Get.context!, message: '¿Esta seguro de crear el préstamo especial?');
     if (result == false) return;
     showLoading();
     ResultType<LoanEntity, ErrorEntity> resultType =

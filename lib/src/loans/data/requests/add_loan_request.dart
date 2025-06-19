@@ -41,5 +41,5 @@ class AddLoanRequest {
     'customerEntity': customerEntity?.toJson(),
     'paymentFrequencyEntity': paymentFrequencyEntity?.toJson(),
     'paymentMethodEntity': paymentMethodEntity?.toJson(),
-  };
+  }; 
 }

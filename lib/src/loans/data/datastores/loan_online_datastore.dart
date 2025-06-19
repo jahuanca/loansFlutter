@@ -19,7 +19,7 @@ class LoanOnlineDatastore extends LoanDatastore {
       return Error(
           error: ErrorEntity(
               statusCode: response.statusCode,
-              title: 'Error del servidor',
+              title: response.title,
               errorMessage: response.body));
     }
   }
@@ -43,8 +43,18 @@ class LoanOnlineDatastore extends LoanDatastore {
 
   @override
   Future<ResultType<LoanEntity, ErrorEntity>> createSpecial(
-      AddSpecialLoanRequest addSpecialLoanRequest) {
-    // TODO: implement createSpecial
-    throw UnimplementedError();
+      AddSpecialLoanRequest addSpecialLoanRequest) async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final response = await appHttpManager.post(
+        url: '/loan/create-special', body: addSpecialLoanRequest.toJson());
+    if (response.isSuccessful) {
+      return Success(data: LoanEntity.fromJson(jsonDecode(response.body)));
+    } else {
+      return Error(
+          error: ErrorEntity(
+              statusCode: response.statusCode,
+              title: response.title,
+              errorMessage: response.body));
+    }
   }
 }
