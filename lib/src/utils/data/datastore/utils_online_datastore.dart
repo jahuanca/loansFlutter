@@ -16,7 +16,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
       return Error(
           error: ErrorEntity(
               statusCode: response.statusCode,
-              title: 'Error del servidor',
+              title: response.title,
               errorMessage: response.body));
     }
   }
@@ -32,7 +32,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
       return Error(
           error: ErrorEntity(
               statusCode: response.statusCode,
-              title: 'Error del servidor',
+              title: response.title,
               errorMessage: response.body));
     }
   }
@@ -48,7 +48,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
       return Error(
           error: ErrorEntity(
               statusCode: response.statusCode,
-              title: 'Error del servidor',
+              title: response.title,
               errorMessage: response.body));
     }
   }

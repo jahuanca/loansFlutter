@@ -78,7 +78,7 @@ class AddLoanInformationPage extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: GetBuilder<AddLoanInformationController>(
-                        id: 'frequencies',
+                        id: frequenciesIdGet,
                         builder: (controller) => DropdownMenuWidget(
                           hintText: 'Seleccione la frecuencia',
                           label: 'Frecuencia de pago',
@@ -103,7 +103,7 @@ class AddLoanInformationPage extends StatelessWidget {
                   ],
                 ),
                 GetBuilder<AddLoanInformationController>(
-                  id: 'amount',
+                  id: amountIdGet,
                   builder: (controller) => InputWidget(
                     hintText: 'Ingrese el monto',
                     label: amountString,
@@ -113,7 +113,7 @@ class AddLoanInformationPage extends StatelessWidget {
                   ),
                 ),
                 GetBuilder<AddLoanInformationController>(
-                    id: 'ganancy',
+                    id: ganancyIdGet,
                     builder: (controller) => InputWidget(
                           textEditingController:
                               controller.ganancyTextController,
@@ -126,9 +126,8 @@ class AddLoanInformationPage extends StatelessWidget {
                   id: methodsIdGet,
                   builder: (controller) => DropdownMenuWidget(
                     hintText: 'Seleccione el método de pago',
-                    label: 'Método de pago',
+                    label: paymentMethodString,
                     items: controller.methods,
-                    idLabel: 'name',
                     value: controller.addLoanRequest.idPaymentMethod,
                     onChanged: controller.onChangedMethodsPayment,
                   ),
@@ -143,7 +142,7 @@ class AddLoanInformationPage extends StatelessWidget {
 
   Widget _bottomButtons() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: defaultPadding,
       child: ButtonWidget(
         text: continueString,
         onTap: controller.goNext,

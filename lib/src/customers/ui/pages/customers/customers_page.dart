@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customers/customers_controller.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class CustomersPage extends StatelessWidget {
@@ -25,7 +26,7 @@ class CustomersPage extends StatelessWidget {
                   child: const Icon(Icons.add),
                 ),
                 appBar: appBarWidget(
-                  text: 'Clientes',
+                  text: customersString,
                   hasArrowBack: true,
                 ),
                 body: ListView.builder(

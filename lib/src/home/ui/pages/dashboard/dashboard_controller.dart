@@ -19,7 +19,7 @@ class DashboardController extends GetxController {
   final GetQuotasByDateUseCase getQuotasByDateUseCase;
   DashboardSummaryResponse? dashboardSummaryResponse;
   List<DashboardQuotaResponse> quotasByDate = [];
-  DateTime dateSelected = DateTime.now();
+  DateTime dateSelected = defaultDate;
 
   DashboardController({
     required this.getSummaryDasboardUseCase,

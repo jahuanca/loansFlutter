@@ -39,7 +39,7 @@ class AddLoanSpecialPage extends StatelessWidget {
                   builder: (controller) => InputWidget(
                     onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
-                          currentDate: controller.addLoanRequest.startDate,
+                          currentDate: controller.addSpecialLoanRequest.startDate,
                           context: context,
                           firstDate: defaultDate.subtract(halfYearDuration),
                           lastDate: defaultDate.add(oneDayDuration));
@@ -72,21 +72,19 @@ class AddLoanSpecialPage extends StatelessWidget {
                   ],
                 ),
                 GetBuilder<AddLoanSpecialController>(
-                  id: amountIdGet,
+                  id: numberOfInstallmentsIdGet,
                   builder: (controller) => InputWidget(
-                    hintText: 'Cantidad de cuotas',
+                    hintText: 'Número de cuotas',
                     label: 'Cuotas',
                     icon: const Icon(Icons.numbers),
                     textInputType: TextInputType.number,
-                    onChanged: controller.onChangeAmount,
+                    onChanged: controller.onChangeNumberOfInstallments,
                   ),
                 ),
                 GetBuilder<AddLoanSpecialController>(
-                  id: percentageIdGet,
+                  id: daysBetweenInstallmentsIdGet,
                   builder: (controller) => InputWidget(
-                      textEditingController:
-                          controller.percentageTextController,
-                      onChanged: controller.onChangedPercentage,
+                      onChanged: controller.onChangeDaysBetweenInstallments,
                       textInputType: TextInputType.number,
                       hintText: 'Ingrese dias por cuota',
                       label: 'Dias por cuota'),
@@ -104,8 +102,6 @@ class AddLoanSpecialPage extends StatelessWidget {
                 GetBuilder<AddLoanSpecialController>(
                   id: percentageIdGet,
                   builder: (controller) => InputWidget(
-                      textEditingController:
-                          controller.percentageTextController,
                       onChanged: controller.onChangedPercentage,
                       hintText: 'Ingrese un porcentaje',
                       label: percentageString),
@@ -124,9 +120,9 @@ class AddLoanSpecialPage extends StatelessWidget {
                   id: methodsIdGet,
                   builder: (controller) => DropdownMenuWidget(
                     hintText: 'Seleccione el método de pago',
-                    label: 'Método de pago',
+                    label: paymentMethodString,
                     items: controller.methods,
-                    value: controller.addLoanRequest.idPaymentMethod,
+                    value: controller.addSpecialLoanRequest.idPaymentMethod,
                     onChanged: controller.onChangedMethodsPayment,
                   ),
                 ),
@@ -140,7 +136,7 @@ class AddLoanSpecialPage extends StatelessWidget {
 
   Widget _bottomButtons() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: defaultPadding,
       child: ButtonWidget(
         text: continueString,
         onTap: controller.goNext,

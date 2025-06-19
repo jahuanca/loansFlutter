@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_controller.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/quota_widget.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanQuotasPage extends StatelessWidget {
@@ -21,7 +22,8 @@ class AddLoanQuotasPage extends StatelessWidget {
       builder: (controller) => Scaffold(
           bottomNavigationBar: _bottomButtons(),
           appBar: appBarWidget(text: 'Calendario', hasArrowBack: true),
-          body: ListView.builder(
+          body: _detailQuotas(size: size),
+          /*body: ListView.builder(
             itemCount: controller.addLoanRequest.paymentFrequencyEntity
                     ?.monthlyInstallments ??
                 defaultInt,
@@ -38,7 +40,33 @@ class AddLoanQuotasPage extends StatelessWidget {
                       .addLoanRequest.paymentFrequencyEntity?.daysInstallment ??
                   defaultInt,
             ),
-          )),
+          ),*/)
+    );
+  }
+
+  Widget _detailQuotas({
+    required Size size,
+  }) {
+    List<Widget> quotas = [];
+    int i = 1;
+    quotas.addAll(controller.quotas
+        .map((e) {
+          return QuotaWidget(
+              value: i++,
+              size: size,
+              total: controller.quotas.length,
+              expirationDate: e.dateToPay,
+              amountQuota: e.amount,
+              amortization: e.amount - e.ganancy,
+              ganancy: e.ganancy,
+              percentage: controller.percentage,
+              paidDate: e.paidDate,
+            );
+        })
+        .toList());
+
+    return Column(
+      children: quotas,
     );
   }
 
@@ -107,7 +135,7 @@ class AddLoanQuotasPage extends StatelessWidget {
     );
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: defaultPadding,
       child: Card(
         color: Colors.white,
         child: ExpansionTile(
@@ -150,7 +178,7 @@ class AddLoanQuotasPage extends StatelessWidget {
 
   Widget _bottomButtons() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: defaultPadding,
       child: ButtonWidget(
         text: confirmString,
         onTap: controller.create,

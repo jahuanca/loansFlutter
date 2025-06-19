@@ -95,7 +95,7 @@ class LoanDetailPage extends StatelessWidget {
                   value: '${loan.percentage.formatDecimals()}%',
                 ),
                 _itemLoan(
-                  label: 'Fecha',
+                  label: dateString,
                   value: loan.date.formatDMMYYY()!,
                 )
               ],
@@ -166,7 +166,7 @@ class LoanDetailPage extends StatelessWidget {
       return null;
     }
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: defaultPadding,
       child: ButtonWidget(
         text: 'Pagar cuota',
         onTap: controller.goToPayQuota,

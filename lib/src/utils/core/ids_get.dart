@@ -11,3 +11,6 @@ const String quotasIdGet = 'quotasIdGet';
 const String startDayIdGet = 'startDayIdGet';
 const String typesDocumentIdGet = 'typesDocumentIdGet';
 const String percentageIdGet = 'percentageIdGet';
+const String frequenciesIdGet = 'frequenciesIdGet';
+const String numberOfInstallmentsIdGet = 'numberOfInstallmentsIdGet';
+const String daysBetweenInstallmentsIdGet = 'daysBetweenInstallmentsIdGet';

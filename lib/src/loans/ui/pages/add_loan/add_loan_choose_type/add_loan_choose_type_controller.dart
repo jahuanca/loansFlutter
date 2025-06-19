@@ -10,6 +10,7 @@ class AddLoanChooseTypeController extends GetxController {
     if (index == defaultInt) {
       Get.to(() => AddLoanInformationPage(),
           binding: AddLoanInformationBinding());
+      return;
     }
     Get.to(() => AddLoanSpecialPage(), binding: AddLoanSpecialBinding());
   }

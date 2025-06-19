@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/customers/domain/use_cases/update_customer_us
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/type_document_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_types_document_use_case.dart';
@@ -89,7 +90,7 @@ class AddCustomerController extends GetxController {
     validateDocument = validateText(
         rules: {RuleValidator.isRequired: true},
         text: value,
-        label: 'Documento');
+        label: documentString);
     if (validateDocument!.hasError.not()) {
       createCustomerRequest.document = validateDocument?.value;
     }
@@ -98,7 +99,7 @@ class AddCustomerController extends GetxController {
 
   void onChangedName(String value) {
     validateName = validateText(
-        rules: {RuleValidator.isRequired: true}, text: value, label: 'Nombre');
+        rules: {RuleValidator.isRequired: true}, text: value, label: nameString);
 
     if (validateName!.hasError) {
     } else {
@@ -115,7 +116,7 @@ class AddCustomerController extends GetxController {
     validateLastname = validateText(
         rules: {RuleValidator.isRequired: true},
         text: value,
-        label: 'Apellido');
+        label: lastNameString);
 
     if (validateLastname?.hasError ?? false) {
     } else {
@@ -128,7 +129,7 @@ class AddCustomerController extends GetxController {
     validateAddress = validateText(
         rules: {RuleValidator.isRequired: true},
         text: value,
-        label: 'Dirección');
+        label: addressString);
 
     if (validateAddress!.hasError) {
     } else {

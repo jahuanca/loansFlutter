@@ -4,9 +4,9 @@ import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
-import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
-import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
+import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
+import 'package:loands_flutter/src/loans/di/add_special_loan_quotas_binding.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan_quotas/add_special_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
@@ -30,17 +30,18 @@ class AddLoanSpecialController extends GetxController {
   PaymentFrequencyEntity? frequencySelected;
   PaymentMethodEntity? methodSelected;
 
-  AddLoanRequest addLoanRequest = AddLoanRequest();
+  AddSpecialLoanRequest addSpecialLoanRequest = AddSpecialLoanRequest();
   TextEditingController percentageTextController = TextEditingController();
   TextEditingController ganancyTextController = TextEditingController();
   TextEditingController startDateTextController = TextEditingController();
 
   ValidateResult? startDateValidationResult,
       idCustomerValidationResult,
-      idFrequencyValidationResult,
+      idMethodValidationResult,
       percentageValidationResult,
       amountValidationResult,
-      idMethodValidationResult;
+      numberOfInstallmentsValidationResult,
+      daysBetweenInstallmentsValidationResult;
 
   AddLoanSpecialController({
     required this.getCustomersUseCase,
@@ -77,7 +78,7 @@ class AddLoanSpecialController extends GetxController {
     if (resultType is Success) {
       frequencies = resultType.data;
     }
-    update(['frequencies']);
+    update([frequenciesIdGet]);
   }
 
   Future<void> getMethodsPayment() async {
@@ -100,31 +101,14 @@ class AddLoanSpecialController extends GetxController {
       (e) => e.id == value,
     );
     if (index != notFoundPosition) {
-      addLoanRequest.idCustomer = idCustomerValidationResult?.value;
+      addSpecialLoanRequest.idCustomer = idCustomerValidationResult?.value;
       customerSelected = customers[index];
-    }
-  }
-
-  void onChangedFrequency(dynamic value, [bool setPercentage = true]) {
-    idFrequencyValidationResult =
-        validateText(text: value, label: 'Frecuencia de pago', rules: {
-      RuleValidator.isRequired: true,
-    });
-
-    int index = frequencies.indexWhere(
-      (e) => e.id == value,
-    );
-    if (index != notFoundPosition) {
-      frequencySelected = frequencies[index];
-      addLoanRequest.paymentFrequencyEntity = frequencySelected;
-      addLoanRequest.idPaymentFrequency = frequencySelected?.id;
-      if (setPercentage) changePercentage();
     }
   }
 
   void onChangedMethodsPayment(dynamic value) {
     idMethodValidationResult =
-        validateText(text: value, label: 'Método de pago', rules: {
+        validateText(text: value, label: paymentMethodString, rules: {
       RuleValidator.isRequired: true,
     });
     int index = methods.indexWhere(
@@ -132,16 +116,9 @@ class AddLoanSpecialController extends GetxController {
     );
     if (index != notFoundPosition) {
       methodSelected = methods[index];
-      addLoanRequest.paymentMethodEntity = methodSelected;
-      addLoanRequest.idPaymentMethod = idMethodValidationResult?.value;
+      addSpecialLoanRequest.paymentMethodEntity = methodSelected;
+      addSpecialLoanRequest.idPaymentMethod = idMethodValidationResult?.value;
     }
-  }
-
-  void changePercentage() {
-    percentageTextController.text =
-        '${frequencySelected?.recommendedPercentage.formatDecimals()}';
-    addLoanRequest.percentage = frequencySelected?.recommendedPercentage;
-    update([percentageIdGet]);
   }
 
   void onChangeAmount(String value) {
@@ -155,16 +132,48 @@ class AddLoanSpecialController extends GetxController {
       toConvert: ToConverter.toDouble,
     );
     if (amountValidationResult!.hasError.not()) {
-      addLoanRequest.amount = amountValidationResult!.value;
+      addSpecialLoanRequest.amount = amountValidationResult!.value;
     }
     update([amountIdGet]);
     calculateGanacy();
   }
 
+  void onChangeDaysBetweenInstallments(String value) {
+    daysBetweenInstallmentsValidationResult = validateText(
+      text: value,
+      label: 'Días entre cuotas',
+      rules: {
+        RuleValidator.isRequired: true,
+      },
+      toConvert: ToConverter.toInt,
+    );
+    if (daysBetweenInstallmentsValidationResult!.hasError.not()) {
+      addSpecialLoanRequest.daysBetweenInstallments = daysBetweenInstallmentsValidationResult!.value;
+    }
+    update([daysBetweenInstallmentsIdGet]);
+    calculateGanacy();
+  }
+
+  void onChangeNumberOfInstallments(String value) {
+    numberOfInstallmentsValidationResult = validateText(
+      text: value,
+      label: 'Número de cuotas',
+      rules: {
+        RuleValidator.isRequired: true,
+      },
+      toConvert: ToConverter.toInt,
+    );
+    if (numberOfInstallmentsValidationResult!.hasError.not()) {
+      addSpecialLoanRequest.numberOfInstallments = numberOfInstallmentsValidationResult!.value;
+    }
+    update([numberOfInstallmentsIdGet]);
+    calculateGanacy();
+  }
+
   void calculateGanacy() {
-    addLoanRequest.ganancy = (addLoanRequest.amount.orZero()) *
-        (addLoanRequest.percentage.orZero() / 100);
-    ganancyTextController.text = '${addLoanRequest.ganancy?.formatDecimals()}';
+    addSpecialLoanRequest.ganancy = (addSpecialLoanRequest.amount.orZero()) *
+        (addSpecialLoanRequest.percentage.orZero() / 100);
+    ganancyTextController.text = '${addSpecialLoanRequest.ganancy?.formatDecimals()}';
     update([ganancyIdGet]);
   }
 
@@ -176,10 +185,10 @@ class AddLoanSpecialController extends GetxController {
     });
     if (startDateValidationResult!.hasError) {
     } else {
-      addLoanRequest.startDate = startDateValidationResult?.value;
+      addSpecialLoanRequest.startDate = startDateValidationResult?.value;
       startDateTextController.text = date.formatDMMYYY().orEmpty();
     }
-    update(['start_date']);
+    update([startDayIdGet]);
   }
 
   void onChangedPercentage(String value) {
@@ -193,36 +202,12 @@ class AddLoanSpecialController extends GetxController {
       toConvert: ToConverter.toDouble,
     );
     if (percentageValidationResult!.hasError.not()) {
-      addLoanRequest.percentage = percentageValidationResult?.value;
-      if (addLoanRequest.amount != null) {
-        onChangeAmount(addLoanRequest.amount.toString());
+      addSpecialLoanRequest.percentage = percentageValidationResult?.value;
+      if (addSpecialLoanRequest.amount != null) {
+        onChangeAmount(addSpecialLoanRequest.amount.toString());
       }
     }
     update([percentageIdGet]);
-  }
-
-  ValidateResult validate() {
-    onChangedStartDate(addLoanRequest.startDate);
-    onChangedCustomer(addLoanRequest.idCustomer);
-    onChangedFrequency(addLoanRequest.idPaymentFrequency, false);
-    onChangedPercentage(addLoanRequest.percentage.toString());
-    onChangeAmount(addLoanRequest.amount.toString());
-    onChangedMethodsPayment(addLoanRequest.idPaymentMethod);
-
-    if (startDateValidationResult!.hasError) return startDateValidationResult!;
-    if (idCustomerValidationResult!.hasError) {
-      return idCustomerValidationResult!;
-    }
-    if (idFrequencyValidationResult!.hasError) {
-      return idFrequencyValidationResult!;
-    }
-    if (percentageValidationResult!.hasError) {
-      return percentageValidationResult!;
-    }
-    if (amountValidationResult!.hasError) return amountValidationResult!;
-    if (idMethodValidationResult!.hasError) return idMethodValidationResult!;
-
-    return ValidateResult(error: null, hasError: false, value: addLoanRequest);
   }
 
   Future<void> goAddCustomer() async {
@@ -231,21 +216,22 @@ class AddLoanSpecialController extends GetxController {
   }
 
   void goNext() {
-    ValidateResult resultInformation = validate();
-    if (resultInformation.hasError) {
+    String? message = addSpecialLoanRequest.validate;
+    if (message != null) {
       showSnackbarWidget(
           context: Get.overlayContext!,
           typeSnackbar: TypeSnackbar.error,
-          message: resultInformation.error ?? emptyString);
+          message: message);
       return;
     }
-    addLoanRequest = resultInformation.value as AddLoanRequest;
-    Get.to(() => AddLoanQuotasPage(),
+    addSpecialLoanRequest;
+    // addSpecialLoanRequest = resultInformation.value as AddLoanRequest;
+    Get.to(() => AddSpecialLoanQuotasPage(),
         transition: Transition.noTransition,
         opaque: false,
-        binding: AddLoanQuotasBinding(),
+        binding: AddSpecialLoanQuotasBinding(),
         arguments: {
-          addLoanRequestArgument: addLoanRequest,
+          addLoanRequestArgument: addSpecialLoanRequest,
         });
   }
 

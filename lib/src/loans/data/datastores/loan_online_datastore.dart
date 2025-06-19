@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
 import 'package:loands_flutter/src/loans/domain/datastores/loan_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:utils/utils.dart';
@@ -35,8 +36,15 @@ class LoanOnlineDatastore extends LoanDatastore {
       return Error(
           error: ErrorEntity(
               statusCode: response.statusCode,
-              title: 'Error del servidor',
+              title: response.title,
               errorMessage: response.body));
     }
+  }
+
+  @override
+  Future<ResultType<LoanEntity, ErrorEntity>> createSpecial(
+      AddSpecialLoanRequest addSpecialLoanRequest) {
+    // TODO: implement createSpecial
+    throw UnimplementedError();
   }
 }

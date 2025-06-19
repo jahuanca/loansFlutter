@@ -18,7 +18,7 @@ class PayQuotaPage extends StatelessWidget {
       builder: (controller) => Scaffold(
         appBar: appBarWidget(text: 'Pago de cuota', hasArrowBack: true),
         bottomNavigationBar:
-            ButtonWidget(padding: const EdgeInsets.all(8.0), text: 'Pagar', onTap: controller.payQuota,),
+            ButtonWidget(padding: defaultPadding, text: 'Pagar', onTap: controller.payQuota,),
         body: Column(
           children: [
             _cardDetail(quota: controller.quota),
@@ -30,8 +30,8 @@ class PayQuotaPage extends StatelessWidget {
                           context: context,
                           currentDate: controller.quota.dateToPay,
                           firstDate:
-                              DateTime.now().subtract(const Duration(days: 180)),
-                          lastDate: DateTime.now().add(const Duration(days: 1)));
+                              defaultDate.subtract(halfYearDuration),
+                          lastDate: defaultDate.add(oneDayDuration));
                       controller.onChangedStartDate(dateSelected);
                     },
                     textEditingController: controller.dateToPayTextController,
@@ -63,7 +63,7 @@ class PayQuotaPage extends StatelessWidget {
               children: [
                 Text(quota.customerName),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: defaultPadding,
                   child: Text(
                     'S/ ${quota.amount}',
                     style: const TextStyle(

@@ -27,7 +27,7 @@ Widget cardDashboardWidget({
       ));
 
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: defaultPadding,
     child: GestureDetector(
       onTap: onTap,
       child: Container(

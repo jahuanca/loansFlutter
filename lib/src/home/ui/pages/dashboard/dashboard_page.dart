@@ -73,7 +73,7 @@ class DashboardPage extends GetView<DashboardController> {
           cardSingleDashboardWidget(
             size: size,
             icon: Icons.people,
-            title: 'Clientes',
+            title: customersString,
             value:
                 controller.dashboardSummaryResponse?.customersCount.toString(),
             onTap: controller.goToCustomers,
@@ -95,7 +95,7 @@ class DashboardPage extends GetView<DashboardController> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: defaultPadding,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -150,7 +150,7 @@ class DashboardPage extends GetView<DashboardController> {
         child: Card(
           color: isSelected ? successColor() : CardTheme.of(context).color,
           child: Container(
-            padding: const EdgeInsets.all(8.0),
+            padding: defaultPadding,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -205,7 +205,7 @@ class DashboardPage extends GetView<DashboardController> {
     Color colorStateQuota = quota.stateQuota['color'];
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: defaultPadding,
       child: GestureDetector(
         onTap: () => controller.goToQuota(quota),
         child: Container(
@@ -213,7 +213,7 @@ class DashboardPage extends GetView<DashboardController> {
             borderRadius: BorderRadius.circular(borderRadius()),
             border: Border.all(),
           ),
-          padding: const EdgeInsets.all(8.0),
+          padding: defaultPadding,
           child: Row(
             children: [
               Expanded(

@@ -78,7 +78,7 @@ class AddLoanInformationController extends GetxController {
       frequencies = resultType.data;
       frequencies.removeWhere((e) => e.id == idOfSpecialFrequency);
     }
-    update(['frequencies']);
+    update([frequenciesIdGet]);
   }
 
   Future<void> getMethodsPayment() async {
@@ -125,7 +125,7 @@ class AddLoanInformationController extends GetxController {
 
   void onChangedMethodsPayment(dynamic value) {
     idMethodValidationResult =
-        validateText(text: value, label: 'Método de pago', rules: {
+        validateText(text: value, label: paymentMethodString, rules: {
       RuleValidator.isRequired: true,
     });
     int index = methods.indexWhere(
@@ -158,7 +158,7 @@ class AddLoanInformationController extends GetxController {
     if (amountValidationResult!.hasError.not()) {
       addLoanRequest.amount = amountValidationResult!.value;
     }
-    update(['aomunt']);
+    update([amountIdGet]);
     calculateGanacy();
   }
 
@@ -166,12 +166,12 @@ class AddLoanInformationController extends GetxController {
     addLoanRequest.ganancy = (addLoanRequest.amount.orZero()) *
         (addLoanRequest.percentage.orZero() / 100);
     ganancyTextController.text = '${addLoanRequest.ganancy?.formatDecimals()}';
-    update(['ganancy']);
+    update([ganancyIdGet]);
   }
 
   void onChangedStartDate(DateTime? date) {
     startDateValidationResult =
-        validateText(text: date, label: 'Fecha de inicio', rules: {
+        validateText(text: date, label: startDateString, rules: {
       RuleValidator.isRequired: true,
       RuleValidator.isDatetime: true,
     });
@@ -180,7 +180,7 @@ class AddLoanInformationController extends GetxController {
       addLoanRequest.startDate = startDateValidationResult?.value;
       startDateTextController.text = date.formatDMMYYY().orEmpty();
     }
-    update(['start_date']);
+    update([startDayIdGet]);
   }
 
   void onChangedPercentage(String value) {

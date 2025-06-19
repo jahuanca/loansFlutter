@@ -14,29 +14,29 @@ class QuotaEntity {
   int? id;
   String name;
   String description;
-  int idLoan;
+  int? idLoan;
   double amount;
   double ganancy;
   DateTime dateToPay;
   DateTime? paidDate;
   double? amountDelinquency;
   int idStateQuota;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   QuotaEntity({
     this.id,
     required this.name,
     required this.description,
-    required this.idLoan,
+    this.idLoan,
     required this.amount,
     required this.dateToPay,
     this.paidDate,
     this.amountDelinquency,
     required this.idStateQuota,
     required this.ganancy,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory QuotaEntity.fromJson(Map<String, dynamic> json) => QuotaEntity(
@@ -47,11 +47,11 @@ class QuotaEntity {
         amount: (json["amount"] as num).toDouble(),
         ganancy: (json["ganancy"] as num).toDouble(),
         dateToPay: DateTime.parse(json["date_to_pay"]),
-        paidDate: json["paid_date"] == null ? null : DateTime.parse(json["paid_date"]),
+        paidDate: json["paid_date"] == null ? null : DateTime.tryParse(json["paid_date"]),
         amountDelinquency: json["amount_delinquency"],
         idStateQuota: json["id_state_quota"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null ? null : DateTime.tryParse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.tryParse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,7 +65,7 @@ class QuotaEntity {
         "paid_date": paidDate?.toIso8601String(),
         "amount_delinquency": amountDelinquency,
         "id_state_quota": idStateQuota,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
       };
 }
