@@ -28,11 +28,9 @@ class LoanOnlineDatastore extends LoanDatastore {
   @override
   Future<ResultType<List<LoanEntity>, ErrorEntity>> getAll() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final response = await appHttpManager.get(
-      url: '/loan', query: {
-        'id_state_loan': idOfPendingLoan,
-      }
-    );
+    final response = await appHttpManager.get(url: '/loan', query: {
+      'id_state_loan': idOfPendingLoan,
+    });
     if (response.isSuccessful) {
       return Success(data: loanEntityFromJson(response.body));
     } else {
@@ -52,6 +50,23 @@ class LoanOnlineDatastore extends LoanDatastore {
         url: '/loan/create-special', body: addSpecialLoanRequest.toJson());
     if (response.isSuccessful) {
       return Success(data: LoanEntity.fromJson(jsonDecode(response.body)));
+    } else {
+      return Error(
+          error: ErrorEntity(
+              statusCode: response.statusCode,
+              title: response.title,
+              errorMessage: response.body));
+    }
+  }
+
+  @override
+  Future<ResultType<bool, ErrorEntity>> validate(
+      AddLoanRequest addLoanRequest) async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final response = await appHttpManager.post(
+        url: '/loan/validate', body: addLoanRequest.toJson());
+    if (response.isSuccessful) {
+      return Success(data: jsonDecode(response.body) as bool);
     } else {
       return Error(
           error: ErrorEntity(

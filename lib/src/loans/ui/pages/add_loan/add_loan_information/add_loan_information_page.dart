@@ -12,6 +12,7 @@ class AddLoanInformationPage extends StatelessWidget {
     getCustomersUseCase: Get.find(),
     getPaymentFrequenciesUseCase: Get.find(),
     getPaymentMethodsUseCase: Get.find(),
+    validateLoanUseCase: Get.find(),
   );
 
   @override

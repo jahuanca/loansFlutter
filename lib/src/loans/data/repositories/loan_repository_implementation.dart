@@ -28,5 +28,9 @@ class LoanRepositoryImplementation extends LoanRepository {
   Future<ResultType<LoanEntity, ErrorEntity>> createSpecial(AddSpecialLoanRequest addSpecialLoanRequest) {
     return datastore.createSpecial(addSpecialLoanRequest);
   }
-
+  
+  @override
+  Future<ResultType<bool, ErrorEntity>> validate(AddLoanRequest addLoanRequest) {
+    return datastore.validate(addLoanRequest);
+  }
 }

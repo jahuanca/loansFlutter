@@ -13,6 +13,7 @@ class DashboardQuotaResponse {
   int id;
   String name;
   String customerName;
+  String? alias;
   double amount;
   int idStateQuota;
   DateTime dateToPay;
@@ -24,6 +25,7 @@ class DashboardQuotaResponse {
     required this.amount,
     required this.idStateQuota,
     required this.dateToPay,
+    this.alias,
   });
 
   Map<String, dynamic> get stateQuota {
@@ -51,6 +53,7 @@ class DashboardQuotaResponse {
         id: json["id"],
         name: json["name"],
         customerName: json["customer_name"],
+        alias: json["alias"],
         amount: (json["amount"] as num).toDouble(),
         idStateQuota: json["id_state_quota"],
         dateToPay: DateTime.parse(json['date_to_pay']),
@@ -59,6 +62,7 @@ class DashboardQuotaResponse {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "alias": alias,
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
         'date_to_pay': dateToPay.toIso8601String(),

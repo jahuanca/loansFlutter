@@ -62,6 +62,10 @@ class PayQuotaPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(quota.customerName),
+                Text(quota.alias.orEmpty(), style: const TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 12
+                ),),
                 Padding(
                   padding: defaultPadding,
                   child: Text(

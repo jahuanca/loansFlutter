@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
+import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -21,6 +22,7 @@ class AddLoanInformationController extends GetxController {
   GetCustomersUseCase getCustomersUseCase;
   GetPaymentFrequenciesUseCase getPaymentFrequenciesUseCase;
   GetPaymentMethodsUseCase getPaymentMethodsUseCase;
+  ValidateLoanUseCase validateLoanUseCase;
 
   List<CustomerEntity> customers = [];
   List<PaymentFrequencyEntity> frequencies = [];
@@ -46,6 +48,7 @@ class AddLoanInformationController extends GetxController {
     required this.getCustomersUseCase,
     required this.getPaymentFrequenciesUseCase,
     required this.getPaymentMethodsUseCase,
+    required this.validateLoanUseCase,
   });
 
   @override
@@ -231,7 +234,7 @@ class AddLoanInformationController extends GetxController {
     getCustomers();
   }
 
-  void goNext() {
+  void goNext() async {
     ValidateResult resultInformation = validate();
     if (resultInformation.hasError) {
       showSnackbarWidget(
@@ -241,6 +244,19 @@ class AddLoanInformationController extends GetxController {
       return;
     }
     addLoanRequest = resultInformation.value as AddLoanRequest;
+    bool? isValidate = await goValidate();
+    if (isValidate == null) return;
+    if (isValidate) {
+      goQuotas();
+    } else {
+      bool result = await showDialogWidget(
+        context: Get.context!, 
+        message: 'Se detecto un prestamo similar, ¿desea continuar?');
+      if(result) goQuotas();
+    }
+  }
+
+  void goQuotas() {
     Get.to(
       ()=> AddLoanQuotasPage(), 
       transition: Transition.noTransition,
@@ -253,8 +269,15 @@ class AddLoanInformationController extends GetxController {
 
   void goBack() async {
     bool result = await showDialogWidget(context: Get.context!, message: alertBackString);
-    if (result) {
-      Get.back();
+    if (result) Get.back();
+  }
+
+  Future<bool?> goValidate() async {
+    ResultType<bool, ErrorEntity> resultType = await validateLoanUseCase.execute(addLoanRequest);
+    if (resultType is Success) {
+      return resultType.data;
+    } else {
+      return null;
     }
   }
 }

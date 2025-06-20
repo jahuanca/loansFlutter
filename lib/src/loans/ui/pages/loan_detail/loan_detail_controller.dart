@@ -22,7 +22,7 @@ class LoanDetailController extends GetxController {
 
   @override
   void onInit() {
-    loanSelected = Get.setArgument('loanSelected');
+    loanSelected = Get.setArgument(loanSelectedArgument);
     super.onInit();
   }
 

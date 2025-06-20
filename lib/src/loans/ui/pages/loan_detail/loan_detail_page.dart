@@ -96,7 +96,7 @@ class LoanDetailPage extends StatelessWidget {
                 ),
                 _itemLoan(
                   label: dateString,
-                  value: loan.date.formatDMMYYY()!,
+                  value: loan.startDate.formatDMMYYY()!,
                 )
               ],
             ),

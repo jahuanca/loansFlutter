@@ -5,6 +5,11 @@ import 'package:loands_flutter/src/customers/data/repositories/customer_reposito
 import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
+import 'package:loands_flutter/src/loans/data/datastores/loan_online_datastore.dart';
+import 'package:loands_flutter/src/loans/data/repositories/loan_repository_implementation.dart';
+import 'package:loands_flutter/src/loans/domain/datastores/loan_datastore.dart';
+import 'package:loands_flutter/src/loans/domain/repositories/loan_repository.dart';
+import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
 import 'package:loands_flutter/src/utils/domain/datastore/utils_datastore.dart';
@@ -18,12 +23,15 @@ class AddLoanInformationBinding extends Bindings {
 
     Get.lazyPut<CustomerDatastore>(() => CustomerOnlineDatastore());
     Get.lazyPut<UtilsDatastore>(() => UtilsOnlineDatastore());
+    Get.lazyPut<LoanDatastore>(() => LoanOnlineDatastore());
 
     Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut<UtilsRepository>(() => UtilsRepositoryImplementation(datastore: Get.find()));
+    Get.lazyPut<LoanRepository>(() => LoanRepositoryImplementation(datastore: Get.find()));
     
     Get.lazyPut(() => GetCustomersUseCase(repository: Get.find()));
     Get.lazyPut(() => GetPaymentMethodsUseCase(repository: Get.find()));
     Get.lazyPut(() => GetPaymentFrequenciesUseCase(repository: Get.find()));
+    Get.lazyPut(() => ValidateLoanUseCase(repository: Get.find()));
   }
 }

@@ -37,7 +37,7 @@ class AddLoanRequest {
     'percentage': percentage,
     'amount': amount,
     'ganancy': ganancy,
-    'date': startDate?.toIso8601String(),
+    'start_date': startDate?.toIso8601String(),
     'customerEntity': customerEntity?.toJson(),
     'paymentFrequencyEntity': paymentFrequencyEntity?.toJson(),
     'paymentMethodEntity': paymentMethodEntity?.toJson(),

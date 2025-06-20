@@ -18,7 +18,7 @@ class LoanEntity {
     int idPaymentFrequency;
     double amount;
     double percentage;
-    DateTime date;
+    DateTime startDate;
     double ganancy;
     int idPaymentMethod;
     String? observation;
@@ -35,7 +35,7 @@ class LoanEntity {
         required this.idPaymentFrequency,
         required this.amount,
         required this.percentage,
-        required this.date,
+        required this.startDate,
         required this.ganancy,
         required this.idPaymentMethod,
         required this.observation,
@@ -55,7 +55,7 @@ class LoanEntity {
         idPaymentFrequency: json["id_payment_frequency"],
         amount: (json["amount"] as num).toDouble(),
         percentage: (json["percentage"] as num).toDouble(),
-        date: DateTime.parse(json["date"]),
+        startDate: DateTime.parse(json["start_date"]),
         ganancy: (json["ganancy"] as num).toDouble(),
         idPaymentMethod: json["id_payment_method"],
         observation: json["observation"],
@@ -73,7 +73,7 @@ class LoanEntity {
         "id_payment_frequency": idPaymentFrequency,
         "amount": amount,
         "percentage": percentage,
-        "date": date.toIso8601String(),
+        "start_date": startDate.toIso8601String(),
         "ganancy": ganancy,
         "id_payment_method": idPaymentMethod,
         "observation": observation,
