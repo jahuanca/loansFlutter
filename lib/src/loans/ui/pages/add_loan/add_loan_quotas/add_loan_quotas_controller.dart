@@ -44,7 +44,7 @@ class AddLoanQuotasController extends GetxController {
         description: emptyString, 
         amount: amountQuota,
         dateToPay: startDate,
-        idStateQuota: idStateQuotaOfPending,
+        idStateQuota: idOfPendingQuota,
         ganancy: interest);
       quotas.add(quota);
     }

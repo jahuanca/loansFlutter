@@ -20,30 +20,32 @@ class LoansPage extends StatelessWidget {
       id: pageIdGet,
       builder: (controller) => RefreshIndicator(
         onRefresh: controller.getLoans,
-        child: Stack(
-          children: [
-            Scaffold(
-              appBar: appBarWidget(
-                text: 'Créditos',
-                hasArrowBack: true,
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: controller.goToAddLoanInformation,
-                child: const Icon(Icons.add),
-              ),
-              body: ListView.builder(
-                itemCount: controller.loans.length,
-                itemBuilder: (context, index) => _item(
-                  size: size,
-                  loan: controller.loans[index],
-                ),
-              ),
-            ),
-            GetBuilder<LoansController>(
-              id: validandoIdGet,
-              builder: (controller) => LoadingWidget(show: controller.validando))
-          ],
+        child: Scaffold(
+          appBar: appBarWidget(text: 'Créditos', hasArrowBack: true, actions: [
+            const IconWidget(
+                padding: defaultPadding, iconData: Icons.filter_alt_outlined),
+            const IconWidget(padding: defaultPadding, iconData: Icons.search),
+          ]),
+          floatingActionButton: FloatingActionButton(
+            onPressed: controller.goToAddLoanInformation,
+            child: const Icon(Icons.add),
+          ),
+          body: ChildOrElseWidget(
+            condition: controller.loans.isNotEmpty,
+            elseWidget: EmptyWidget(),
+            child: _list(size),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _list(Size size) {
+    return ListView.builder(
+      itemCount: controller.loans.length,
+      itemBuilder: (context, index) => _item(
+        size: size,
+        loan: controller.loans[index],
       ),
     );
   }
@@ -53,17 +55,17 @@ class LoansPage extends StatelessWidget {
     required LoanEntity loan,
   }) {
     return ListTile(
-      onTap: ()=> controller.goToDetail(loan),
+      onTap: () => controller.goToDetail(loan),
       leading: Text('${loan.id}'),
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(loan.formatTitle),
-          if(loan.idStateLoan == 2)
-          IconWidget(
-            padding: const EdgeInsets.only(left: 8.0),
-            color: successColor(),
-            iconData: Icons.check)
+          if (loan.idStateLoan == 2)
+            IconWidget(
+                padding: const EdgeInsets.only(left: 8.0),
+                color: successColor(),
+                iconData: Icons.check)
         ],
       ),
       subtitle: Text(loan.customerEntity?.aliasOrFullName ?? emptyString),

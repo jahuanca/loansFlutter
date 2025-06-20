@@ -76,7 +76,7 @@ class QuotaWidget extends StatelessWidget {
               vertical: 3,
             ),
             decoration: BoxDecoration(
-                color: colorOfStateColor(idStateQuota ?? idStateQuotaOfPending),
+                color: colorOfStateColor(idStateQuota ?? idOfPendingQuota),
                 borderRadius: BorderRadius.circular(12)),
             child: Text(
               ' S/ ${amountQuota.formatDecimals()}',
