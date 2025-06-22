@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
@@ -273,7 +274,14 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<bool?> goValidate() async {
-    ResultType<bool, ErrorEntity> resultType = await validateLoanUseCase.execute(addLoanRequest);
+    ResultType<bool, ErrorEntity> resultType = await validateLoanUseCase.execute(
+      ValidateLoanRequest(
+        idCustomer: addLoanRequest.idCustomer!, 
+        idPaymentFrequency: addLoanRequest.idPaymentFrequency!, 
+        percentage: addLoanRequest.percentage!, 
+        amount: addLoanRequest.amount!, 
+        startDate: addLoanRequest.startDate!)
+    );
     if (resultType is Success) {
       return resultType.data;
     } else {

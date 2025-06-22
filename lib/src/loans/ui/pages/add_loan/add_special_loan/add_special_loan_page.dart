@@ -10,6 +10,7 @@ class AddSpecialLoanPage extends StatelessWidget {
     getCustomersUseCase: Get.find(),
     getPaymentFrequenciesUseCase: Get.find(),
     getPaymentMethodsUseCase: Get.find(),
+    validateLoanUseCase: Get.find(),
   );
 
   AddSpecialLoanPage({super.key});
@@ -59,7 +60,8 @@ class AddSpecialLoanPage extends StatelessWidget {
                   builder: (controller) => InputWidget(
                     onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
-                          currentDate: controller.addSpecialLoanRequest.startDate,
+                          currentDate:
+                              controller.addSpecialLoanRequest.startDate,
                           context: context,
                           firstDate: defaultDate.subtract(halfYearDuration),
                           lastDate: defaultDate.add(oneDayDuration));
@@ -118,7 +120,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                         )),
                 GetBuilder<AddSpecialLoanController>(
                   id: methodsIdGet,
-                  builder: (controller) => DropdownMenuWidget(
+                  builder: (controller) => DropdownWidget(
                     hintText: 'Seleccione el método de pago',
                     label: paymentMethodString,
                     items: controller.methods,

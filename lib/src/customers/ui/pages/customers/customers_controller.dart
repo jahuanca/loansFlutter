@@ -1,9 +1,11 @@
 
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
+import 'package:loands_flutter/src/customers/di/get_customer_analytics_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
+import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
@@ -40,6 +42,14 @@ class CustomersController extends GetxController {
 
   void goToAddCustomer(){
     Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+  }
+
+  void goToCustomerAnalytic() {
+    Get.to(()=> CustomerAnalyticsPage(), 
+      binding: GetCustomerAnalyticsBinding(),
+      arguments: {
+      customersArgument: customers
+    });
   }
 
   void goToEditCustomer(CustomerEntity customer){

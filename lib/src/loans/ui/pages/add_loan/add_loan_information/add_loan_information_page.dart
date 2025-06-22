@@ -80,7 +80,7 @@ class AddLoanInformationPage extends StatelessWidget {
                       flex: 2,
                       child: GetBuilder<AddLoanInformationController>(
                         id: frequenciesIdGet,
-                        builder: (controller) => DropdownMenuWidget(
+                        builder: (controller) => DropdownWidget(
                           hintText: 'Seleccione la frecuencia',
                           label: 'Frecuencia de pago',
                           items: controller.frequencies,
@@ -125,7 +125,7 @@ class AddLoanInformationPage extends StatelessWidget {
                         )),
                 GetBuilder<AddLoanInformationController>(
                   id: methodsIdGet,
-                  builder: (controller) => DropdownMenuWidget(
+                  builder: (controller) => DropdownWidget(
                     hintText: 'Seleccione el método de pago',
                     label: paymentMethodString,
                     items: controller.methods,

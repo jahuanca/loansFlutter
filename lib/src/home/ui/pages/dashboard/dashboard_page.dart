@@ -42,6 +42,9 @@ class DashboardPage extends GetView<DashboardController> {
   Widget _cards({
     required Size size,
   }) {
+
+    const double heightOfCard = 150;
+
     DashboardSummaryResponse? response = controller.dashboardSummaryResponse;
 
     Map<String, dynamic> valuesOfLoans = response?.loansInfo ?? {};
@@ -51,7 +54,7 @@ class DashboardPage extends GetView<DashboardController> {
     Map<String, dynamic> valuesOfGanancy = response?.ganancyInfo ?? {};
 
     return SizedBox(
-      height: size.height * 0.18,
+      height: heightOfCard,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [

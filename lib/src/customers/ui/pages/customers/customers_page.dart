@@ -21,9 +21,22 @@ class CustomersPage extends StatelessWidget {
         builder: (controller) => RefreshIndicator(
               onRefresh: controller.getCustomers,
               child: Scaffold(
-                floatingActionButton: FloatingActionButton(
-                  onPressed: controller.goToAddCustomer,
-                  child: const Icon(Icons.add),
+                floatingActionButton: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: addHeroTag,
+                      onPressed: controller.goToAddCustomer,
+                      child: const Icon(Icons.add),
+                    ),
+                    const SizedBox(height: 8,),
+                    FloatingActionButton(
+                      heroTag: analyticsHeroTag,
+                      onPressed: controller.goToCustomerAnalytic,
+                      backgroundColor: infoColor(),
+                      child: const Icon(Icons.analytics, color: Colors.white,),
+                    ),
+                  ],
                 ),
                 appBar: appBarWidget(
                   text: customersString,

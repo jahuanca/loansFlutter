@@ -9,6 +9,12 @@ import 'package:utils/utils.dart';
 class AddCustomerPage extends StatelessWidget {
   AddCustomerPage({super.key});
 
+  final FocusNode focusNodeDocument = FocusNode();
+  final FocusNode focusNodeAlias = FocusNode();
+  final FocusNode focusNodeName = FocusNode();
+  final FocusNode focusNodeLastName = FocusNode();
+  final FocusNode focusNodeAddress = FocusNode();
+
   final AddCustomerController controller = AddCustomerController(
     getTypesDocumentUseCase: Get.find(),
     createCustomerUseCase: Get.find(),
@@ -35,7 +41,7 @@ class AddCustomerPage extends StatelessWidget {
             children: [
               GetBuilder<AddCustomerController>(
                 id: typesDocumentIdGet,
-                builder: (controller) => DropdownMenuWidget(
+                builder: (controller) => DropdownWidget(
                   isAlignLabel: true,
                   label: typeDocumentString,
                   hintText: 'Seleccione el tipo de documento',
@@ -46,28 +52,31 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
-                    initialValue: controller.createCustomerRequest.document,
-                    isAlignLabel: true,
-                    onChanged: controller.onChangedDocument,
-                    label: documentString,
-                    textInputType: TextInputType.number,
-                    hintText: enterDocumentString,
-                    maxLength: CustomerEntity.maxLenghtOfDocument,
+                  initialValue: controller.createCustomerRequest.document,
+                  isAlignLabel: true,
+                  onChanged: controller.onChangedDocument,
+                  label: documentString,
+                  textInputType: TextInputType.number,
+                  hintText: enterDocumentString,
+                  maxLength: CustomerEntity.maxLenghtOfDocument,
+                  focusNode: focusNodeDocument,
                 ),
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
-                    initialValue: controller.createCustomerRequest.alias,
-                    textInputType: TextInputType.name,
-                    onChanged: controller.onChangedAlias,
-                    isAlignLabel: true,
-                    label: aliasString,
-                    hintText: 'Ingrese un alias para el cliente',
-                    maxLength: CustomerEntity.maxLenghtOfAlias,
+                  initialValue: controller.createCustomerRequest.alias,
+                  textInputType: TextInputType.name,
+                  onChanged: controller.onChangedAlias,
+                  isAlignLabel: true,
+                  label: aliasString,
+                  hintText: 'Ingrese un alias para el cliente',
+                  maxLength: CustomerEntity.maxLenghtOfAlias,
+                  focusNode: focusNodeAlias,
                 ),
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    focusNode: focusNodeName,
                     initialValue: controller.createCustomerRequest.name,
                     textInputType: TextInputType.name,
                     onChanged: controller.onChangedName,
@@ -77,6 +86,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    focusNode: focusNodeLastName,
                     initialValue: controller.createCustomerRequest.lastName,
                     textInputType: TextInputType.name,
                     onChanged: controller.onChangedLastname,
@@ -86,6 +96,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
+                    focusNode: focusNodeAddress,
                     initialValue: controller.createCustomerRequest.address,
                     textInputType: TextInputType.streetAddress,
                     onChanged: controller.onChangedAddress,

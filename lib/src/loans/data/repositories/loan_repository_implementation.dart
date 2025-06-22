@@ -1,6 +1,7 @@
 
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/domain/datastores/loan_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/loan_repository.dart';
@@ -30,7 +31,7 @@ class LoanRepositoryImplementation extends LoanRepository {
   }
   
   @override
-  Future<ResultType<bool, ErrorEntity>> validate(AddLoanRequest addLoanRequest) {
-    return datastore.validate(addLoanRequest);
+  Future<ResultType<bool, ErrorEntity>> validate(ValidateLoanRequest validateLoanRequest) {
+    return datastore.validate(validateLoanRequest);
   }
 }
