@@ -1,11 +1,11 @@
 
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
-import 'package:loands_flutter/src/home/domain/repositories/dashboard_repository.dart';
+import 'package:loands_flutter/src/home/domain/repositories/summary_repository.dart';
 import 'package:utils/utils.dart';
 
 class GetQuotasByDateUseCase {
 
-  DashboardRepository repository;
+  SummaryRepository repository;
 
   GetQuotasByDateUseCase({
     required this.repository,

@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_summary_response.dart';
-import 'package:loands_flutter/src/home/domain/datastores/dashboard_datastore.dart';
+import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
+import 'package:loands_flutter/src/home/domain/datastores/summary_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:utils/utils.dart';
 
-class DashboardOnlineDatastore extends DashboardDatastore {
+class SummaryOnlineDatastore extends SummaryDatastore {
 
   @override
   Future<ResultType<DashboardSummaryResponse, ErrorEntity>> getSummary() async {
@@ -57,7 +58,22 @@ class DashboardOnlineDatastore extends DashboardDatastore {
     return Error(
         error: ErrorEntity(
             statusCode: response.statusCode,
-            title: '',
+            title: response.title,
+            errorMessage: response.body));
+  }
+  
+  @override
+  Future<ResultType<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final AppResponseHttp response =
+        await appHttpManager.get(url: '/utils/summary-months');
+    if (response.isSuccessful) {
+      return Success(data: summaryMonthFromJson(response.body));
+    }
+    return Error(
+        error: ErrorEntity(
+            statusCode: response.statusCode,
+            title: response.title,
             errorMessage: response.body));
   }
 }

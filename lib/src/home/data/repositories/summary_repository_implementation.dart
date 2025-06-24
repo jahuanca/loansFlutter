@@ -2,17 +2,18 @@
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_summary_response.dart';
-import 'package:loands_flutter/src/home/domain/datastores/dashboard_datastore.dart';
-import 'package:loands_flutter/src/home/domain/repositories/dashboard_repository.dart';
+import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
+import 'package:loands_flutter/src/home/domain/datastores/summary_datastore.dart';
+import 'package:loands_flutter/src/home/domain/repositories/summary_repository.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:utils/utils.dart';
 
 
-class DashboardRepositoryImplementation extends DashboardRepository {
+class SummaryRepositoryImplementation extends SummaryRepository {
 
-  DashboardDatastore datastore;
+  SummaryDatastore datastore;
 
-  DashboardRepositoryImplementation({
+  SummaryRepositoryImplementation({
     required this.datastore,
   });
 
@@ -29,5 +30,10 @@ class DashboardRepositoryImplementation extends DashboardRepository {
   @override
   Future<ResultType<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
     return datastore.payQuota(payQuotaRequest);
+  }
+  
+  @override
+  Future<ResultType<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() {
+    return datastore.getSummaryMonths();
   }
 }
