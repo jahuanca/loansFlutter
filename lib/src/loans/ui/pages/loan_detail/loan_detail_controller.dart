@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
@@ -11,7 +10,6 @@ import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class LoanDetailController extends GetxController {
-
   LoanEntity? loanSelected;
   List<QuotaEntity> quotas = [];
   GetAllQuotasUseCase getAllQuotasUseCase;
@@ -34,11 +32,12 @@ class LoanDetailController extends GetxController {
 
   Future<void> getQuotas() async {
     showLoading();
-    ResultType<List<QuotaEntity>, ErrorEntity> resultType = await getAllQuotasUseCase.execute({
+    ResultType<List<QuotaEntity>, ErrorEntity> resultType =
+        await getAllQuotasUseCase.execute({
       'id_loan': loanSelected?.id,
     });
 
-    if(resultType is Success){
+    if (resultType is Success) {
       quotas = resultType.data;
     }
     hideLoading();
@@ -46,33 +45,70 @@ class LoanDetailController extends GetxController {
   }
 
   Future<void> goToPayQuota() async {
-    QuotaEntity? quota = quotas.firstWhereOrNull((element) => element.idStateQuota == 1,);
-    if(quota == null) {
+    QuotaEntity? quota = quotas.firstWhereOrNull(
+      (element) => element.idStateQuota == 1,
+    );
+    if (quota == null) {
       showSnackbarWidget(
-        context: Get.context!, 
-        typeSnackbar: TypeSnackbar.error, 
-        message: 'No se encontró cuota por pagar');
-        return;
-    }
-
-    bool result = await showDialogWidget(
-      context: Get.context!, 
-      message: '¿Desea iniciar el pago de la cuota ${quota.name}, Vence: ${quota.dateToPay.formatDMMYYY()}?'
-      );
-    if(result == false){
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: 'No se encontró cuota por pagar');
       return;
     }
 
-    await Get.to(()=> const PayQuotaPage(), arguments: {
+    bool result = await showDialogWidget(
+        context: Get.context!,
+        message:
+            '¿Desea iniciar el pago de la cuota ${quota.name}, Vence: ${quota.dateToPay.formatDMMYYY()}?');
+    if (result == false) {
+      return;
+    }
+
+    await Get.to(() => const PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: DashboardQuotaResponse(
-        id: quota.id!,
-        name: quota.name,
-        customerName: loanSelected?.customerEntity?.fullName ?? emptyString,
-        amount: quota.amount,
-        idStateQuota: quota.idStateQuota,
-        dateToPay: quota.dateToPay)
+          id: quota.id!,
+          name: quota.name,
+          customerName: loanSelected?.customerEntity?.fullName ?? emptyString,
+          amount: quota.amount,
+          idStateQuota: quota.idStateQuota,
+          dateToPay: quota.dateToPay)
     });
 
     getQuotas();
+  }
+
+  void shareInformation() async {
+
+    QuotaEntity firstQuota = quotas.first;
+    String information = emptyString;
+    int? differenceDays = quotas.last.dateToPay.difference(loanSelected!.startDate.orNow()).inDays + 1;
+
+    information += 'Préstamo #${loanSelected?.id} \n';
+    information +=
+        'Cliente: ${loanSelected?.customerEntity?.aliasOrFullName} \n';
+    information += 'Fecha: ${loanSelected?.startDate.formatDMMYYY()} \n';
+    information += 'Duración: $differenceDays días\n';
+    information += 'Monto: S/ ${loanSelected?.amount.formatDecimals()} \n';
+    information +=
+        'Porcentaje: ${loanSelected?.percentage.formatDecimals()}% \n';
+
+    information += 'Cantidad de cuotas: ${quotas.length}\n';
+    information += 'Monto de cuota: S/ ${firstQuota.amount.formatDecimals()}\n';
+
+    double amountToSendMe = firstQuota.amount - (firstQuota.ganancy / 2);
+
+    information += 'Envíame: S/ ${amountToSendMe.formatDecimals()} \n';
+    information += 'Fechas:\n';
+
+    for (QuotaEntity quota in quotas) {
+      information += '${quota.dateToPay.format(formatDate: 'EEEE dd/MM/y')} \n';
+    }
+
+    print(information);
+    await copyToClipboard(information);
+    showSnackbarWidget(
+      context: Get.context!, 
+      typeSnackbar: TypeSnackbar.success, 
+      message: 'Información copiada');
   }
 }

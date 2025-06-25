@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 
 List<SummaryMonthResponse> summaryMonthFromJson(String str) =>
     List<SummaryMonthResponse>.from(
@@ -6,30 +7,36 @@ List<SummaryMonthResponse> summaryMonthFromJson(String str) =>
 
 class SummaryMonthResponse {
   double ganancy;
-  int idStateLoan;
+  double amount;
+  int idStateQuota;
   String month;
   String year;
 
   SummaryMonthResponse({
     required this.ganancy,
-    required this.idStateLoan,
+    required this.amount,
+    required this.idStateQuota,
     required this.month,
     required this.year,
   });
 
   DateTime get time => DateTime(int.parse(year), int.parse(month));
 
+  String get stateLoan => (idStateQuota == idOfCompleteLoan) ? 'Ganancia' : 'Pérdida';
+
   factory SummaryMonthResponse.fromJson(Map<String, dynamic> json) =>
       SummaryMonthResponse(
         ganancy: (json['ganancy'] as num).toDouble(),
-        idStateLoan: json['id_state_loan'],
+        amount: (json['amount'] as num).toDouble(),
+        idStateQuota: json['id_state_quota'],
         month: json['month'],
         year: json['year'],
       );
 
   Map<String, dynamic> toJson() => {
         'ganancy': ganancy,
-        'id_state_loan': idStateLoan,
+        'amount': amount,
+        'id_state_quota': idStateQuota,
         'month': month,
         'year': year,
       };

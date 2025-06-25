@@ -133,9 +133,26 @@ class LoanDetailPage extends StatelessWidget {
   Widget _detailQuotas({
     required Size size,
   }) {
+
+    TextStyle textStyle = const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.bold,
+    );
+
     List<Widget> quotas = [];
     quotas.add(
-      const Text('Cuotas: '),
+      Padding(
+        padding: defaultPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text('Cuotas', style: textStyle),
+            IconWidget(
+              onTap: controller.shareInformation,
+              iconData: Icons.share)
+          ],
+        ),
+      ),
     );
     int i = 1;
     quotas.addAll(controller.quotas
