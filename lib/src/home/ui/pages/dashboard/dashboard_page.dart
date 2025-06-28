@@ -30,7 +30,7 @@ class DashboardPage extends GetView<DashboardController> {
             child: Column(
               children: [
                 _cards(size: size),
-                _details(size: size),
+                _details(size: size, context: context),
               ],
             ),
           ),
@@ -42,7 +42,6 @@ class DashboardPage extends GetView<DashboardController> {
   Widget _cards({
     required Size size,
   }) {
-
     const double heightOfCard = 150;
 
     DashboardSummaryResponse? response = controller.dashboardSummaryResponse;
@@ -88,6 +87,7 @@ class DashboardPage extends GetView<DashboardController> {
 
   Widget _details({
     required Size size,
+    required BuildContext context,
   }) {
     const TextStyle subtitleStyle = TextStyle(
       fontWeight: FontWeight.w500,
@@ -98,7 +98,7 @@ class DashboardPage extends GetView<DashboardController> {
       child: Column(
         children: [
           Padding(
-            padding: defaultPadding,
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -106,7 +106,16 @@ class DashboardPage extends GetView<DashboardController> {
                   'Pagos pendientes',
                   style: subtitleStyle,
                 ),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () async =>
+                            controller.changeDatePicker(
+                                await _showDatePicker(context: context)),
+                        icon: const Icon(Icons.calendar_month_outlined)),
+                    const IconButton(onPressed: null, icon: Icon(Icons.search))
+                  ],
+                )
               ],
             ),
           ),
@@ -115,6 +124,16 @@ class DashboardPage extends GetView<DashboardController> {
         ],
       ),
     );
+  }
+
+  Future<DateTime?> _showDatePicker({
+    required BuildContext context,
+  }) async {
+    return await showDatePicker(
+        context: context,
+        initialDate: defaultDate,
+        firstDate: defaultDate.subtract(halfYearDuration),
+        lastDate: defaultDate.add(halfYearDuration));
   }
 
   Widget _listDays({
@@ -139,7 +158,7 @@ class DashboardPage extends GetView<DashboardController> {
     required BuildContext context,
   }) {
     final dateOfResponse =
-        controller.dashboardSummaryResponse?.dateToSearch ?? defaultDate;
+        controller.dateSelected.subtract(oneDayDuration);
     final date = dateOfResponse.add(Duration(days: day));
     final isSelected =
         (date.formatDMMYYY() == controller.dateSelected.formatDMMYYY());
@@ -202,10 +221,12 @@ class DashboardPage extends GetView<DashboardController> {
     required int index,
     required DashboardQuotaResponse quota,
   }) {
+    
+    int id = quota.idLoan;
     String name = quota.name;
     String amountValue = quota.amount.formatDecimals();
-    String nameStateQuota = quota.stateQuota['name'];
-    Color colorStateQuota = quota.stateQuota['color'];
+    String nameStateQuota = quota.stateQuota.name;
+    Color colorStateQuota = quota.stateQuota.color;
 
     return Padding(
       padding: defaultPadding,
@@ -237,9 +258,9 @@ class DashboardPage extends GetView<DashboardController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(name),
+                    Text('#P$id: $name'),
+                    Text(quota.aliasOrName),
                     Text(quota.customerName),
-                    const Text('Direccion del deudor'),
                   ],
                 ),
               ),

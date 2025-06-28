@@ -9,6 +9,7 @@ import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/loans/di/loans_binding.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
+import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_page.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -33,13 +34,15 @@ class DashboardController extends GetxController {
     super.onReady();
   }
 
-  Future<void> getSummary() async {
+  Future<void> getSummary([bool updateDateSelected = true]) async {
     showLoading();
     ResultType<DashboardSummaryResponse, ErrorEntity> resultType =
         await getSummaryDasboardUseCase.execute();
     if (resultType is Success) {
       dashboardSummaryResponse = resultType.data;
-      dateSelected = dashboardSummaryResponse?.dateToSearch ?? defaultDate;
+      if (updateDateSelected) {
+        dateSelected = dashboardSummaryResponse?.dateToSearch ?? defaultDate;
+      }
     }
     update([pageIdGet]);
     await getQuotasByDay(dateSelected);
@@ -73,13 +76,19 @@ class DashboardController extends GetxController {
   }
 
   Future<void> goToQuota(DashboardQuotaResponse quotaResponse) async {
-    await Get.to(() => const PayQuotaPage(), arguments: {
+    final result = await Get.to(() => PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: quotaResponse,
     });
-    getSummary();
+    getSummary((result is QuotaEntity).not());
   }
 
   void goToPaymentSummary() {
     Get.to(()=> PaymentSummaryPage(), binding: PaymentSummaryBinding());
+  }
+
+  void changeDatePicker(DateTime? dateTime) {
+    if (dateTime == null) return;
+    dateSelected = dateTime;
+    getQuotasByDay(dateTime);
   }
 }

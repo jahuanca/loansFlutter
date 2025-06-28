@@ -6,45 +6,87 @@ import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaPage extends StatelessWidget {
-  const PayQuotaPage({super.key});
+  final PayQuotaController controller =
+      PayQuotaController(payQuotaUseCase: Get.find());
+
+  PayQuotaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<PayQuotaController>(
-      init: PayQuotaController(
-        payQuotaUseCase: Get.find(),
-      ),
+      init: controller,
       id: pageIdGet,
       builder: (controller) => Scaffold(
         appBar: appBarWidget(text: 'Pago de cuota', hasArrowBack: true),
-        bottomNavigationBar:
-            ButtonWidget(padding: defaultPadding, text: 'Pagar', onTap: controller.payQuota,),
+        bottomNavigationBar: ChildOrElseWidget(
+          condition: (controller.isPending),
+          child: ButtonWidget(
+            padding: defaultPadding,
+            text: 'Pagar',
+            onTap: controller.payQuota,
+          ),
+        ),
         body: Column(
           children: [
-            _cardDetail(quota: controller.quota),
-            InputWidget(
-              hintText: 'Seleccione la fecha de pago',
-              label: paymentDateString,
-              onTap: () async {
-                      DateTime? dateSelected = await showDatePicker(
-                          context: context,
-                          currentDate: controller.quota.dateToPay,
-                          firstDate:
-                              defaultDate.subtract(halfYearDuration),
-                          lastDate: defaultDate.add(oneDayDuration));
-                      controller.onChangedStartDate(dateSelected);
-                    },
-                    textEditingController: controller.dateToPayTextController,
-                    enabled: false,
-                    
-            ),
-            InputWidget(
-              hintText: 'Evidencia',
-              label: 'Evidencia',
-            ),
+            if (controller.quota != null) _cardDetail(quota: controller.quota!),
+            ChildOrElseWidget(
+                condition: (controller.isPending),
+                elseWidget: _paidQuotaWidget(),
+                child: _form(context))
           ],
         ),
       ),
+    );
+  }
+
+  Widget _paidQuotaWidget() {
+    return Column(
+      children: [
+        EmptyWidget(
+          iconData: Icons.check,
+          title: 'Esta cuota ya ha sido pagada.',
+        ),
+        GestureDetector(
+          onTap: controller.copyPaidQuota,
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconWidget(
+                  padding: EdgeInsets.only(
+                    top: 64,
+                    bottom: 8,
+                  ),
+                  iconData: Icons.copy_outlined),
+              Text('Copiar información de pago')
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _form(BuildContext context) {
+    return Column(
+      children: [
+        InputWidget(
+          hintText: 'Seleccione la fecha de pago',
+          label: paymentDateString,
+          onTap: () async {
+            DateTime? dateSelected = await showDatePicker(
+                context: context,
+                currentDate: controller.quota?.dateToPay,
+                firstDate: defaultDate.subtract(halfYearDuration),
+                lastDate: defaultDate.add(oneDayDuration));
+            controller.onChangedStartDate(dateSelected);
+          },
+          textEditingController: controller.dateToPayTextController,
+          enabled: false,
+        ),
+        InputWidget(
+          hintText: 'Evidencia',
+          label: 'Evidencia',
+        ),
+      ],
     );
   }
 
@@ -62,10 +104,11 @@ class PayQuotaPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(quota.customerName),
-                Text(quota.alias.orEmpty(), style: const TextStyle(
-                  fontWeight: FontWeight.w300,
-                  fontSize: 12
-                ),),
+                Text(
+                  quota.alias.orEmpty(),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w300, fontSize: 12),
+                ),
                 Padding(
                   padding: defaultPadding,
                   child: Text(

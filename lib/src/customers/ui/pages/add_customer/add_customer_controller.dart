@@ -40,7 +40,7 @@ class AddCustomerController extends GetxController {
       
       createCustomerRequest.id = customerEntity.id;
       createCustomerRequest.idTypeDocument = customerEntity.idTypeDocument;
-
+      createCustomerRequest.alias = customerEntity.alias;
       createCustomerRequest.name = customerEntity.name;
       createCustomerRequest.lastName = customerEntity.lastName;
       createCustomerRequest.document = customerEntity.document;

@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/pay_quota_use_case.dart';
+import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
@@ -11,7 +13,7 @@ import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaController extends GetxController {
-  late DashboardQuotaResponse quota;
+  DashboardQuotaResponse? quota;
   PayQuotaUseCase payQuotaUseCase;
   TextEditingController dateToPayTextController = TextEditingController();
   
@@ -21,10 +23,12 @@ class PayQuotaController extends GetxController {
     required this.payQuotaUseCase,
   });
 
+  bool get isPending => (quota?.idStateQuota == idOfPendingQuota);
+
   @override
   void onInit() {
     quota = Get.setArgument(dashboardQuotaResponseArgument);
-    payQuotaRequest.idOfQuota = quota.id;
+    payQuotaRequest.idOfQuota = quota?.id;
     super.onInit();
   }
 
@@ -54,11 +58,26 @@ class PayQuotaController extends GetxController {
         message: 'Se registrara la cuota como pagada, ¿desea continuar?');
     if (result) {
       showLoading();
-      ResultType resultType = await payQuotaUseCase.execute(payQuotaRequest);
+      ResultType<QuotaEntity, ErrorEntity> resultType = await payQuotaUseCase.execute(payQuotaRequest);
       hideLoading();
       if (resultType is Success) {
-        Get.back();
+        Get.back(result: resultType.data);
       }
     }
+  }
+
+  Future<void> copyPaidQuota() async {
+    if (quota == null) return;
+
+    String message = emptyString;
+    message += 'Préstamo # ${quota!.idLoan}:';
+    message += ' ${quota!.aliasOrName},';
+    message += ' cuota ${quota!.name}';
+    message += ' pagado el ${quota!.paidDate.formatDMMYYY()}.';
+    copyToClipboard(message);
+    showSnackbarWidget(
+      context: Get.context!, 
+      typeSnackbar: TypeSnackbar.success, 
+      message: 'Información copiada');
   }
 }

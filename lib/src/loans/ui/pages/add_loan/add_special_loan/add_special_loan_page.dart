@@ -13,6 +13,8 @@ class AddSpecialLoanPage extends StatelessWidget {
     validateLoanUseCase: Get.find(),
   );
 
+  final FocusNode customerFocusNode = FocusNode();
+
   AddSpecialLoanPage({super.key});
 
   @override
@@ -42,6 +44,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                       child: GetBuilder<AddSpecialLoanController>(
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
+                                focusNode: customerFocusNode,
                                 hintText: selectTheCustomer,
                                 label: customerString,
                                 items: controller.customers,

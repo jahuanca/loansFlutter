@@ -6,7 +6,6 @@ import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanInformationPage extends StatelessWidget {
-  AddLoanInformationPage({super.key});
 
   final AddLoanInformationController controller = AddLoanInformationController(
     getCustomersUseCase: Get.find(),
@@ -14,6 +13,10 @@ class AddLoanInformationPage extends StatelessWidget {
     getPaymentMethodsUseCase: Get.find(),
     validateLoanUseCase: Get.find(),
   );
+
+  final FocusNode focusNodeCustomer = FocusNode();
+
+  AddLoanInformationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,7 @@ class AddLoanInformationPage extends StatelessWidget {
                       child: GetBuilder<AddLoanInformationController>(
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
+                                focusNode: focusNodeCustomer,
                                 hintText: selectTheCustomer,
                                 label: customerString,
                                 items: controller.customers,

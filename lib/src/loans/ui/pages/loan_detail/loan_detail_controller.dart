@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_all_quotas_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
@@ -45,9 +46,7 @@ class LoanDetailController extends GetxController {
   }
 
   Future<void> goToPayQuota() async {
-    QuotaEntity? quota = quotas.firstWhereOrNull(
-      (element) => element.idStateQuota == 1,
-    );
+    QuotaEntity? quota = quotas.firstWhereOrNull((e) => e.idStateQuota == idOfPendingQuota);
     if (quota == null) {
       showSnackbarWidget(
           context: Get.context!,
@@ -60,20 +59,20 @@ class LoanDetailController extends GetxController {
         context: Get.context!,
         message:
             '¿Desea iniciar el pago de la cuota ${quota.name}, Vence: ${quota.dateToPay.formatDMMYYY()}?');
-    if (result == false) {
-      return;
-    }
+    if (result == false) return;
 
-    await Get.to(() => const PayQuotaPage(), arguments: {
+    await Get.to(() => PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: DashboardQuotaResponse(
           id: quota.id!,
+          idLoan: quota.idLoan!,
           name: quota.name,
           customerName: loanSelected?.customerEntity?.fullName ?? emptyString,
           amount: quota.amount,
           idStateQuota: quota.idStateQuota,
-          dateToPay: quota.dateToPay)
+          dateToPay: quota.dateToPay,
+          paidDate: quota.paidDate,
+        )
     });
-
     getQuotas();
   }
 
@@ -104,7 +103,6 @@ class LoanDetailController extends GetxController {
       information += '${quota.dateToPay.format(formatDate: 'EEEE dd/MM/y')} \n';
     }
 
-    print(information);
     await copyToClipboard(information);
     showSnackbarWidget(
       context: Get.context!, 
