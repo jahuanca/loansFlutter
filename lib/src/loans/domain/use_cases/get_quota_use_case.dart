@@ -3,11 +3,11 @@ import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/quota_repository.dart';
 import 'package:utils/utils.dart';
 
-class GetAllQuotasUseCase {
+class GetQuotaUseCase {
 
   QuotaRepository repository;
 
-  GetAllQuotasUseCase({
+  GetQuotaUseCase({
     required this.repository,
   });
 

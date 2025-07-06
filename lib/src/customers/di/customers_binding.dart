@@ -10,8 +10,8 @@ class CustomersBinding extends Bindings {
   @override
   void dependencies() {
     
-    Get.lazyPut<CustomerDatastore>(() => CustomerOnlineDatastore());
-    Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
+    Get.lazyReplace<CustomerDatastore>(() => CustomerOnlineDatastore());
+    Get.lazyReplace<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut(() => GetCustomersUseCase(repository: Get.find()));
   }
 

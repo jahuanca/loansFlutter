@@ -54,7 +54,7 @@ Widget _data({
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(label.capitalize() ),
+      Text(label.toCapitalize() ),
       Text(
         '$value',
         style: TextStyle(

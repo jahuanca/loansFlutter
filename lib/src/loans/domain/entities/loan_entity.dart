@@ -5,6 +5,7 @@
 
 import 'dart:convert';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:utils/utils.dart';
 
 List<LoanEntity> loanEntityFromJson(String str) => List<LoanEntity>.from(json.decode(str).map((x) => LoanEntity.fromJson(x)));
@@ -26,7 +27,9 @@ class LoanEntity {
     String evidence;
     DateTime createdAt;
     DateTime updatedAt;
+
     CustomerEntity? customerEntity;
+    PaymentFrequencyEntity? paymentFrequencyEntity;
 
     LoanEntity({
         this.id,
@@ -44,6 +47,7 @@ class LoanEntity {
         required this.createdAt,
         required this.updatedAt,
         this.customerEntity,
+        this.paymentFrequencyEntity,
     });
 
     String get formatTitle => 'S/ ${amount.formatDecimals()} - ${percentage.formatDecimals()}%';
@@ -64,6 +68,7 @@ class LoanEntity {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         customerEntity: json['Customer'] == null ? null : CustomerEntity.fromJson(json['Customer']),
+        paymentFrequencyEntity: json['Payment_Frequency'] == null ? null : PaymentFrequencyEntity.fromJson(json['Payment_Frequency']),
     );
 
     Map<String, dynamic> toJson() => {
@@ -82,5 +87,6 @@ class LoanEntity {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         'Customer': customerEntity?.toJson(),
+        'Payment_Frequency': paymentFrequencyEntity?.toJson(),
     };
 }

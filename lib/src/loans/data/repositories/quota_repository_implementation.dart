@@ -1,3 +1,4 @@
+import 'package:loands_flutter/src/loans/data/requests/get_all_quotas_request.dart';
 import 'package:loands_flutter/src/loans/domain/datastores/quota_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/quota_repository.dart';
@@ -12,8 +13,8 @@ class QuotaRepositoryImplementation extends QuotaRepository {
   });
 
   @override
-  Future<ResultType<List<QuotaEntity>, ErrorEntity>> getAll(Map<String, dynamic> query) {
-    return datastore.getAll(query);
+  Future<ResultType<List<QuotaEntity>, ErrorEntity>> getAll(GetAllQuotasRequest request) {
+    return datastore.getAll(request);
   }
   
   @override

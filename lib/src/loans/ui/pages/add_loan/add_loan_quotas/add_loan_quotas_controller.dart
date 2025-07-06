@@ -64,7 +64,7 @@ class AddLoanQuotasController extends GetxController {
           message: resultType.error);
       return;
     } else {
-      Get.until((route) => route.settings.name == '/LoansPage');
+      Get.until((route) => route.settings.name == '/');
     }
     hideLoading();
   }

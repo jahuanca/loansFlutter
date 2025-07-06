@@ -24,3 +24,5 @@ enum StateQuotaEnum {
   final Color color;
   final String name;
 }
+
+StateQuotaEnum findStateQuotaEnum(int idStateQuota) => StateQuotaEnum.values.firstWhere((e) => e.id == idStateQuota);

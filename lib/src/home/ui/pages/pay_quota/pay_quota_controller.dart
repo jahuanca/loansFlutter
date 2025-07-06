@@ -61,20 +61,35 @@ class PayQuotaController extends GetxController {
       ResultType<QuotaEntity, ErrorEntity> resultType = await payQuotaUseCase.execute(payQuotaRequest);
       hideLoading();
       if (resultType is Success) {
-        Get.back(result: resultType.data);
+        QuotaEntity quotaToReturn = resultType.data;
+        updateQuotaAndCopy(quotaToReturn);
+        Get.back(result: quotaToReturn);
+      } else {
+        ErrorEntity errorEntity = resultType.error;
+        showSnackbarWidget(
+          context: Get.context!, 
+          typeSnackbar: TypeSnackbar.error, message: errorEntity.errorMessage);
       }
     }
   }
 
-  Future<void> copyPaidQuota() async {
+  Future<void> updateQuotaAndCopy(QuotaEntity quotaUpdated) async {
+    quota!.paidDate = quotaUpdated.paidDate;
+    copyPaidQuota(false);
+  }
+
+  Future<void> copyPaidQuota([bool showSnackbar = true]) async {
     if (quota == null) return;
 
     String message = emptyString;
-    message += 'Préstamo # ${quota!.idLoan}:';
+    String nameOfDate = quota!.paidDate.format(formatDate: 'EEEE').orEmpty();
+    message += 'Préstamo #${quota!.idLoan}:';
     message += ' ${quota!.aliasOrName},';
     message += ' cuota ${quota!.name}';
-    message += ' pagado el ${quota!.paidDate.formatDMMYYY()}.';
+    message += ' monto de S/ ${quota!.amount.formatDecimals()},';
+    message += ' pagado el $nameOfDate ${quota!.paidDate.formatDMMYYY()}.';
     copyToClipboard(message);
+    if (showSnackbar == false) return;
     showSnackbarWidget(
       context: Get.context!, 
       typeSnackbar: TypeSnackbar.success, 

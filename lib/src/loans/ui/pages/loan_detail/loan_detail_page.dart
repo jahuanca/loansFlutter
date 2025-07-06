@@ -24,7 +24,11 @@ class LoanDetailPage extends StatelessWidget {
           bottomNavigationBar: _bottomButtons(),
           appBar: appBarWidget(
               hasArrowBack: true,
-              text: 'Préstamo ${controller.loanSelected?.id}'),
+              text: 'Préstamo ${controller.loanSelected?.id}',
+              actions: [
+                IconButton(onPressed: controller.shareInformation, icon: const Icon(Icons.copy_all)),
+              ]
+          ),
           body: ListView(
             children: [
               if (controller.loanSelected != null)
@@ -144,12 +148,10 @@ class LoanDetailPage extends StatelessWidget {
       Padding(
         padding: defaultPadding,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Cuotas', style: textStyle),
-            IconWidget(
-              onTap: controller.shareInformation,
-              iconData: Icons.share)
+            
           ],
         ),
       ),

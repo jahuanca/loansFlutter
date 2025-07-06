@@ -38,11 +38,12 @@ class LoansController extends GetxController {
     getLoans();
   }
 
-  void goToDetail(LoanEntity loanSelected) {
-    Get.to(() => LoanDetailPage(),
+  void goToDetail(LoanEntity loanSelected) async {
+    await Get.to(() => LoanDetailPage(),
         arguments: {
           loanSelectedArgument: loanSelected,
         },
         binding: LoanDetailBinding());
+    getLoans();    
   }
 }
