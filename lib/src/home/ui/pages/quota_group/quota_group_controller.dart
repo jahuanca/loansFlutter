@@ -18,6 +18,7 @@ class QuotaGroupController extends GetxController {
 
   List<DashboardQuotaResponse> quotas = [];
   Map<dynamic, List<Map<String, dynamic>>> groupByDate = {};
+  bool isGroup = false;
 
   QuotaGroupController({
     required this.getQuotasByDateUseCase,
@@ -27,6 +28,7 @@ class QuotaGroupController extends GetxController {
   void onInit() {
     getQuotasByDateRequest = Get.setArgument(getAllQuotasRequestArgument);
     title = Get.setArgument(titleArgument);
+    isGroup = Get.setArgument(isGroupArgument);
     super.onInit();
   }
 
@@ -44,7 +46,6 @@ class QuotaGroupController extends GetxController {
 
     if (resultType is Success) {
       quotas = resultType.data;
-       
       groupByDate = groupBy(
         values: quotas.map((e) => e.toJson(),).toList(), 
         functionKey: (p0) => p0['date_to_pay'],);
@@ -52,7 +53,8 @@ class QuotaGroupController extends GetxController {
     }
   }
 
-  Future<void> goToQuota(int index) async {
+  Future<void> goToQuota(int idOfQuota) async {
+    int index = quotas.indexWhere((e) => e.id == idOfQuota,);
     DashboardQuotaResponse quotaSelected = quotas[index];
     QuotaEntity? result = await Get.to(() => PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: quotaSelected,

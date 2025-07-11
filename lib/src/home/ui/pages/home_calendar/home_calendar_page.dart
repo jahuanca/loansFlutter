@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/home_calendar_controller.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class HomeCalendarPage extends StatelessWidget {
@@ -116,9 +117,12 @@ class HomeCalendarPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  controller.dateSelected.format(formatDate: 'EEEE dd/MM/yyy').orEmpty().toCapitalize(),
-                  style: subtitleStyle,
+                GetBuilder<HomeCalendarController>(
+                  id: calendarIdGet,
+                  builder: (controller) => Text(
+                    controller.dateSelected.format(formatDate: formatOfSummary).orEmpty().toCapitalize(),
+                    style: subtitleStyle,
+                  ),
                 ),
                 Row(
                   children: [
@@ -221,7 +225,6 @@ class HomeCalendarPage extends StatelessWidget {
         child: ListView.builder(
           itemCount: controller.quotasByDate.length,
           itemBuilder: (context, index) => QuotaOfCalendarWidget(
-            index: index,
             idStateQuota: controller.quotasByDate[index].idStateQuota,
             amount: controller.quotasByDate[index].amount,
             subtitle: controller.quotasByDate[index].customerName,

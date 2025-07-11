@@ -6,3 +6,4 @@ const String customersArgument = 'customersArgument';
 const String loanSelectedArgument = 'loanSelectedArgument';
 const String getAllQuotasRequestArgument = 'getAllQuotasRequestArgument';
 const String titleArgument = 'titleArgument';
+const String isGroupArgument = 'isGroupArgument';

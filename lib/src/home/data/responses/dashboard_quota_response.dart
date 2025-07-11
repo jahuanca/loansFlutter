@@ -53,6 +53,7 @@ class DashboardQuotaResponse {
         "id_loan": idLoan,
         "name": name,
         "alias": alias,
+        "amount": amount,
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
         'date_to_pay': dateToPay.toIso8601String(),

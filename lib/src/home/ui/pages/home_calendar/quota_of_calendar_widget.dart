@@ -3,7 +3,6 @@ import 'package:loands_flutter/src/home/data/responses/state_quota_enum.dart';
 import 'package:utils/utils.dart';
 
 class QuotaOfCalendarWidget extends StatelessWidget {
-  final int index;
   final void Function()? onTap;
   final int idLoan;
   final String title;
@@ -14,7 +13,6 @@ class QuotaOfCalendarWidget extends StatelessWidget {
 
   const QuotaOfCalendarWidget({
     super.key,
-    required this.index,
     this.onTap,
     required this.idLoan,
     required this.title,

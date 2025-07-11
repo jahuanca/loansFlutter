@@ -94,6 +94,7 @@ class HomeCalendarController extends GetxController {
     _goToQuotaGroup(
       request: request,
       title: 'Cuotas de la semana',
+      isGroup: true,
     );
   }
 
@@ -105,18 +106,21 @@ class HomeCalendarController extends GetxController {
     _goToQuotaGroup(
       request: request,
       title: 'Cuotas vencidas',
+      isGroup: false,
     );
   }
 
   void _goToQuotaGroup({
     required GetQuotasByDateRequest request, 
-    required String title
+    required String title,
+    required bool isGroup,
   }) {
     Get.to(() => QuotaGroupPage(),
         binding: QuotaGroupBinding(),
         arguments: {
           getAllQuotasRequestArgument: request,
           titleArgument: title,
+          isGroupArgument: isGroup,
         });
   }
 
