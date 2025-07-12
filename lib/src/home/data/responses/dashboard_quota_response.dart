@@ -15,9 +15,11 @@ class DashboardQuotaResponse {
   String customerName;
   String? alias;
   double amount;
+  double ganancy;
   int idStateQuota;
   DateTime dateToPay;
   DateTime? paidDate;
+  
 
   DashboardQuotaResponse({
     required this.id,
@@ -25,6 +27,7 @@ class DashboardQuotaResponse {
     required this.name,
     required this.customerName,
     required this.amount,
+    required this.ganancy,
     required this.idStateQuota,
     required this.dateToPay,
     required this.paidDate,
@@ -43,6 +46,7 @@ class DashboardQuotaResponse {
       customerName: json["customer_name"],
       alias: json["alias"],
       amount: (json["amount"] as num).toDouble(),
+      ganancy: (json["ganancy"] as num).toDouble(),
       idStateQuota: json["id_state_quota"],
       dateToPay: DateTime.parse(json['date_to_pay']),
       paidDate: json['paid_date'] == null ? null : DateTime.tryParse(json['paid_date']),
@@ -54,6 +58,7 @@ class DashboardQuotaResponse {
         "name": name,
         "alias": alias,
         "amount": amount,
+        "ganancy": ganancy,
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
         'date_to_pay': dateToPay.toIso8601String(),

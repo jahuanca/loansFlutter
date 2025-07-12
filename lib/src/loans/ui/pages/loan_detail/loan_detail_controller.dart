@@ -73,6 +73,7 @@ class LoanDetailController extends GetxController {
           name: quota.name,
           customerName: loanSelected?.customerEntity?.fullName ?? emptyString,
           amount: quota.amount,
+          ganancy: quota.ganancy,
           idStateQuota: quota.idStateQuota,
           dateToPay: quota.dateToPay,
           paidDate: quota.paidDate,
