@@ -23,6 +23,12 @@ class QuotaGroupPage extends StatelessWidget {
         onRefresh: controller.getQuotas,
         child: Scaffold(
           appBar: appBarWidget(text: controller.title, actions: [
+            ChildOrElseWidget(
+              condition: controller.isGroup, 
+            child: IconWidget(
+              padding: defaultPadding,
+              onTap: _showDatePickerRange,
+              iconData: Icons.calendar_month_outlined,),),
             MenuOverlayWidget(
               //TODO: crear resumen de completados o pendientes por dia, 
               //copiar solo pendientes.
@@ -70,21 +76,37 @@ class QuotaGroupPage extends StatelessWidget {
     String title = dateOfTitle.format(formatDate: formatOfSummary).orEmpty().toCapitalize();
 
     TextStyle titleStyle = const TextStyle(fontWeight: FontWeight.bold);
-
-    bool initiallyExpanded = false;
+    int quantityOfPendings = 0;
     List<Widget> items = group.map(
       (e) {
         DashboardQuotaResponse quota = DashboardQuotaResponse.fromJson(e);
-        if(initiallyExpanded == false){
-          initiallyExpanded = (quota.idStateQuota == idOfPendingQuota);
+        if(quota.idStateQuota == idOfPendingQuota){
+          quantityOfPendings++;
         }
         return _itemOfCalendar(quota);
       }
     ).toList();
 
+    Widget titleWidget = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: titleStyle),
+        
+        if(quantityOfPendings > defaultInt)
+        CircleAvatar(
+          backgroundColor: dangerColor(),
+          radius: 12,
+          child: Text(quantityOfPendings.toString(), style: 
+          const TextStyle(
+            fontSize: 12,
+            color: Colors.white))
+        ),
+      ],
+    ); 
+
     return ExpansionTile(
-      title: Text(title, style: titleStyle),
-      initiallyExpanded: initiallyExpanded,
+      title: titleWidget,
+      initiallyExpanded: (quantityOfPendings > defaultInt),
       children: items,
     );
   }
@@ -99,5 +121,15 @@ class QuotaGroupPage extends StatelessWidget {
       title: quota.name,
       onTap: () => controller.goToQuota(quota.id),
     );
+  }
+
+  Future<void> _showDatePickerRange() async {
+    DateTimeRange? range = await showDateRangePicker(
+      initialDateRange: controller.dateTimeRange,
+      context: Get.context!, 
+      firstDate: defaultDate.subtract(halfYearDuration), 
+      lastDate: defaultDate.add(halfYearDuration),
+    );
+    controller.onChangedDateTimeRange(range);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
@@ -18,6 +19,7 @@ class QuotaGroupController extends GetxController {
 
   List<DashboardQuotaResponse> quotas = [];
   Map<dynamic, List<Map<String, dynamic>>> groupByDate = {};
+  DateTimeRange? dateTimeRange;
   bool isGroup = false;
 
   QuotaGroupController({
@@ -29,6 +31,12 @@ class QuotaGroupController extends GetxController {
     getQuotasByDateRequest = Get.setArgument(getAllQuotasRequestArgument);
     title = Get.setArgument(titleArgument);
     isGroup = Get.setArgument(isGroupArgument);
+    if(isGroup) {
+      dateTimeRange = DateTimeRange(
+        start: getQuotasByDateRequest.fromDate.orNow(), 
+        end: getQuotasByDateRequest.untilDate.orNow(), 
+      );
+    }
     super.onInit();
   }
 
@@ -89,13 +97,28 @@ class QuotaGroupController extends GetxController {
             if (quota.idStateQuota != idOfPendingQuota) continue;
             double amount = quota.amount;
             double sendMe = amount - (quota.ganancy/2);
-            data += '${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n'; 
+            data += 'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n'; 
           }
         },
       );
       await copyToClipboard(data);
       showSnackbarWidget(context: Get.context!, typeSnackbar: TypeSnackbar.success, message: 'Cuotas copiadas.');
     }
+  }
+
+  void onChangedDateTimeRange(DateTimeRange? value) {
+    if (value == null) return;
+    dateTimeRange = value;
+    getQuotasByDateRequest.fromDate = value.start;
+    getQuotasByDateRequest.untilDate = value.end;
+    _setTitle();
+    getQuotas();
+  }
+
+  void _setTitle() {
+    String startDate = dateTimeRange!.start.formatDMMYYY().orEmpty();
+    String endDate = dateTimeRange!.end.formatDMMYYY().orEmpty();
+    title = '$startDate - $endDate';
   }
 
 }
