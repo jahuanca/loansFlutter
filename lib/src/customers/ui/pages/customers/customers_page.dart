@@ -80,12 +80,6 @@ class CustomersPage extends StatelessWidget {
           shape: BoxShape.circle,
           backgroundColor: infoColor(),
         ),
-        IconButtonWidget(
-          onPressed: controller.goToDeleteCustomer,
-          iconData: Icons.delete,
-          shape: BoxShape.circle,
-          backgroundColor: dangerColor(),
-        ),
       ],
     );
   }

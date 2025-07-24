@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_controller.dart';
-import 'package:loands_flutter/src/utils/ui/widgets/input_label_widget.dart';
 import 'package:utils/utils.dart';
 
-class LoginPage extends GetView<LoginController> {
-  const LoginPage({super.key});
-
-  final double _sizeOfImage = 65;
+class LoginPage extends StatelessWidget {
+  
+  final LoginController controller = LoginController(loginUseCase: Get.find());
   final TextStyle _headerStyle = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w500,
@@ -16,25 +14,29 @@ class LoginPage extends GetView<LoginController> {
     fontSize: 12,
     fontWeight: FontWeight.w500,
   );
+  
+  LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: SizedBox(
-            width: size.width,
-            height: size.height,
-            child: Column(
-              children: [
-                _image(),
-                _formContent(
-                  
-                ),
-              ],
+    return GetBuilder<LoginController>(
+      id: pageIdGet,
+      init: controller,
+      builder: (controller) => Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: SizedBox(
+              width: size.width,
+              height: size.height * 0.9,
+              child: Column(
+                children: [
+                  _image(),
+                  _formContent(),
+                ],
+              ),
             ),
           ),
         ),
@@ -43,26 +45,10 @@ class LoginPage extends GetView<LoginController> {
   }
 
   Widget _image() {
-    return Expanded(
+    return const Expanded(
       flex: 1,
       child: Align(
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
-            ),
-          ),
-          width: _sizeOfImage,
-          height: _sizeOfImage,
-          child: const Icon(
-            Icons.attach_money_sharp,
-            color: Colors.black,
-            size: 45,
-          ),
-        ),
+        child: Image(image: AssetImage('assets/icons/icon_app.png')),
       ),
     );
   }
@@ -86,18 +72,22 @@ class LoginPage extends GetView<LoginController> {
               'Iniciar sesión',
               style: _headerStyle,
             ),
-            const InputLabelWidget(
+            InputWidget(
+              onChanged: controller.onChangeUsername,
               hintText: 'Ingrese su correo',
               label: 'Email',
+              maxLength: 50,
             ),
-            const InputLabelWidget(
+            PasswordInputWidget(
+              onChanged: controller.onChangePassword,
               hintText: 'Ingrese su contraseña',
               label: 'Contraseña',
             ),
             ButtonWidget(
-              onTap: controller.goToHome,
-              fontSize: 16, text: 'Ingresar'),
-            const SizedBox(height: 25,),
+                onTap: controller.goToHome, fontSize: 16, text: 'Ingresar'),
+            const SizedBox(
+              height: 25,
+            ),
             Text(
               '¿Olvidaste tu contraseña? Presione aquí.',
               style: _detailStyle,

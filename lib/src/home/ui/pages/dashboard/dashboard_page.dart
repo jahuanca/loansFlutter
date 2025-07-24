@@ -7,7 +7,6 @@ import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class DashboardPage extends StatelessWidget {
-
   final DashboardController controller = DashboardController(
     getQuotasByDateUseCase: Get.find(),
     getSummaryDasboardUseCase: Get.find(),
@@ -47,7 +46,8 @@ class DashboardPage extends StatelessWidget {
   }) {
     const double heightOfCard = 150;
 
-    SummaryOfDashboardResponse? response = controller.summaryOfDashboardResponse;
+    SummaryOfDashboardResponse? response =
+        controller.summaryOfDashboardResponse;
 
     Map<String, dynamic> valuesOfLoans = response?.loansInfo ?? {};
 
@@ -84,29 +84,52 @@ class DashboardPage extends StatelessWidget {
     required Size size,
     required BuildContext context,
   }) {
+
     const TextStyle subtitleStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16,
     );
 
-    return SizedBox(
-      height: size.height * 0.3,
-      child: const Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Actividad',
-                  style: subtitleStyle,
+    final List<String> examples = [
+      'Se creo un préstamo semanal para Cliente de S/ 400',
+      'Se creo un préstamo semanal para Cliente de S/ 220',
+      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
+      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
+      'Se creo un préstamo semanal para Cliente de S/ 400',
+      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
+      'Se creo un préstamo semanal para Cliente de S/ 400',
+      'Se creo un préstamo semanal para Cliente de S/ 220',
+      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
+      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
+    ];
+
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Text(
+            'Actividad',
+            style: subtitleStyle,
+          ),
+        ),
+        SizedBox(
+          height: size.height * 0.5,
+          child: ListView.separated(
+            separatorBuilder: (context, index) => const Divider(),
+            itemCount: 10,
+            itemBuilder: (context, index) => SizedBox(
+              child: ListTile(
+                title: Text(examples[index]),
+                subtitle: Text(defaultDate
+                  .format(formatDate: formatOfActivity)
+                  .orEmpty()
+                  .toCapitalize()
                 ),
-              ],
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-  }
+}

@@ -24,18 +24,20 @@ class QuotaGroupPage extends StatelessWidget {
         child: Scaffold(
           appBar: appBarWidget(text: controller.title, actions: [
             ChildOrElseWidget(
-              condition: controller.isGroup, 
-            child: IconWidget(
-              padding: defaultPadding,
-              onTap: _showDatePickerRange,
-              iconData: Icons.calendar_month_outlined,),),
+              condition: controller.isGroup,
+              child: IconWidget(
+                padding: defaultPadding,
+                onTap: _showDatePickerRange,
+                iconData: Icons.calendar_month_outlined,
+              ),
+            ),
             MenuOverlayWidget(
-              //TODO: crear resumen de completados o pendientes por dia, 
+              //TODO: crear resumen de completados o pendientes por dia,
               //copiar solo pendientes.
               iconData: Icons.more_vert,
               padding: defaultPadding,
               items: [
-                //TODO: crear un enum y que el enums tambien 
+                //TODO: crear un enum y que el enums tambien
                 //puedan ser pasados al MenuOverlay
                 OptionMenu(id: 1, name: 'Filtrar'),
                 OptionMenu(id: 2, name: 'Copiar'),
@@ -52,13 +54,14 @@ class QuotaGroupPage extends StatelessWidget {
   }
 
   Widget _listOfContent() {
-    return (controller.isGroup) ? _listOfGroup() :  _listOfCalendar();
+    return (controller.isGroup) ? _listOfGroup() : _listOfCalendar();
   }
 
   Widget _listOfCalendar() {
     return ListView.builder(
       itemCount: controller.quotas.length,
-      itemBuilder: (context, index) => _itemOfCalendar(controller.quotas[index]),
+      itemBuilder: (context, index) =>
+          _itemOfCalendar(controller.quotas[index]),
     );
   }
 
@@ -70,39 +73,37 @@ class QuotaGroupPage extends StatelessWidget {
   }
 
   Widget _itemOfGroup(int index) {
-    List<Map<String, dynamic>> group = controller.groupByDate.values.elementAt(index);
+    List<Map<String, dynamic>> group =
+        controller.groupByDate.values.elementAt(index);
     String key = controller.groupByDate.keys.elementAt(index);
     DateTime dateOfTitle = DateTime.parse(key);
-    String title = dateOfTitle.format(formatDate: formatOfSummary).orEmpty().toCapitalize();
+    String title = dateOfTitle
+        .format(formatDate: formatOfSummary)
+        .orEmpty()
+        .toCapitalize();
 
     TextStyle titleStyle = const TextStyle(fontWeight: FontWeight.bold);
     int quantityOfPendings = 0;
-    List<Widget> items = group.map(
-      (e) {
-        DashboardQuotaResponse quota = DashboardQuotaResponse.fromJson(e);
-        if(quota.idStateQuota == idOfPendingQuota){
-          quantityOfPendings++;
-        }
-        return _itemOfCalendar(quota);
+    List<Widget> items = group.map((e) {
+      DashboardQuotaResponse quota = DashboardQuotaResponse.fromJson(e);
+      if (quota.idStateQuota == idOfPendingQuota) {
+        quantityOfPendings++;
       }
-    ).toList();
+      return _itemOfCalendar(quota);
+    }).toList();
 
     Widget titleWidget = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title, style: titleStyle),
-        
-        if(quantityOfPendings > defaultInt)
-        CircleAvatar(
-          backgroundColor: dangerColor(),
-          radius: 12,
-          child: Text(quantityOfPendings.toString(), style: 
-          const TextStyle(
-            fontSize: 12,
-            color: Colors.white))
-        ),
+        if (quantityOfPendings > defaultInt)
+          CircleAvatar(
+              backgroundColor: dangerColor(),
+              radius: 12,
+              child: Text(quantityOfPendings.toString(),
+                  style: const TextStyle(fontSize: 12, color: Colors.white))),
       ],
-    ); 
+    );
 
     return ExpansionTile(
       title: titleWidget,
@@ -126,8 +127,8 @@ class QuotaGroupPage extends StatelessWidget {
   Future<void> _showDatePickerRange() async {
     DateTimeRange? range = await showDateRangePicker(
       initialDateRange: controller.dateTimeRange,
-      context: Get.context!, 
-      firstDate: defaultDate.subtract(halfYearDuration), 
+      context: Get.context!,
+      firstDate: defaultDate.subtract(halfYearDuration),
       lastDate: defaultDate.add(halfYearDuration),
     );
     controller.onChangedDateTimeRange(range);

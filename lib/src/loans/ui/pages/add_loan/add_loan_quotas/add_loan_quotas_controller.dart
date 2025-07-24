@@ -58,10 +58,11 @@ class AddLoanQuotasController extends GetxController {
     ResultType<LoanEntity, ErrorEntity> resultType =
         await createLoanUseCase.execute(addLoanRequest);
     if (resultType is Error) {
+      ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           context: Get.overlayContext!,
           typeSnackbar: TypeSnackbar.error,
-          message: resultType.error);
+          message: errorEntity.errorMessage);
       return;
     } else {
       Get.until((route) => route.settings.name == '/');
