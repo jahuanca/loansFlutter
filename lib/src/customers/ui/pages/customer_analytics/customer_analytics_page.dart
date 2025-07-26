@@ -39,7 +39,7 @@ class CustomerAnalyticsPage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: DropdownWidget(
+              child: DropdownMenuWidget(
                   items: controller.customers,
                   label: 'Clientes',
                   onChanged: controller.onChangedCustomer,
@@ -101,7 +101,12 @@ class CustomerAnalyticsPage extends StatelessWidget {
     );
 
     return ChildOrElseWidget(
-        condition: controller.response != null, child: content);
+        condition: controller.response != null, child: Column(
+          children: [
+            content,
+            _buttonOfSearchLoans(),
+          ],
+        ));
   }
 
   Widget _itemContent({
@@ -125,5 +130,12 @@ class CustomerAnalyticsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buttonOfSearchLoans() {
+    return ButtonWidget(
+      padding: defaultPadding,
+      onTap: controller.goAllLoans,
+      text: 'Ver préstamos');
   }
 }

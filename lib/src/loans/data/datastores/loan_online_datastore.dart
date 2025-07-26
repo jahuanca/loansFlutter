@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/domain/datastores/loan_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
-import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:utils/utils.dart';
 
 class LoanOnlineDatastore extends LoanDatastore {
@@ -27,11 +27,9 @@ class LoanOnlineDatastore extends LoanDatastore {
   }
 
   @override
-  Future<ResultType<List<LoanEntity>, ErrorEntity>> getAll() async {
+  Future<ResultType<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final response = await appHttpManager.get(url: '/loan', query: {
-      'id_state_loan': idOfPendingLoan,
-    });
+    final response = await appHttpManager.get(url: '/loan', query: request.toJson());
     if (response.isSuccessful) {
       return Success(data: loanEntityFromJson(response.body));
     } else {

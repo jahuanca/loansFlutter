@@ -24,7 +24,7 @@ class LoanDetailPage extends StatelessWidget {
           bottomNavigationBar: _bottomButtons(),
           appBar: appBarWidget(
               hasArrowBack: true,
-              text: 'Préstamo ${controller.loanSelected?.id}',
+              text: 'Préstamo #${controller.loanSelected?.id}',
               actions: [
                 IconButton(onPressed: controller.shareInformation, icon: const Icon(Icons.copy_all)),
               ]

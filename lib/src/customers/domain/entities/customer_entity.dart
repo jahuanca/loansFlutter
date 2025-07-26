@@ -39,6 +39,12 @@ class CustomerEntity {
 
     String get fullName => '$name $lastName';
 
+    bool containValue(String value) {
+      value = value.toLowerCase().trim();
+      if(aliasOrFullName.toLowerCase().contains(value)) return true;
+      return false;
+    }
+
     factory CustomerEntity.fromJson(Map<String, dynamic> json) => CustomerEntity(
         id: json["id"],
         alias: json["alias"],

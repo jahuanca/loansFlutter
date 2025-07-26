@@ -1,6 +1,7 @@
 
 class CustomerAnalyticsResponse {
 
+  int idCustomer;
   double ganancy;
   int amountOfLoans;
   DateTime startDate;
@@ -8,6 +9,7 @@ class CustomerAnalyticsResponse {
   double amountInProgress;
 
   CustomerAnalyticsResponse({
+    required this.idCustomer,
     required this.ganancy,
     required this.amountOfLoans,
     required this.startDate,
@@ -16,6 +18,7 @@ class CustomerAnalyticsResponse {
   });
 
   factory CustomerAnalyticsResponse.fromJson(Map<String, dynamic> json) => CustomerAnalyticsResponse(
+    idCustomer: json['id_customer'],
     ganancy: (json['ganancy'] as num).toDouble(),
     amountOfLoans: json['amount_of_loans'],
     loansInProgress: json['loans_in_progress'],
@@ -24,6 +27,7 @@ class CustomerAnalyticsResponse {
   );
 
   Map<String, dynamic> toJson() => {
+    'id_customer': idCustomer,
     'ganancy': ganancy,
     'amount_of_loans': amountOfLoans,
     'loans_in_progress': loansInProgress,

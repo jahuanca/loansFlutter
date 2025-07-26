@@ -1,3 +1,4 @@
+import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/loan_repository.dart';
 import 'package:utils/utils.dart';
@@ -10,8 +11,8 @@ class GetLoansUseCase {
     required this.repository,
   });
 
-  Future<ResultType<List<LoanEntity>,ErrorEntity>> execute() {
-    return repository.getAll();
+  Future<ResultType<List<LoanEntity>,ErrorEntity>> execute(GetLoansRequest request) {
+    return repository.getAll(request);
   }
 
 

@@ -32,8 +32,6 @@ class QuotaGroupPage extends StatelessWidget {
               ),
             ),
             MenuOverlayWidget(
-              //TODO: crear resumen de completados o pendientes por dia,
-              //copiar solo pendientes.
               iconData: Icons.more_vert,
               padding: defaultPadding,
               items: [
