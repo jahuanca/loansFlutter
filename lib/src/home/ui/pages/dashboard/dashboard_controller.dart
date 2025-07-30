@@ -8,28 +8,50 @@ import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_reques
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
+import 'package:loands_flutter/src/utils/domain/use_cases/get_logs_use_case.dart';
 import 'package:utils/utils.dart';
 
 class DashboardController extends GetxController {
   final GetSummaryOfDasboardUseCase getSummaryDasboardUseCase;
   final GetQuotasByDateUseCase getQuotasByDateUseCase;
+  final GetLogsUseCase getLogsUseCase;
   SummaryOfDashboardResponse? summaryOfDashboardResponse;
   List<DashboardQuotaResponse> quotasByDate = [];
+  List<ActivityLogEntity> logs = [];
   DateTime dateSelected = defaultDate;
 
   DashboardController({
     required this.getSummaryDasboardUseCase,
     required this.getQuotasByDateUseCase,
+    required this.getLogsUseCase,
   });
 
   @override
   void onReady() {
-    getSummary();
+    getAll();
     super.onReady();
   }
 
-  Future<void> getSummary([bool updateDateSelected = true]) async {
+  Future<void> getAll() async {
     showLoading();
+    await Future.wait([
+      getLogs(),
+      getSummary(),
+    ]);
+    hideLoading();
+    update([pageIdGet]);
+  }
+
+  Future<void> getLogs() async {
+    ResultType<List<ActivityLogEntity>, ErrorEntity> resultType =
+        await getLogsUseCase.execute();
+    if (resultType is Success) {
+      logs = resultType.data;
+    }
+  }
+
+  Future<void> getSummary([bool updateDateSelected = true]) async {
     ResultType<SummaryOfDashboardResponse, ErrorEntity> resultType =
         await getSummaryDasboardUseCase.execute();
     if (resultType is Success) {
@@ -38,9 +60,7 @@ class DashboardController extends GetxController {
         dateSelected = defaultDate;
       }
     }
-    update([pageIdGet]);
     await getQuotasByDay(dateSelected);
-    hideLoading();
   }
 
   Future<void> getQuotasByDay(DateTime dateTime) async {

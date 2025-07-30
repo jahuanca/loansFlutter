@@ -8,6 +8,7 @@ import 'package:utils/utils.dart';
 
 class DashboardPage extends StatelessWidget {
   final DashboardController controller = DashboardController(
+    getLogsUseCase: Get.find(),
     getQuotasByDateUseCase: Get.find(),
     getSummaryDasboardUseCase: Get.find(),
   );
@@ -22,7 +23,7 @@ class DashboardPage extends StatelessWidget {
       id: pageIdGet,
       init: controller,
       builder: (controller) => RefreshIndicator(
-        onRefresh: controller.getSummary,
+        onRefresh: controller.getAll,
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: appBarWidget(text: 'Inicio'),
@@ -84,24 +85,10 @@ class DashboardPage extends StatelessWidget {
     required Size size,
     required BuildContext context,
   }) {
-
     const TextStyle subtitleStyle = TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16,
     );
-
-    final List<String> examples = [
-      'Se creo un préstamo semanal para Cliente de S/ 400',
-      'Se creo un préstamo semanal para Cliente de S/ 220',
-      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
-      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
-      'Se creo un préstamo semanal para Cliente de S/ 400',
-      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
-      'Se creo un préstamo semanal para Cliente de S/ 400',
-      'Se creo un préstamo semanal para Cliente de S/ 220',
-      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
-      'Se pago la cuota 2/4 por S/ 100, del prestamo 120 de Juan Lopez',
-    ];
 
     return Column(
       children: [
@@ -116,15 +103,14 @@ class DashboardPage extends StatelessWidget {
           height: size.height * 0.5,
           child: ListView.separated(
             separatorBuilder: (context, index) => const Divider(),
-            itemCount: 10,
+            itemCount: controller.logs.length,
             itemBuilder: (context, index) => SizedBox(
               child: ListTile(
-                title: Text(examples[index]),
-                subtitle: Text(defaultDate
-                  .format(formatDate: formatOfActivity)
-                  .orEmpty()
-                  .toCapitalize()
-                ),
+                title: Text(controller.logs[index].descriptionOperation),
+                subtitle: Text(controller.logs[index].createdAt
+                    .format(formatDate: formatOfActivity)
+                    .orEmpty()
+                    .toCapitalize()),
               ),
             ),
           ),
