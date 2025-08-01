@@ -1,7 +1,7 @@
 
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/home/di/dashboard_binding.dart';
-import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_page.dart';
+import 'package:loands_flutter/src/home/di/navigation_content_binding.dart';
+import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_page.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
 import 'package:loands_flutter/src/login/data/request/login_request.dart';
 import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
@@ -46,7 +46,7 @@ class LoginController extends GetxController {
     if (resultType is Success){
       LoginEntity loginEntity = resultType.data as LoginEntity;
       await UserPreferences().setToken(loginEntity.token);
-      Get.to(()=> DashboardPage(), binding: DashboardBinding());
+      Get.to(()=> NavigationContentPage(), binding: NavigationContentBinding());
     }
     hideLoading();
   }

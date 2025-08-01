@@ -19,14 +19,17 @@ class PaymentSummaryPage extends StatelessWidget {
     return GetBuilder<PaymentSummaryController>(
       init: controller,
       id: pageIdGet,
-      builder: (controller) => Scaffold(
-        appBar: appBarWidget(text: 'Resumen de pagos', hasArrowBack: true),
-        bottomNavigationBar: _bottomSection(),
-        body: ListView.builder(
-          itemCount: controller.summary.length,
-          itemBuilder: (context, index) => _item(
-            size: size,
-            summary: controller.summary[index],
+      builder: (controller) => RefreshIndicator(
+        onRefresh: controller.getSummaryMonths,
+        child: Scaffold(
+          appBar: appBarWidget(text: 'Resumen de pagos', hasArrowBack: true),
+          bottomNavigationBar: _bottomSection(),
+          body: ListView.builder(
+            itemCount: controller.summary.length,
+            itemBuilder: (context, index) => _item(
+              size: size,
+              summary: controller.summary[index],
+            ),
           ),
         ),
       ),

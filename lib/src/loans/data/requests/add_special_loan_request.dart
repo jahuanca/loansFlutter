@@ -41,7 +41,7 @@ class AddSpecialLoanRequest {
         validateText(text: idPaymentMethod, label: paymentMethodString);
     ValidateResult validatePercentage =
         validateText(
-          text: percentage, 
+          text: percentage.orZero(), 
           label: percentageString,
           rules: {
             RuleValidator.minValue: 5,

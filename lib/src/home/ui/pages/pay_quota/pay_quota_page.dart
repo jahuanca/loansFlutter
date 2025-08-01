@@ -13,27 +13,38 @@ class PayQuotaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final Size size = MediaQuery.sizeOf(context);
+
     return GetBuilder<PayQuotaController>(
       init: controller,
       id: pageIdGet,
-      builder: (controller) => Scaffold(
-        appBar: appBarWidget(text: 'Pago de cuota', hasArrowBack: true),
-        bottomNavigationBar: ChildOrElseWidget(
-          condition: (controller.isPending),
-          child: ButtonWidget(
-            padding: defaultPadding,
-            text: 'Pagar',
-            onTap: controller.payQuota,
+      builder: (controller) => SingleChildScrollView(
+        child: SizedBox(
+          height: size.height,
+          child: Scaffold(
+            appBar: appBarWidget(text: '#P${controller.quota?.idLoan}: Pago de cuota', hasArrowBack: true),
+            bottomNavigationBar: ChildOrElseWidget(
+              condition: (controller.isPending),
+              child: ButtonWidget(
+                padding: defaultPadding,
+                text: 'Pagar',
+                onTap: controller.payQuota,
+              ),
+            ),
+            body: Column(
+              children: [
+                if (controller.quota != null) _cardDetail(
+                    size: size,
+                    quota: controller.quota!
+                  ),
+                ChildOrElseWidget(
+                    condition: (controller.isPending),
+                    elseWidget: _paidQuotaWidget(),
+                    child: _form(context))
+              ],
+            ),
           ),
-        ),
-        body: Column(
-          children: [
-            if (controller.quota != null) _cardDetail(quota: controller.quota!),
-            ChildOrElseWidget(
-                condition: (controller.isPending),
-                elseWidget: _paidQuotaWidget(),
-                child: _form(context))
-          ],
         ),
       ),
     );
@@ -92,13 +103,14 @@ class PayQuotaPage extends StatelessWidget {
 
   Widget _cardDetail({
     required DashboardQuotaResponse quota,
+    required Size size,
   }) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Card(
         elevation: 7,
         child: SizedBox(
-            width: double.infinity,
+            width: size.width,
             height: 150,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -39,7 +39,7 @@ class CustomerAnalyticsPage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: DropdownMenuWidget(
+              child: DropdownWidget(
                   items: controller.customers,
                   label: 'Clientes',
                   onChanged: controller.onChangedCustomer,

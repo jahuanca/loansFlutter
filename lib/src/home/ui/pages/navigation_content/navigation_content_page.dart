@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/home_calendar_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_controller.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_page.dart';
+import 'package:loands_flutter/src/settings/ui/home_settings/home_settings_page.dart';
 import 'package:utils/utils.dart';
 
 class NavigationContentPage extends StatelessWidget {
@@ -13,6 +14,7 @@ class NavigationContentPage extends StatelessWidget {
     BottomNavigationItemWidget(icon: Icons.calendar_month, title: 'Calendario'),
     BottomNavigationItemWidget(icon: Icons.shopping_bag_outlined, title: 'Préstamos'),
     BottomNavigationItemWidget(icon: Icons.people, title: 'Clientes'),
+    BottomNavigationItemWidget(icon: Icons.settings, title: 'Ajustes'),
   ];
 
   final List<Widget> pages = [
@@ -20,6 +22,7 @@ class NavigationContentPage extends StatelessWidget {
     HomeCalendarPage(),
     LoansPage(),
     CustomersPage(),
+    const HomeSettingsPage(),
   ];
 
   NavigationContentPage({super.key});

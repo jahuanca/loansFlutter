@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:loands_flutter/src/utils/domain/entities/description_operation_of_log.dart';
+
 List<ActivityLogEntity> activityLogEntityFromJson(String str) => List<ActivityLogEntity>.from(json.decode(str).map((x) => ActivityLogEntity.fromJson(x)));
 
 String paymentMethodEntityToJson(List<ActivityLogEntity> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -10,7 +12,7 @@ class ActivityLogEntity {
   int id;
   String tableName;
   String typeOperation;
-  String descriptionOperation;
+  DescriptionOperationOfLog descriptionOperation;
   Map<String, dynamic> newRegistry;
   Map<String, dynamic>? oldRegistry;
   DateTime createdAt;
@@ -31,7 +33,8 @@ class ActivityLogEntity {
     id: json['id'], 
     tableName: json['table_name'], 
     typeOperation: json['type_operation'], 
-    descriptionOperation: json['description_operation'], 
+    descriptionOperation: DescriptionOperationOfLog.values
+      .firstWhere((e) => json['description_operation'] == e.title, orElse: () => DescriptionOperationOfLog.none,), 
     newRegistry: json['new_registry'], 
     oldRegistry: json['old_registry'], 
     idUser: json['id_user'], 
@@ -47,5 +50,4 @@ class ActivityLogEntity {
     'id_user': idUser,
     'createdAt': createdAt.toLocal(),
   };
-
 }

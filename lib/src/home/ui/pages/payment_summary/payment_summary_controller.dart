@@ -37,7 +37,7 @@ class PaymentSummaryController extends GetxController {
 
   double get total => totalOfGanancy - totalOfLoss;
 
-  void getSummaryMonths() async {
+  Future<void> getSummaryMonths() async {
     showLoading();
     ResultType<List<SummaryMonthResponse>, ErrorEntity> resultType =
         await getSummaryMonthsUseCase.execute();
