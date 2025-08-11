@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/home/data/responses/summary_month_response.da
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_controller.dart';
 import 'package:loands_flutter/src/utils/core/colors.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/totals_bottoms_widget.dart';
 import 'package:utils/utils.dart';
 
 class PaymentSummaryPage extends StatelessWidget {
@@ -37,41 +38,11 @@ class PaymentSummaryPage extends StatelessWidget {
   }
 
   Widget _bottomSection() {
-    return SizedBox(
-      height: kBottomNavigationBarHeight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _itemBottomSection(
-              title: 'Ganancia',
-              value: controller.totalOfGanancy.formatDecimals()),
-          _itemBottomSection(
-              title: 'Perdida', value: controller.totalOfLoss.formatDecimals()),
-          _itemBottomSection(
-              title: 'Total', value: controller.total.formatDecimals())
-        ],
-      ),
-    );
-  }
-
-  Widget _itemBottomSection({
-    required String title,
-    required String value,
-  }) {
-    TextStyle textStyle = const TextStyle(
-      fontWeight: FontWeight.bold,
-    );
-
-    return Column(
-      children: [
-        Text(
-          title,
-          style: textStyle,
-        ),
-        Text('S/ $value'),
-      ],
-    );
+    return TotalsBottomsWidget(values: {
+      'Ganancia': controller.totalOfGanancy.formatDecimals(),
+      'Perdida': controller.totalOfLoss.formatDecimals(),
+      'Total': controller.total.formatDecimals(),
+    });
   }
 
   Widget _item({

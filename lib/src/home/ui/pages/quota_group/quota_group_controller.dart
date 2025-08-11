@@ -31,10 +31,10 @@ class QuotaGroupController extends GetxController {
     getQuotasByDateRequest = Get.setArgument(getAllQuotasRequestArgument);
     title = Get.setArgument(titleArgument);
     isGroup = Get.setArgument(isGroupArgument);
-    if(isGroup) {
+    if (isGroup) {
       dateTimeRange = DateTimeRange(
-        start: getQuotasByDateRequest.fromDate.orNow(), 
-        end: getQuotasByDateRequest.untilDate.orNow(), 
+        start: getQuotasByDateRequest.fromDate.orNow(),
+        end: getQuotasByDateRequest.untilDate.orNow(),
       );
     }
     super.onInit();
@@ -44,6 +44,30 @@ class QuotaGroupController extends GetxController {
   void onReady() {
     getQuotas();
     super.onReady();
+  }
+
+  double get amountOfCapital {
+    List<double> capital = quotas.map((e) => e.amount - e.ganancy).toList();
+    return (capital.isNotEmpty)
+        ? capital.reduce((value, element) => value + element)
+        : defaultDouble;
+  }
+
+  double get amountOfGanancy {
+    List<double> ganancy = quotas.map((e) => e.ganancy).toList();
+    return (ganancy.isNotEmpty)
+        ? ganancy.reduce((value, element) => value + element)
+        : defaultDouble;
+  }
+
+  double get amountOfPendingGanancy {
+    List<double> pendingGanancy = quotas
+        .map((e) =>
+            (e.idStateQuota == idOfPendingQuota) ? e.ganancy : defaultDouble)
+        .toList();
+    return (pendingGanancy.isNotEmpty)
+        ? pendingGanancy.reduce((value, element) => value + element)
+        : defaultDouble;
   }
 
   Future<void> getQuotas() async {
@@ -93,16 +117,21 @@ class QuotaGroupController extends GetxController {
               .toCapitalize();
           data += '\n$title\n';
           for (Map<String, dynamic> element in value) {
-            DashboardQuotaResponse quota = DashboardQuotaResponse.fromJson(element);
+            DashboardQuotaResponse quota =
+                DashboardQuotaResponse.fromJson(element);
             if (quota.idStateQuota != idOfPendingQuota) continue;
             double amount = quota.amount;
-            double sendMe = amount - (quota.ganancy/2);
-            data += 'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n'; 
+            double sendMe = amount - (quota.ganancy / 2);
+            data +=
+                'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n';
           }
         },
       );
       await copyToClipboard(data);
-      showSnackbarWidget(context: Get.context!, typeSnackbar: TypeSnackbar.success, message: 'Cuotas copiadas.');
+      showSnackbarWidget(
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.success,
+          message: 'Cuotas copiadas.');
     }
   }
 
@@ -120,5 +149,4 @@ class QuotaGroupController extends GetxController {
     String endDate = dateTimeRange!.end.formatDMMYYY().orEmpty();
     title = '$startDate - $endDate';
   }
-
 }
