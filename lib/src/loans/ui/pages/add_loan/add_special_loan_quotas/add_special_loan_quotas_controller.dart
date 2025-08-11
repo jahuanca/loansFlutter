@@ -3,7 +3,7 @@ import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_special_loan_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';

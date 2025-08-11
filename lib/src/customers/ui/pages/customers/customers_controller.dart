@@ -6,7 +6,8 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/customers/ui/pages/customer_detail/customer_detail_page.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
@@ -14,6 +15,8 @@ class CustomersController extends GetxController {
 
   GetCustomersUseCase getCustomersUseCase;
   List<CustomerEntity> customers = [];
+  List<CustomerEntity> customersToShow = [];
+  bool isSearching = false;
 
   CustomersController({
     required this.getCustomersUseCase,
@@ -26,10 +29,12 @@ class CustomersController extends GetxController {
   }
 
   Future<void> getCustomers() async {
+    customersToShow.clear();
     showLoading();
     ResultType<List<CustomerEntity>, ErrorEntity> resultType = await getCustomersUseCase.execute();
     if(resultType is Success){
       customers = resultType.data as List<CustomerEntity>;
+      customersToShow.addAll(customers);
     }else{
       showSnackbarWidget(
         context: Get.overlayContext!, 
@@ -70,5 +75,31 @@ class CustomersController extends GetxController {
     if(result) {
 
     }
+  }
+
+  void goToDetail(CustomerEntity customer) { 
+    Get.to(()=> const CustomerDetailPage(), arguments: {
+      customerArgument: customer,
+    });
+  }
+
+  void onChangedSearch(String value){
+    if(value == emptyString){
+      clearSearch();
+      return;
+    }
+    isSearching = true;
+    customersToShow.clear();
+    customersToShow.addAll(
+      customers.where((e) => e.aliasOrFullName.contains(value))
+    );
+    update([pageIdGet]);
+  }
+
+  void clearSearch() {
+    isSearching = false;
+    customersToShow.clear();
+    customersToShow.addAll(customers);
+    update([pageIdGet]);
   }
 }

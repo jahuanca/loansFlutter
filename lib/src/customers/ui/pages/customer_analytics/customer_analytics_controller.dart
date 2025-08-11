@@ -5,7 +5,7 @@ import 'package:loands_flutter/src/customers/domain/use_cases/get_customer_analy
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/di/loans_binding.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_page.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';

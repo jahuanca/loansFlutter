@@ -3,7 +3,7 @@ import 'package:loands_flutter/src/customers/data/requests/create_customer_reque
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/create_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/update_customer_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';

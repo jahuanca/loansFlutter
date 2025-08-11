@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_controller.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/search_input_widget.dart';
 import 'package:utils/utils.dart';
 
 class LoansPage extends StatelessWidget {
@@ -120,33 +121,12 @@ class LoansPage extends StatelessWidget {
       iconData: Icons.check);
 
   Widget _searchInput() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 16,
-        horizontal: 8,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-              onChanged: controller.searchValue,
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: '¿Qué préstamo desea buscar?',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(borderRadius())),
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: ChildOrElseWidget(
-                  condition: controller.isSearching,
-                  child: IconWidget(onTap: _clearSearch, iconData: Icons.close),
-                ),
-              )),
-          Text(
-            _textOfResults,
-            textAlign: TextAlign.start,
-          ),
-        ],
-      ),
+    return SearchInputWidget(
+      hintText: '¿Qué préstamo desea buscar?',
+      onChanged: controller.onChangedSearch,
+      controller: searchController,
+      onClear: _clearSearch,
+      textOfResults: _textOfResults,
     );
   }
 

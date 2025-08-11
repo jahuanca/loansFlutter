@@ -1,15 +1,13 @@
-
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/di/navigation_content_binding.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_page.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/login/data/request/login_request.dart';
 import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
 import 'package:loands_flutter/src/login/domain/use_cases/login_use_case.dart';
 import 'package:utils/utils.dart';
 
 class LoginController extends GetxController {
-
   LoginUseCase loginUseCase;
   ValidateResult? username;
   ValidateResult? password;
@@ -27,26 +25,26 @@ class LoginController extends GetxController {
   }
 
   void goToHome() async {
-
-    ValidateResult? validateResult = findErrorInValidations([
-      username, password
-    ]);
+    ValidateResult? validateResult =
+        findErrorInValidations([username, password]);
 
     if (validateResult != null) {
       showSnackbarWidget(
-        context: Get.context!, 
-        typeSnackbar: TypeSnackbar.error, 
-        message: validateResult.error.orEmpty()
-      );
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: validateResult.error.orEmpty());
       return;
     }
     showLoading();
-    LoginRequest request = LoginRequest(email: username!.value, password: password!.value);
-    ResultType<LoginEntity, ErrorEntity> resultType = await loginUseCase.execute(request);
-    if (resultType is Success){
+    LoginRequest request =
+        LoginRequest(email: username!.value, password: password!.value);
+    ResultType<LoginEntity, ErrorEntity> resultType =
+        await loginUseCase.execute(request);
+    if (resultType is Success) {
       LoginEntity loginEntity = resultType.data as LoginEntity;
       await UserPreferences().setToken(loginEntity.token);
-      Get.to(()=> NavigationContentPage(), binding: NavigationContentBinding());
+      Get.off(() => NavigationContentPage(),
+          binding: NavigationContentBinding());
     }
     hideLoading();
   }

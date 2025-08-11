@@ -10,22 +10,18 @@ class App extends StatelessWidget {
 
   Widget get _home {
     String? token = UserPreferences().getToken();
-    if(token == null) {
-      return LoginPage();
-    }
-    return NavigationContentPage();
+    return (token == null) ? LoginPage() : NavigationContentPage();
   }
 
   @override
   Widget build(BuildContext context) {
-
     MainBinding().dependencies();
 
     return GetMaterialApp(
       localizationsDelegates: localizationsDelegates,
       supportedLocales: const [Locale('es')],
       debugShowCheckedModeBanner: false,
-      title: 'Material App',
+      title: 'App de Pagos',
       home: _home,
     );
   }

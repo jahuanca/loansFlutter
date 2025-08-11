@@ -9,15 +9,20 @@ import 'package:loands_flutter/src/settings/ui/home_settings/home_settings_page.
 import 'package:utils/utils.dart';
 
 class NavigationContentPage extends StatelessWidget {
-  final List<BottomNavigationItemWidget> iconsOfBottom = [
+  final NavigationContentController controller = NavigationContentController();
+
+  final PageController pageController = PageController();
+
+  final List<BottomNavigationItemWidget> _iconsOfBottom = [
     BottomNavigationItemWidget(icon: Icons.home, title: 'Inicio'),
     BottomNavigationItemWidget(icon: Icons.calendar_month, title: 'Calendario'),
-    BottomNavigationItemWidget(icon: Icons.shopping_bag_outlined, title: 'Préstamos'),
+    BottomNavigationItemWidget(
+        icon: Icons.shopping_bag_outlined, title: 'Préstamos'),
     BottomNavigationItemWidget(icon: Icons.people, title: 'Clientes'),
     BottomNavigationItemWidget(icon: Icons.settings, title: 'Ajustes'),
   ];
 
-  final List<Widget> pages = [
+  final List<Widget> _pages = [
     DashboardPage(),
     HomeCalendarPage(),
     LoansPage(),
@@ -33,17 +38,27 @@ class NavigationContentPage extends StatelessWidget {
       init: NavigationContentController(),
       id: pageIdGet,
       builder: (controller) => Scaffold(
-        body: PageView(
-          controller: controller.pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: pages,
-        ),
-        bottomNavigationBar: BottomNavigationBarWidget(
-          icons: iconsOfBottom,
-          onTapItem: controller.onChangedPage,
-          indexSelectedItem: controller.indexPage,
-        ),
+        body: _body(),
+        bottomNavigationBar: _bottomNavigation(),
       ),
     );
   }
+
+  Widget _body() => PageView(
+        controller: pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: _pages,
+      );
+
+  Widget _bottomNavigation() => GetBuilder<NavigationContentController>(
+    id: pageIdGet,
+    builder: (controller)=> BottomNavigationBarWidget(
+          icons: _iconsOfBottom,
+          onTapItem: (index) {
+            pageController.jumpToPage(index);
+            controller.onChangedPage(index);
+          },
+          indexSelectedItem: controller.indexPage,
+        ),
+  );
 }

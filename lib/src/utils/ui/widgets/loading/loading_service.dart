@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_overlay.dart'; // Si usas GetX para la gestión de estado
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_overlay.dart'; // Si usas GetX para la gestión de estado
 
 class LoadingService extends GetxService {
 

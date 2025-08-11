@@ -6,7 +6,7 @@ import 'package:loands_flutter/src/home/domain/use_cases/get_summary_of_dasboard
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_logs_use_case.dart';

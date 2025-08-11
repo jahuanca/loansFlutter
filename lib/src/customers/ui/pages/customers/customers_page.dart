@@ -3,11 +3,14 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customers/customers_controller.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/search_input_widget.dart';
 import 'package:utils/utils.dart';
 
 class CustomersPage extends StatelessWidget {
   final CustomersController controller =
       CustomersController(getCustomersUseCase: Get.find());
+
+  final TextEditingController searchController = TextEditingController();
 
   CustomersPage({super.key});
 
@@ -21,37 +24,77 @@ class CustomersPage extends StatelessWidget {
         builder: (controller) => RefreshIndicator(
               onRefresh: controller.getCustomers,
               child: Scaffold(
-                floatingActionButton: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: addHeroTag,
-                      onPressed: controller.goToAddCustomer,
-                      child: const Icon(Icons.add),
-                    ),
-                    const SizedBox(height: 8,),
-                    FloatingActionButton(
-                      heroTag: analyticsHeroTag,
-                      onPressed: controller.goToCustomerAnalytic,
-                      backgroundColor: infoColor(),
-                      child: const Icon(Icons.analytics, color: Colors.white,),
-                    ),
-                  ],
-                ),
-                appBar: appBarWidget(
-                  text: customersString,
-                  hasArrowBack: true,
-                ),
-                body: ListView.builder(
-                  itemCount: controller.customers.length,
-                  itemBuilder: (context, index) => _item(
-                    size: size,
-                    index: index,
-                    customer: controller.customers[index],
-                  ),
-                ),
+                appBar: _appBar(),
+                floatingActionButton: _floatingButtons(),
+                body: _body(size),
               ),
             ));
+  }
+
+  AppBar _appBar() => appBarWidget(
+        text: customersString,
+        hasArrowBack: true,
+      );
+
+  Widget _floatingButtons() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          heroTag: addHeroTag,
+          onPressed: controller.goToAddCustomer,
+          child: const Icon(Icons.add),
+        ),
+        const SizedBox(height: 8),
+        FloatingActionButton(
+          heroTag: analyticsHeroTag,
+          onPressed: controller.goToCustomerAnalytic,
+          backgroundColor: infoColor(),
+          child: const Icon(
+            Icons.analytics,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _body(Size size) {
+    return Column(
+      children: [
+        SearchInputWidget(
+          hintText: '¿Qué cliente desea buscar?',
+          controller: searchController,
+          onChanged: controller.onChangedSearch,
+          isSearching: controller.isSearching,
+          onClear: _clearSearch,
+          textOfResults: _textOfResults,
+        ),
+        Expanded(
+          child: ListView.builder(
+              itemCount: controller.customersToShow.length,
+              itemBuilder: (context, index) => _item(
+                size: size,
+                index: index,
+                customer: controller.customersToShow[index],
+              ),
+            ),
+        ),
+      ],
+    );
+  }
+
+  void _clearSearch() {
+    searchController.clear();
+    controller.clearSearch();
+  }
+
+  String get _textOfResults {
+    int results = controller.customers.length;
+    int resultsOfShow = controller.customersToShow.length;
+    return (controller.isSearching.not())
+        ? 'Total: $results'
+        : 'Total: $results, $resultsOfShow coincidencias.';
   }
 
   Widget _item({
@@ -60,6 +103,7 @@ class CustomersPage extends StatelessWidget {
     required Size size,
   }) {
     return ItemListImageDataWidget(
+      onTap: () => controller.goToDetail(customer),
       paddingAll: defaultPadding,
       decorationAll: BoxDecoration(
         border: Border.all(),
@@ -73,14 +117,6 @@ class CustomersPage extends StatelessWidget {
       subtitle: customer.address,
       detail: customer.alias,
       alignmentOfActions: MainAxisAlignment.spaceEvenly,
-      actions: [
-        IconButtonWidget(
-          onPressed: () => controller.goToEditCustomer(customer),
-          iconData: Icons.edit,
-          shape: BoxShape.circle,
-          backgroundColor: infoColor(),
-        ),
-      ],
     );
   }
 }

@@ -10,14 +10,23 @@ class HomeSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeSettingsController>(
       init: HomeSettingsController(),
-      builder: (controller)=> Scaffold(
+      builder: (controller) => Scaffold(
         appBar: appBarWidget(text: 'Ajustes'),
         body: Column(
           children: [
+            const ListTile(  
+              leading: Icon(Icons.email_outlined),
+              title: Text('Cambiar correo'),
+            ),
+            const ListTile(  
+              leading: Icon(Icons.password),
+              title: Text('Cambiar contraseña'),
+            ),
             ListTile(
-              onTap: controller.logout,
+              onTap: controller.goLogout,
+              leading: const Icon(Icons.logout),
               title: const Text('Cerrar sesión'),
-            )
+            ),
           ],
         ),
       ),

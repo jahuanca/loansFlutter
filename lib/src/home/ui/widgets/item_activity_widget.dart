@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
@@ -14,6 +15,7 @@ class ItemActivityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String dateTimeFormat = log.createdAt
+        .toLocal()
         .format(formatDate: formatOfActivity)
         .orEmpty()
         .toCapitalize();
@@ -38,7 +40,8 @@ class ItemActivityWidget extends StatelessWidget {
         LoanEntity loan = LoanEntity.fromJson(log.newRegistry);
         return 'P#${loan.id} de S/ ${loan.amount.formatDecimals()} para ${loan.idCustomer}';
       case DescriptionOperationOfLog.createCustomer:
-        return 'Se creó un nuevo cliente, Jose Antonio Huanca Ancajima';
+        CustomerEntity customer = CustomerEntity.fromJson(log.newRegistry);
+        return 'Se creó un nuevo cliente, ${customer.fullName}';
       default:
         return 'Sin descripción';
     }

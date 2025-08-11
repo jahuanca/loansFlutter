@@ -7,7 +7,7 @@ import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dar
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_choose_type/add_loan_choose_type_page.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loan_detail/loan_detail_page.dart';
 import 'package:loands_flutter/src/loans/ui/pages/search_loan/search_loan_page.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
@@ -78,7 +78,7 @@ class LoansController extends GetxController {
     Get.to(()=> const SearchLoanPage());
   }
 
-  void searchValue(String value){
+  void onChangedSearch(String value){
     
     if(value == emptyString){
       clearSearch();

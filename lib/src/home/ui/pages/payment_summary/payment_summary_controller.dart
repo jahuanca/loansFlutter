@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_summary_months_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/widgets/loading_service.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:utils/utils.dart';
 

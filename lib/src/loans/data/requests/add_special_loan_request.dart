@@ -33,8 +33,10 @@ class AddSpecialLoanRequest {
   });
 
   String? get validate {
-    ValidateResult validateIdCustomer =
-        validateText(text: idCustomer, label: customerString);
+    ValidateResult validateIdCustomer = validateText(
+      text: idCustomer, 
+      label: customerString
+    );
     ValidateResult validateIdPaymentFrequency =
         validateText(text: idPaymentFrequency, label: 'Frecuencia de pago');
     ValidateResult validateIdPaymentMethod =
