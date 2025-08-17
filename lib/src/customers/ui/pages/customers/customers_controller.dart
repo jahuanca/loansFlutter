@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
 import 'package:loands_flutter/src/customers/di/get_customer_analytics_binding.dart';
@@ -12,7 +11,6 @@ import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class CustomersController extends GetxController {
-
   GetCustomersUseCase getCustomersUseCase;
   List<CustomerEntity> customers = [];
   List<CustomerEntity> customersToShow = [];
@@ -31,68 +29,57 @@ class CustomersController extends GetxController {
   Future<void> getCustomers() async {
     customersToShow.clear();
     showLoading();
-    ResultType<List<CustomerEntity>, ErrorEntity> resultType = await getCustomersUseCase.execute();
-    if(resultType is Success){
+    ResultType<List<CustomerEntity>, ErrorEntity> resultType =
+        await getCustomersUseCase.execute();
+    if (resultType is Success) {
       customers = resultType.data as List<CustomerEntity>;
       customersToShow.addAll(customers);
-    }else{
+    } else {
       showSnackbarWidget(
-        context: Get.overlayContext!, 
-        typeSnackbar: TypeSnackbar.error, 
-        message: 'Ocurrio un error');
+          context: Get.overlayContext!,
+          typeSnackbar: TypeSnackbar.error,
+          message: 'Ocurrio un error');
     }
     hideLoading();
     update([pageIdGet]);
   }
 
-  void goToAddCustomer(){
-    Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+  void goToAddCustomer() {
+    Get.to(() => AddCustomerPage(), binding: AddCustomerBinding());
   }
 
   void goToCustomerAnalytic() {
-    Get.to(()=> CustomerAnalyticsPage(), 
-      binding: GetCustomerAnalyticsBinding(),
-      arguments: {
-      customersArgument: customers
-    });
+    Get.to(() => CustomerAnalyticsPage(),
+        binding: GetCustomerAnalyticsBinding(),
+        arguments: {customersArgument: customers});
   }
 
-  void goToEditCustomer(CustomerEntity customer){
-    Get.to(
-      ()=> AddCustomerPage(), 
-      binding: AddCustomerBinding(),
-      arguments: {
-        customerArgument: customer
-      }
-    );
+  void goToEditCustomer(CustomerEntity customer) {
+    Get.to(() => AddCustomerPage(),
+        binding: AddCustomerBinding(), arguments: {customerArgument: customer});
   }
 
   void goToDeleteCustomer() async {
     bool result = await showDialogWidget(
-      context: Get.context!, 
-      message: '¿Está seguro de eliminar el cliente?'
-    );
-    if(result) {
-
-    }
+        context: Get.context!, message: '¿Está seguro de eliminar el cliente?');
+    if (result) {}
   }
 
-  void goToDetail(CustomerEntity customer) { 
-    Get.to(()=> const CustomerDetailPage(), arguments: {
+  void goToDetail(CustomerEntity customer) {
+    Get.to(() => const CustomerDetailPage(), arguments: {
       customerArgument: customer,
     });
   }
 
-  void onChangedSearch(String value){
-    if(value == emptyString){
+  void onChangedSearch(String value) {
+    if (value == emptyString) {
       clearSearch();
       return;
     }
     isSearching = true;
     customersToShow.clear();
-    customersToShow.addAll(
-      customers.where((e) => e.aliasOrFullName.contains(value))
-    );
+    customersToShow.addAll(customers.where(
+        (e) => e.aliasOrFullName.toLowerCase().contains(value.toLowerCase())));
     update([pageIdGet]);
   }
 

@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/home/data/responses/summary_month_response.da
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_controller.dart';
 import 'package:loands_flutter/src/utils/core/colors.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/totals_bottoms_widget.dart';
 import 'package:utils/utils.dart';
 
@@ -49,16 +50,22 @@ class PaymentSummaryPage extends StatelessWidget {
     required SummaryMonthResponse summary,
     required Size size,
   }) {
-    double amountToShow = (summary.idStateQuota == idOfCompleteLoan)
-        ? summary.ganancy
-        : summary.amount;
+    final String title =
+        summary.time.format(formatDate: FormatDate.summaryOfMonth).orEmpty().toCapitalize();
 
     return ListTile(
       title: SizedBox(
           width: size.width * 0.8,
-          child:
-              Text(summary.time.format(formatDate: 'MMMM - yyyy').orEmpty())),
-      subtitle: Text('S/ ${amountToShow.formatDecimals()}'),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          )),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: getChildren(summary),
+      ),
       trailing: SizedBox(
           width: size.width * 0.2,
           child: TagWidget(
@@ -67,5 +74,17 @@ class PaymentSummaryPage extends StatelessWidget {
               textColorAndIcon: colorOfStateLoan(summary.idStateQuota),
               title: summary.stateLoan)),
     );
+  }
+
+  List<Widget> getChildren(SummaryMonthResponse summary) {
+    List<Widget> widgets = [];
+
+    String ganancy = summary.ganancy.formatDecimals();
+    widgets.add(Text('Ganancia: S/ $ganancy'));
+    if (summary.isCompleted) return widgets;
+
+    String capital = (summary.amount - summary.ganancy).formatDecimals();
+    widgets.insert(firstElementPosition, Text('Capital: S/ $capital'));
+    return widgets;
   }
 }

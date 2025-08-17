@@ -1,12 +1,9 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
-import 'package:loands_flutter/src/loans/di/add_loan_information_binding.dart';
-import 'package:loands_flutter/src/loans/di/loan_detail_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_choose_type/add_loan_choose_type_page.dart';
-import 'package:loands_flutter/src/loans/ui/pages/loan_detail/loan_detail_page.dart';
 import 'package:loands_flutter/src/loans/ui/pages/search_loan/search_loan_page.dart';
+import 'package:loands_flutter/src/utils/ui/navigation_to.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -23,18 +20,20 @@ class LoansController extends GetxController {
   );
   bool isFromDashboard = true;
   String titleOfAppBar = 'Créditos';
+  String valueToSearch = emptyString;
 
   LoansController({required this.getLoansUseCase});
 
   @override
   void onInit() {
-    GetLoansRequest? loanRequestofArgument = Get.setArgument(getLoansRequestArgument);
+    GetLoansRequest? loanRequestofArgument =
+        Get.setArgument(getLoansRequestArgument);
     String? titleOfArgument = Get.setArgument(titleOfAppBarArgument);
     if (loanRequestofArgument != null) {
       request = loanRequestofArgument;
       isFromDashboard = false;
     }
-    if (titleOfArgument != null){
+    if (titleOfArgument != null) {
       titleOfAppBar = titleOfArgument;
     }
     super.onInit();
@@ -59,41 +58,40 @@ class LoansController extends GetxController {
     update([pageIdGet]);
   }
 
-  Future<void> goToAddLoanInformation() async {
-    await Get.to(() => AddLoanChooseTypePage(),
-        binding: AddLoanInformationBinding());
+  Future<void> goToAddLoanChooseType() async {
+    await NavigationTo.goToAddLoanChooseType();
     getLoans();
   }
 
   void goToDetail(LoanEntity loanSelected) async {
-    await Get.to(() => LoanDetailPage(),
-        arguments: {
-          loanSelectedArgument: loanSelected,
-        },
-        binding: LoanDetailBinding());
-    getLoans();    
+    Map<String, dynamic> arguments = {loanSelectedArgument: loanSelected};
+    await NavigationTo.goToLoanDetail(arguments);
+    await getLoans();
+    if (isSearching) {
+      onChangedSearch(valueToSearch);
+    }
   }
 
   void goToSearchLoan() {
-    Get.to(()=> const SearchLoanPage());
+    Get.to(() => const SearchLoanPage());
   }
 
-  void onChangedSearch(String value){
-    
-    if(value == emptyString){
+  void onChangedSearch(String value) {
+    if (value == emptyString) {
       clearSearch();
       return;
     }
     isSearching = true;
+    valueToSearch = value;
     loansToShow.clear();
     loansToShow.addAll(
-      loans.where((e) => e.customerEntity?.containValue(value) ?? false)
-    );
+        loans.where((e) => e.customerEntity?.containValue(value) ?? false));
     update([pageIdGet]);
   }
 
   void clearSearch() {
     isSearching = false;
+    valueToSearch = emptyString;
     loansToShow.clear();
     loansToShow.addAll(loans);
     update([pageIdGet]);

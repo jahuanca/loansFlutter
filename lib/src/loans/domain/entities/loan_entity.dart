@@ -5,6 +5,7 @@
 
 import 'dart:convert';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:utils/utils.dart';
 
@@ -52,6 +53,8 @@ class LoanEntity {
 
     String get formatTitle => 'S/ ${amount.formatDecimals()} - ${percentage.formatDecimals()}%';
 
+    bool get isCompleted => (idStateLoan == idOfCompleteLoan);
+    
     factory LoanEntity.fromJson(Map<String, dynamic> json) => LoanEntity(
         id: json["id"],
         idCustomer: json["id_customer"],

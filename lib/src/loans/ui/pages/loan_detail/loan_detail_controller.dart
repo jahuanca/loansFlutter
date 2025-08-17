@@ -5,10 +5,10 @@ import 'package:loands_flutter/src/loans/data/requests/get_all_quotas_request.da
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_all_quotas_use_case.dart';
+import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
-import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
@@ -92,7 +92,7 @@ class LoanDetailController extends GetxController {
     information += 'Préstamo #${loanSelected?.id} \n';
     information +=
         'Cliente: ${loanSelected?.customerEntity?.aliasOrFullName} \n';
-    information += 'Fecha: ${loanSelected?.startDate.format(formatDate: formatOfSummary)} \n';
+    information += 'Fecha: ${loanSelected?.startDate.format(formatDate: FormatDate.summary)} \n';
     information += 'Duración: $differenceDays días ($frecuency)\n';
     information += 'Monto: S/ ${loanSelected?.amount.formatDecimals()} \n';
     information +=
@@ -107,7 +107,7 @@ class LoanDetailController extends GetxController {
     information += 'Fechas:';
 
     for (QuotaEntity quota in quotas) {
-      String quotaInformation = quota.dateToPay.format(formatDate: formatOfSummary).orEmpty();
+      String quotaInformation = quota.dateToPay.format(formatDate: FormatDate.summary).orEmpty();
       information += '\n${quotaInformation.toCapitalize()}';
     }
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/home_calendar_controller.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
+import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
-import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class HomeCalendarPage extends StatelessWidget {
@@ -120,7 +120,7 @@ class HomeCalendarPage extends StatelessWidget {
                 GetBuilder<HomeCalendarController>(
                   id: calendarIdGet,
                   builder: (controller) => Text(
-                    controller.dateSelected.format(formatDate: formatOfSummary).orEmpty().toCapitalize(),
+                    controller.dateSelected.format(formatDate: FormatDate.summary).orEmpty().toCapitalize(),
                     style: subtitleStyle,
                   ),
                 ),

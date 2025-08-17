@@ -77,10 +77,11 @@ class DashboardController extends GetxController {
       quotasByDate = resultType.data;
       update([quotasIdGet]);
     } else {
+      ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           typeSnackbar: TypeSnackbar.error,
           context: Get.context!,
-          message: resultType.error.toString());
+          message: errorEntity.errorMessage);
     }
     hideLoading();
   }

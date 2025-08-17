@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
-import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:utils/utils.dart';
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/description_operation_of_log.dart';
@@ -16,7 +16,7 @@ class ItemActivityWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final String dateTimeFormat = log.createdAt
         .toLocal()
-        .format(formatDate: formatOfActivity)
+        .format(formatDate: FormatDate.activity)
         .orEmpty()
         .toCapitalize();
 

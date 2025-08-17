@@ -21,8 +21,8 @@ class SummaryMonthResponse {
   });
 
   DateTime get time => DateTime(int.parse(year), int.parse(month));
-
-  String get stateLoan => (idStateQuota == idOfCompleteLoan) ? 'Ganancia' : 'Pérdida';
+  bool get isCompleted => (idStateQuota == idOfCompleteQuota);
+  String get stateLoan => isCompleted ? 'Ganancia' : 'Pérdida';
 
   factory SummaryMonthResponse.fromJson(Map<String, dynamic> json) =>
       SummaryMonthResponse(

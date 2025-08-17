@@ -22,7 +22,7 @@ class PaymentSummaryController extends GetxController {
   double get totalOfGanancy {
     List<double> amounts = summary
       .map(
-        (e) => (e.idStateQuota == idOfCompleteLoan) ? e.ganancy : defaultDouble,
+        (e) => (e.isCompleted) ? e.ganancy : defaultDouble,
       ).toList();
     return (amounts.isEmpty) ? defaultDouble : amounts.reduce((value, element) => value + element);
   }

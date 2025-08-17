@@ -4,7 +4,7 @@ import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
 import 'package:loands_flutter/src/home/ui/pages/quota_group/quota_group_controller.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
-import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/totals_bottoms_widget.dart';
 import 'package:utils/utils.dart';
 
@@ -99,7 +99,7 @@ class QuotaGroupPage extends StatelessWidget {
     DateTime dateOfTitle = DateTime.parse(key);
 
     String title = dateOfTitle
-        .format(formatDate: formatOfSummary)
+        .format(formatDate: FormatDate.summary)
         .orEmpty()
         .toCapitalize();
 

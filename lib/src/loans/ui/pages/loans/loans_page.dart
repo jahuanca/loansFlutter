@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_controller.dart';
-import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
-import 'package:loands_flutter/src/utils/ui/widgets/search_input_widget.dart';
+import 'package:loands_flutter/src/utils/ui/paddings.dart';
 import 'package:utils/utils.dart';
 
 class LoansPage extends StatelessWidget {
-  LoansPage({super.key});
 
   final LoansController controller = LoansController(
     getLoansUseCase: Get.find(),
   );
   final TextEditingController searchController = TextEditingController();
+  final FocusNode searchFocusNode = FocusNode();
+
+  LoansPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class LoansPage extends StatelessWidget {
 
   Widget _floatingActionButton() {
     return FloatingActionButton(
-      onPressed: controller.goToAddLoanInformation,
+      onPressed: controller.goToAddLoanChooseType,
       child: const Icon(Icons.add),
     );
   }
@@ -110,7 +111,7 @@ class LoansPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(loan.formatTitle),
-        if (loan.idStateLoan == idOfCompleteLoan) _iconComplete()
+        if (loan.isCompleted) _iconComplete()
       ],
     );
   }
@@ -122,11 +123,14 @@ class LoansPage extends StatelessWidget {
 
   Widget _searchInput() {
     return SearchInputWidget(
+      padding: Paddings.search,
+      focusNode: searchFocusNode,
       hintText: '¿Qué préstamo desea buscar?',
       onChanged: controller.onChangedSearch,
       controller: searchController,
       onClear: _clearSearch,
       textOfResults: _textOfResults,
+      isSearching: controller.isSearching,
     );
   }
 

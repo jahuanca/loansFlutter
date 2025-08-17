@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customers/customers_controller.dart';
+import 'package:loands_flutter/src/utils/ui/paddings.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
-import 'package:loands_flutter/src/utils/ui/widgets/search_input_widget.dart';
 import 'package:utils/utils.dart';
 
 class CustomersPage extends StatelessWidget {
   final CustomersController controller =
       CustomersController(getCustomersUseCase: Get.find());
+  final FocusNode focusNodeOfSearch = FocusNode();
 
   final TextEditingController searchController = TextEditingController();
 
@@ -63,6 +64,8 @@ class CustomersPage extends StatelessWidget {
     return Column(
       children: [
         SearchInputWidget(
+          padding: Paddings.search,
+          focusNode: focusNodeOfSearch,
           hintText: '¿Qué cliente desea buscar?',
           controller: searchController,
           onChanged: controller.onChangedSearch,
@@ -72,13 +75,13 @@ class CustomersPage extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-              itemCount: controller.customersToShow.length,
-              itemBuilder: (context, index) => _item(
-                size: size,
-                index: index,
-                customer: controller.customersToShow[index],
-              ),
+            itemCount: controller.customersToShow.length,
+            itemBuilder: (context, index) => _item(
+              size: size,
+              index: index,
+              customer: controller.customersToShow[index],
             ),
+          ),
         ),
       ],
     );

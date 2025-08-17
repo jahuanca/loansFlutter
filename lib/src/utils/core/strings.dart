@@ -24,5 +24,3 @@ const String selectTypeDocumentString = 'Seleccione el tipo de documento';
 const String enterDocumentString = 'Ingrese el documento';
 const String enterLastNameOfCustomerString = 'Ingrese el apellido del cliente';
 const String paymentMethodString = 'Método de pago';
-const String formatOfSummary = 'EEEE dd/MM/yyy';
-const String formatOfActivity = 'EEEE dd/MM/yyy, hh:mm';
