@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_controller.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
@@ -26,9 +27,7 @@ class AddLoanInformationPage extends StatelessWidget {
       builder: (controller) => PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
-          if (didPop) {
-            return;
-          }
+          if (didPop) return;
           controller.goBack();
         },
         child: Scaffold(
@@ -69,7 +68,7 @@ class AddLoanInformationPage extends StatelessWidget {
                           currentDate: controller.addLoanRequest.startDate,
                           context: context,
                           firstDate: defaultDate.subtract(halfYearDuration),
-                          lastDate: defaultDate.add(oneDayDuration));
+                          lastDate: defaultDate.add(maxDaysByLoan));
                       controller.onChangedStartDate(dateSelected);
                     },
                     textEditingController: controller.startDateTextController,

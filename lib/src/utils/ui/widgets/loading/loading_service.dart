@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_overlay.dart'; // Si usas GetX para la gestión de estado
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_overlay.dart';
 
 class LoadingService extends GetxService {
 
@@ -12,12 +12,11 @@ class LoadingService extends GetxService {
     if (isShowing) return;
 
     isShowing = true;
-    _overlayEntry = OverlayEntry(
-      builder: (context) => const LoadingOverlay(),
-    );
-
+    _overlayEntry = OverlayEntry(builder: (context) => const LoadingOverlay());
     final overlay = Navigator.of(Get.context!).overlay;
-    overlay?.insert(_overlayEntry!);
+    if (_overlayEntry != null) {
+      overlay?.insert(_overlayEntry!);
+    }
   }
 
   void hide() {

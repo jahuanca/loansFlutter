@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_controller.dart';
 import 'package:loands_flutter/src/utils/core/colors.dart';
-import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/totals_bottoms_widget.dart';
 import 'package:utils/utils.dart';

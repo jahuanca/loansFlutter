@@ -23,7 +23,7 @@ class CustomerAnalyticsPage extends StatelessWidget {
                 text: 'Analíticas de cliente',
                 hasArrowBack: true,
               ),
-              body: Column(
+              body: ListView(
                 children: [
                   _header(size),
                   _content(),
@@ -39,7 +39,7 @@ class CustomerAnalyticsPage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: DropdownWidget(
+              child: DropdownMenuWidget(
                   items: controller.customers,
                   label: 'Clientes',
                   onChanged: controller.onChangedCustomer,

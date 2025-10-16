@@ -13,7 +13,6 @@ class PayQuotaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final Size size = MediaQuery.sizeOf(context);
 
     return GetBuilder<PayQuotaController>(
@@ -23,7 +22,9 @@ class PayQuotaPage extends StatelessWidget {
         child: SizedBox(
           height: size.height,
           child: Scaffold(
-            appBar: appBarWidget(text: '#P${controller.quota?.idLoan}: Pago de cuota', hasArrowBack: true),
+            appBar: appBarWidget(
+                text: '#P${controller.quota?.idLoan}: Pago de cuota',
+                hasArrowBack: true),
             bottomNavigationBar: ChildOrElseWidget(
               condition: (controller.isPending),
               child: ButtonWidget(
@@ -32,12 +33,11 @@ class PayQuotaPage extends StatelessWidget {
                 onTap: controller.payQuota,
               ),
             ),
-            body: Column(
+            body: ListView(
               children: [
-                if (controller.quota != null) _cardDetail(
-                    size: size,
-                    quota: controller.quota!
-                  ),
+                ChildOrElseWidget(
+                    condition: (controller.quota != null),
+                    child: _cardDetail(size: size, quota: controller.quota!)),
                 ChildOrElseWidget(
                     condition: (controller.isPending),
                     elseWidget: _paidQuotaWidget(),

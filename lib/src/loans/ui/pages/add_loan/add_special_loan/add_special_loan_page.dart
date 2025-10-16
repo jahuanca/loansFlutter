@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan/add_special_loan_controller.dart';
+import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
@@ -67,7 +68,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                               controller.addSpecialLoanRequest.startDate,
                           context: context,
                           firstDate: defaultDate.subtract(halfYearDuration),
-                          lastDate: defaultDate.add(oneDayDuration));
+                          lastDate: defaultDate.add(maxDaysByLoan));
                       controller.onChangedStartDate(dateSelected);
                     },
                     textEditingController: controller.startDateTextController,

@@ -70,6 +70,16 @@ class QuotaGroupController extends GetxController {
         : defaultDouble;
   }
 
+  double get amountOfPendingCapital {
+    List<double> pendingCapital = quotas
+        .map((e) =>
+            (e.idStateQuota == idOfPendingQuota) ? (e.amount - e.ganancy) : defaultDouble)
+        .toList();
+    return (pendingCapital.isNotEmpty)
+        ? pendingCapital.reduce((value, element) => value + element)
+        : defaultDouble;
+  }
+
   Future<void> getQuotas() async {
     showLoading();
     ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =

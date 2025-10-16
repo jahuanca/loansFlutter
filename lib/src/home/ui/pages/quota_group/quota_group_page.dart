@@ -66,10 +66,15 @@ class QuotaGroupPage extends StatelessWidget {
   }
 
   Widget _bottomNavigation() {
+
+    String capital = controller.amountOfCapital.formatDecimals();
+    String ganancy = controller.amountOfGanancy.formatDecimals();
+    String pendingCapital = controller.amountOfPendingCapital.formatDecimals();
+    String pendingGanancy = controller.amountOfPendingGanancy.formatDecimals();
+
     return TotalsBottomsWidget(values: {
-      'Capital': controller.amountOfCapital.formatDecimals(),
-      'Ganancia': controller.amountOfGanancy.formatDecimals(),
-      'Pendiente': controller.amountOfPendingGanancy.formatDecimals(),
+      'Completado': '$capital + $ganancy',
+      'Pendiente': '$pendingCapital + $pendingGanancy',
     });
   }
 
