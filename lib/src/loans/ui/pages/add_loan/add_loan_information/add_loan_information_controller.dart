@@ -107,6 +107,7 @@ class AddLoanInformationController extends GetxController {
     if (index != notFoundPosition) {
       addLoanRequest.idCustomer = idCustomerValidationResult?.value;
       customerSelected = customers[index];
+      addLoanRequest.customerEntity = customerSelected;
     }
   }
 

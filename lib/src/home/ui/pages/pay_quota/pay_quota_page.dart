@@ -25,14 +25,7 @@ class PayQuotaPage extends StatelessWidget {
             appBar: appBarWidget(
                 text: '#P${controller.quota?.idLoan}: Pago de cuota',
                 hasArrowBack: true),
-            bottomNavigationBar: ChildOrElseWidget(
-              condition: (controller.isPending),
-              child: ButtonWidget(
-                padding: defaultPadding,
-                text: 'Pagar',
-                onTap: controller.payQuota,
-              ),
-            ),
+            bottomNavigationBar: _bottomNavigation(),
             body: ListView(
               children: [
                 ChildOrElseWidget(
@@ -139,6 +132,33 @@ class PayQuotaPage extends StatelessWidget {
               ],
             )),
       ),
+    );
+  }
+
+  Widget _bottomNavigation() {
+    return ChildOrElseWidget(
+      condition: (controller.isPending),
+      child: _buttomsNavigation(),
+    );
+  }
+
+  Widget _buttomsNavigation() {
+    return Row(
+      children: [
+        Expanded(
+            child: ButtonWidget(
+          padding: defaultPadding,
+          text: 'Pagar',
+          onTap: controller.payQuota,
+        )),
+        Expanded(
+            child: ButtonWidget(
+          padding: defaultPadding,
+          text: 'Pagar y renovar',
+          buttonStyle: ButtonStyleWidget.success,
+          onTap: controller.payQuota,
+        )),
+      ],
     );
   }
 }

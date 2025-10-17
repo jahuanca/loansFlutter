@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
+import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_all_quotas_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_all_quotas_use_case.dart';
-import 'package:loands_flutter/src/utils/core/format_date.dart';
+import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -82,39 +83,11 @@ class LoanDetailController extends GetxController {
     if(quotaPaid != null) getQuotas();
   }
 
-  void shareInformation() async {
-
-    QuotaEntity firstQuota = quotas.first;
-    String information = emptyString;
-    int? differenceDays = quotas.last.dateToPay.difference(loanSelected!.startDate.orNow()).inDays;
-    String frecuency = loanSelected!.paymentFrequencyEntity!.name.orEmpty();
-
-    information += 'Préstamo #${loanSelected?.id} \n';
-    information +=
-        'Cliente: ${loanSelected?.customerEntity?.aliasOrFullName} \n';
-    information += 'Fecha: ${loanSelected?.startDate.format(formatDate: FormatDate.summary)} \n';
-    information += 'Duración: $differenceDays días ($frecuency)\n';
-    information += 'Monto: S/ ${loanSelected?.amount.formatDecimals()} \n';
-    information +=
-        'Porcentaje: ${loanSelected?.percentage.formatDecimals()}% \n';
-
-    information += 'Cantidad de cuotas: ${quotas.length}\n';
-    information += 'Monto de cuota: S/ ${firstQuota.amount.formatDecimals()}\n';
-
-    double amountToSendMe = firstQuota.amount - (firstQuota.ganancy / 2);
-
-    information += 'Envíame: S/ ${amountToSendMe.formatDecimals()} \n';
-    information += 'Fechas:';
-
-    for (QuotaEntity quota in quotas) {
-      String quotaInformation = quota.dateToPay.format(formatDate: FormatDate.summary).orEmpty();
-      information += '\n${quotaInformation.toCapitalize()}';
-    }
-
-    await copyToClipboard(information);
-    showSnackbarWidget(
-      context: Get.context!, 
-      typeSnackbar: TypeSnackbar.success, 
-      message: 'Información copiada');
+  void goShareInformation() async {
+    if (loanSelected == null) return;
+    shareInformation(
+      addLoanRequest: AddLoanRequest.fromLoanEntity(loanSelected!), 
+      quotas: quotas
+    );
   }
 }

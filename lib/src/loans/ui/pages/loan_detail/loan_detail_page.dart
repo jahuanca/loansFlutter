@@ -26,7 +26,7 @@ class LoanDetailPage extends StatelessWidget {
               hasArrowBack: true,
               text: 'Préstamo #${controller.loanSelected?.id}',
               actions: [
-                IconButton(onPressed: controller.shareInformation, icon: const Icon(Icons.copy_all)),
+                IconButton(onPressed: controller.goShareInformation, icon: const Icon(Icons.copy_all)),
               ]
           ),
           body: ListView(

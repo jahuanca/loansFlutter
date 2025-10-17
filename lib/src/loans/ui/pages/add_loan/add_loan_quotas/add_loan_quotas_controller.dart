@@ -3,6 +3,7 @@ import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_loan_use_case.dart';
+import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -65,8 +66,25 @@ class AddLoanQuotasController extends GetxController {
           message: errorEntity.errorMessage);
       return;
     } else {
-      Get.until((route) => route.settings.name == '/');
+      _successCreate(resultType as LoanEntity);
     }
     hideLoading();
   }
+
+  void goShareInformation() {
+    shareInformation(
+        addLoanRequest: addLoanRequest,
+        quotas: quotas,
+      );
+  }
+
+  void _successCreate(LoanEntity newLoan) {
+      addLoanRequest.id = newLoan.id;
+      shareInformation(
+        addLoanRequest: addLoanRequest,
+        quotas: quotas,
+      );
+      Get.until((route) => route.settings.name == '/');
+  }
+
 }

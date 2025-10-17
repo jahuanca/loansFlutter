@@ -21,7 +21,11 @@ class AddLoanQuotasPage extends StatelessWidget {
       id: pageIdGet,
       builder: (controller) => Scaffold(
           bottomNavigationBar: _bottomButtons(),
-          appBar: appBarWidget(text: 'Calendario', hasArrowBack: true),
+          appBar: appBarWidget(
+            actions: [
+              IconButton(onPressed: controller.goShareInformation, icon: const Icon(Icons.copy))
+            ],
+            text: 'Calendario', hasArrowBack: true),
           body: _detailQuotas(size: size),
           )
     );
