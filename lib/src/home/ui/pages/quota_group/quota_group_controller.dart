@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
+import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -107,6 +108,7 @@ class QuotaGroupController extends GetxController {
     DashboardQuotaResponse quotaSelected = quotas[index];
     QuotaEntity? result = await Get.to(() => PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: quotaSelected,
+      sourceToLoanArgument: SourceToLoanEnum.quotaGroup,
     });
     if (result != null) {
       quotaSelected.idStateQuota = result.idStateQuota;

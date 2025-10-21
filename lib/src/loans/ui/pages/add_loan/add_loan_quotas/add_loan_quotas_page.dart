@@ -10,6 +10,7 @@ class AddLoanQuotasPage extends StatelessWidget {
 
   final AddLoanQuotasController controller =  AddLoanQuotasController(
         createLoanUseCase: Get.find(),
+        createRenewalUseCase: Get.find(),
       );
 
   @override

@@ -1,5 +1,6 @@
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
@@ -12,4 +13,5 @@ abstract class LoanDatastore {
   Future<ResultType<LoanEntity, ErrorEntity>> createSpecial(
       AddSpecialLoanRequest addSpecialLoanRequest);
   Future<ResultType<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request);
+  Future<ResultType<LoanEntity,ErrorEntity>> get(GetLoanRequest request);
 }

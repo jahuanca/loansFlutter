@@ -5,25 +5,37 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
+import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
+import 'package:loands_flutter/src/loans/domain/use_cases/get_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencies_use_case.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_methods_use_case.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanInformationController extends GetxController {
+
+  late SourceToLoanEnum sourceToLoanEnum;
+  PayAndRenewalRequest? createRenewalRequest;
+
   GetCustomersUseCase getCustomersUseCase;
   GetPaymentFrequenciesUseCase getPaymentFrequenciesUseCase;
   GetPaymentMethodsUseCase getPaymentMethodsUseCase;
   ValidateLoanUseCase validateLoanUseCase;
+  GetLoanUseCase getLoanUseCase;
 
   List<CustomerEntity> customers = [];
   List<PaymentFrequencyEntity> frequencies = [];
@@ -37,6 +49,7 @@ class AddLoanInformationController extends GetxController {
   TextEditingController percentageTextController = TextEditingController();
   TextEditingController ganancyTextController = TextEditingController();
   TextEditingController startDateTextController = TextEditingController();
+  TextEditingController amountTextController = TextEditingController();
 
   ValidateResult? startDateValidationResult,
       idCustomerValidationResult,
@@ -50,7 +63,15 @@ class AddLoanInformationController extends GetxController {
     required this.getPaymentFrequenciesUseCase,
     required this.getPaymentMethodsUseCase,
     required this.validateLoanUseCase,
+    required this.getLoanUseCase,
   });
+
+  @override
+  void onInit() {
+    sourceToLoanEnum = Get.setArgument(sourceToLoanArgument) ?? SourceToLoanEnum.normal;
+    createRenewalRequest = Get.setArgument(createRenewalRequestArgument);
+    super.onInit();
+  }
 
   @override
   void onReady() {
@@ -59,11 +80,16 @@ class AddLoanInformationController extends GetxController {
   }
 
   void getData() async {
+    showLoading();
     await Future.wait([
       getCustomers(),
       getPaymentFrecuencies(),
       getMethodsPayment(),
     ]);
+    if (createRenewalRequest != null) {
+      await getLoanToRenew();
+    }
+    hideLoading();
   }
 
   Future<void> getCustomers() async {
@@ -93,6 +119,25 @@ class AddLoanInformationController extends GetxController {
       onChangedMethodsPayment(idOfMethodPaymentDefault);
     }
     update([methodsIdGet]);
+  }
+
+  Future<void> getLoanToRenew() async {
+    ResultType<LoanEntity, ErrorEntity> resultType =
+        await getLoanUseCase.execute(GetLoanRequest(id: createRenewalRequest?.idLoanToRenew));    
+    if (resultType is Success) {
+      // TODO: set values' loan
+      LoanEntity loanToRenew = resultType.data as LoanEntity;
+      onChangedCustomer(loanToRenew.idCustomer);
+      onChangedFrequency(loanToRenew.idPaymentFrequency);
+      
+      onChangeAmount(loanToRenew.amount.toString());
+      amountTextController = TextEditingController(
+        text: loanToRenew.amount.formatDecimals()
+      );
+
+      onChangedMethodsPayment(loanToRenew.idPaymentMethod);
+      update([pageIdGet]);
+    }
   }
 
   void onChangedCustomer(dynamic value) {
@@ -266,6 +311,7 @@ class AddLoanInformationController extends GetxController {
       binding: AddLoanQuotasBinding(),
     arguments: {
       addLoanRequestArgument: addLoanRequest,
+      createRenewalRequestArgument: createRenewalRequest,
     });
   }
 

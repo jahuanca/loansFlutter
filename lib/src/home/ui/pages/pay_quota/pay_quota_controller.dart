@@ -3,7 +3,11 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/pay_quota_use_case.dart';
+import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
+import 'package:loands_flutter/src/loans/di/add_loan_information_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_page.dart';
+import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -13,10 +17,12 @@ import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaController extends GetxController {
+
+  late SourceToLoanEnum sourceToLoanEnum;
   DashboardQuotaResponse? quota;
   PayQuotaUseCase payQuotaUseCase;
   TextEditingController dateToPayTextController = TextEditingController();
-  
+
   PayQuotaRequest payQuotaRequest = PayQuotaRequest();
 
   PayQuotaController({
@@ -25,9 +31,16 @@ class PayQuotaController extends GetxController {
 
   bool get isPending => (quota?.idStateQuota == idOfPendingQuota);
 
+  bool get isLastQuota {
+    if (quota == null) return false;
+    List<String> parts = quota!.name.split('/');
+    return (parts.first == parts.last);
+  }
+
   @override
   void onInit() {
     quota = Get.setArgument(dashboardQuotaResponseArgument);
+    sourceToLoanEnum = Get.setArgument(sourceToLoanArgument);
     payQuotaRequest.idOfQuota = quota?.id;
     super.onInit();
   }
@@ -45,20 +58,25 @@ class PayQuotaController extends GetxController {
     update([startDayIdGet]);
   }
 
-  void payQuota() async {
+  Future<bool> _goAction(String info) async {
     String? message = payQuotaRequest.messageError;
-    if(message != null){
-      return showSnackbarWidget(
-        context: Get.context!, 
-        typeSnackbar: TypeSnackbar.error, 
-        message: message);
+    if (message != null) {
+      showSnackbarWidget(
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: message);
+      return false;
     }
-    bool result = await showDialogWidget(
-        context: Get.context!,
-        message: 'Se registrara la cuota como pagada, ¿desea continuar?');
-    if (result) {
+    return await showDialogWidget(context: Get.context!, message: info);
+  }
+
+  void goPayQuota() async {
+    bool goAction = await _goAction(
+        'Se registrara la cuota como pagada, ¿desea continuar?');
+    if (goAction) {
       showLoading();
-      ResultType<QuotaEntity, ErrorEntity> resultType = await payQuotaUseCase.execute(payQuotaRequest);
+      ResultType<QuotaEntity, ErrorEntity> resultType =
+          await payQuotaUseCase.execute(payQuotaRequest);
       hideLoading();
       if (resultType is Success) {
         QuotaEntity quotaToReturn = resultType.data;
@@ -67,9 +85,27 @@ class PayQuotaController extends GetxController {
       } else {
         ErrorEntity errorEntity = resultType.error;
         showSnackbarWidget(
-          context: Get.context!, 
-          typeSnackbar: TypeSnackbar.error, message: errorEntity.errorMessage);
+            context: Get.context!,
+            typeSnackbar: TypeSnackbar.error,
+            message: errorEntity.errorMessage);
       }
+    }
+  }
+
+  void goPayQuotaAndRenewLoan() async {
+    bool goAction = await _goAction(
+        'Se pagará la cuota y renovara el préstamo, ¿desea continuar?');
+    if (goAction) {
+      AddLoanInformationBinding().dependencies();
+      Get.to(AddLoanInformationPage(),
+          arguments: {
+            sourceToLoanArgument: sourceToLoanEnum,
+            createRenewalRequestArgument: PayAndRenewalRequest(
+              idLoanToRenew: quota?.idLoan,
+              paidDate: payQuotaRequest.paidDate,
+              idOfQuota: payQuotaRequest.idOfQuota,
+            )
+          });
     }
   }
 
@@ -91,8 +127,8 @@ class PayQuotaController extends GetxController {
     copyToClipboard(message);
     if (showSnackbar == false) return;
     showSnackbarWidget(
-      context: Get.context!, 
-      typeSnackbar: TypeSnackbar.success, 
-      message: 'Información copiada');
+        context: Get.context!,
+        typeSnackbar: TypeSnackbar.success,
+        message: 'Información copiada');
   }
 }

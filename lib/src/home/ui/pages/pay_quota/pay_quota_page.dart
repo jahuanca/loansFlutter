@@ -149,14 +149,15 @@ class PayQuotaPage extends StatelessWidget {
             child: ButtonWidget(
           padding: defaultPadding,
           text: 'Pagar',
-          onTap: controller.payQuota,
+          onTap: controller.goPayQuota,
         )),
+        if (controller.isLastQuota)
         Expanded(
             child: ButtonWidget(
           padding: defaultPadding,
           text: 'Pagar y renovar',
           buttonStyle: ButtonStyleWidget.success,
-          onTap: controller.payQuota,
+          onTap: controller.goPayQuotaAndRenewLoan,
         )),
       ],
     );

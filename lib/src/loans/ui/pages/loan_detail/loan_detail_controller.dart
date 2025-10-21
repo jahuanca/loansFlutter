@@ -7,6 +7,7 @@ import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_all_quotas_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
+import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -67,8 +68,7 @@ class LoanDetailController extends GetxController {
             '¿Desea iniciar el pago de la cuota ${quota.name}, Vence: ${quota.dateToPay.formatDMMYYY()}?');
     if (result == false) return;
 
-    QuotaEntity? quotaPaid = await Get.to<QuotaEntity>(() => PayQuotaPage(), arguments: {
-      dashboardQuotaResponseArgument: DashboardQuotaResponse(
+    DashboardQuotaResponse dashboardQuotaResponse = DashboardQuotaResponse(
           id: quota.id!,
           idLoan: quota.idLoan!,
           name: quota.name,
@@ -78,8 +78,14 @@ class LoanDetailController extends GetxController {
           idStateQuota: quota.idStateQuota,
           dateToPay: quota.dateToPay,
           paidDate: quota.paidDate,
-        )
+        );
+
+    QuotaEntity? quotaPaid = await Get.to<QuotaEntity>(
+      () => PayQuotaPage(), arguments: {
+      sourceToLoanArgument: SourceToLoanEnum.listLoans,
+      dashboardQuotaResponseArgument: dashboardQuotaResponse,
     });
+    
     if(quotaPaid != null) getQuotas();
   }
 

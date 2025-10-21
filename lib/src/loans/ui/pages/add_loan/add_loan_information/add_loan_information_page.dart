@@ -13,6 +13,7 @@ class AddLoanInformationPage extends StatelessWidget {
     getPaymentFrequenciesUseCase: Get.find(),
     getPaymentMethodsUseCase: Get.find(),
     validateLoanUseCase: Get.find(),
+    getLoanUseCase: Get.find(),
   );
 
   final FocusNode focusNodeCustomer = FocusNode();
@@ -46,6 +47,7 @@ class AddLoanInformationPage extends StatelessWidget {
                       child: GetBuilder<AddLoanInformationController>(
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
+                                initialValue: controller.addLoanRequest.idCustomer,
                                 focusNode: focusNodeCustomer,
                                 hintText: selectTheCustomer,
                                 label: customerString,
@@ -84,6 +86,7 @@ class AddLoanInformationPage extends StatelessWidget {
                       child: GetBuilder<AddLoanInformationController>(
                         id: frequenciesIdGet,
                         builder: (controller) => DropdownWidget(
+                          value: controller.addLoanRequest.idPaymentFrequency,
                           hintText: 'Seleccione la frecuencia',
                           label: 'Frecuencia de pago',
                           items: controller.frequencies,
@@ -109,6 +112,7 @@ class AddLoanInformationPage extends StatelessWidget {
                 GetBuilder<AddLoanInformationController>(
                   id: amountIdGet,
                   builder: (controller) => InputWidget(
+                    textEditingController: controller.amountTextController,
                     hintText: 'Ingrese el monto',
                     label: amountString,
                     icon: const Icon(Icons.monetization_on),

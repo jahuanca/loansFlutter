@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_choose_type/add_loan_choose_type_controller.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_choose_type/types.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_choose_type/add_loan_choose_options.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanChooseTypePage extends StatelessWidget {
@@ -25,13 +25,13 @@ class AddLoanChooseTypePage extends StatelessWidget {
 
   Widget _content(Size size) {
     return ListView.separated(
-      itemCount: loansType.length,
+      itemCount: AddLoanChooseOptions.values.length,
       separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) => _cardType(
-          onTap: ()=> controller.goSelectedType(index),
-          iconData: loansType[index]['iconData'],
-          title: loansType[index]['title'],
-          description: loansType[index]['description'],
+          onTap: ()=> controller.goSelectedType(AddLoanChooseOptions.values[index]),
+          iconData: AddLoanChooseOptions.values[index].iconData,
+          title: AddLoanChooseOptions.values[index].title,
+          description: AddLoanChooseOptions.values[index].description,
           size: size,
       ),
     );

@@ -9,3 +9,5 @@ const String getAllQuotasRequestArgument = 'getAllQuotasRequestArgument';
 const String titleArgument = 'titleArgument';
 const String isGroupArgument = 'isGroupArgument';
 const String titleOfAppBarArgument = 'titleOfAppBarArgument';
+const String sourceToLoanArgument = 'sourceToLoanArgument';
+const String createRenewalRequestArgument = 'createRenewalRequestArgument';

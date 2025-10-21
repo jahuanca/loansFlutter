@@ -1,8 +1,4 @@
 
-// To parse this JSON data, do
-//
-//     final loanEntity = loanEntityFromJson(jsonString);
-
 import 'dart:convert';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
@@ -54,6 +50,8 @@ class LoanEntity {
     String get formatTitle => 'S/ ${amount.formatDecimals()} - ${percentage.formatDecimals()}%';
 
     bool get isCompleted => (idStateLoan == idOfCompleteLoan);
+
+    String get name => '#P$id - ${startDate.format(formatDate: 'dd MMM')}: S/ ${amount.formatDecimals()}';
     
     factory LoanEntity.fromJson(Map<String, dynamic> json) => LoanEntity(
         id: json["id"],
@@ -91,5 +89,7 @@ class LoanEntity {
         "updatedAt": updatedAt.toIso8601String(),
         'Customer': customerEntity?.toJson(),
         'Payment_Frequency': paymentFrequencyEntity?.toJson(),
+
+        'name': name,
     };
 }
