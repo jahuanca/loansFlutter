@@ -1,27 +1,27 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_renewal_request.dart';
-import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
+import 'package:loands_flutter/src/loans/data/responses/get_metadata_renewal_response.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/renewal_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/add_renewal_use_case.dart';
-import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dart';
+import 'package:loands_flutter/src/loans/domain/use_cases/get_metadata_renewal_use_case.dart';
 import 'package:loands_flutter/src/utils/core/enums_of_app.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
 class AddRenewalController extends GetxController {
-
   CustomerEntity? customerSelected;
-  LoanEntity? previousLoan;
-  LoanEntity? newLoan;
+
+  GetMetadataRenewalResponse? getMetadataRenewalResponse;
+  LoanEntity? previousLoanSelected;
+  LoanEntity? newLoanSelected;
 
   GetCustomersUseCase getCustomersUseCase;
-  GetLoansUseCase getLoansUseCase;
+  GetMetadataRenewalUseCase getMetadataRenewalUseCase;
   AddRenewalUseCase addRenewalUseCase;
 
   List<CustomerEntity> customers = [];
@@ -32,9 +32,13 @@ class AddRenewalController extends GetxController {
   TextEditingController variationTextController = TextEditingController();
   TextEditingController typeRenewalTextController = TextEditingController();
 
+  TextEditingController customerTextController = TextEditingController();
+  TextEditingController newLoanTextController = TextEditingController();
+  TextEditingController previousLoanTextController = TextEditingController();
+
   AddRenewalController({
     required this.getCustomersUseCase,
-    required this.getLoansUseCase,
+    required this.getMetadataRenewalUseCase,
     required this.addRenewalUseCase,
   });
 
@@ -46,11 +50,11 @@ class AddRenewalController extends GetxController {
 
   void getCustomers() async {
     showLoading();
-    ResultType<List<CustomerEntity>, ErrorEntity> resultType = await getCustomersUseCase.execute();
+    ResultType<List<CustomerEntity>, ErrorEntity> resultType =
+        await getCustomersUseCase.execute();
     hideLoading();
-    if (resultType is Error){
-
-        return;
+    if (resultType is Error) {
+      return;
     }
     customers = resultType.data as List<CustomerEntity>;
     update([pageIdGet]);
@@ -58,16 +62,15 @@ class AddRenewalController extends GetxController {
 
   void getLoans(int idCustomer) async {
     showLoading();
-    ResultType<List<LoanEntity>, ErrorEntity> resultType = await getLoansUseCase.execute(
-      GetLoansRequest(idCustomer: idCustomer)
-    );
+    ResultType<GetMetadataRenewalResponse, ErrorEntity> resultType =
+        await getMetadataRenewalUseCase.execute(idCustomer);
     hideLoading();
-    if (resultType is Error){
-
-        return;
+    if (resultType is Error) {
+      return;
     }
-    loansPrevious.clear();
-    loansPrevious = resultType.data as List<LoanEntity>;
+    loansNew.clear();
+    getMetadataRenewalResponse = resultType.data as GetMetadataRenewalResponse;
+    loansNew = getMetadataRenewalResponse?.newLoans ?? [];
     update([pageIdGet]);
   }
 
@@ -77,9 +80,7 @@ class AddRenewalController extends GetxController {
       RuleValidator.isRequired: true,
     });
 
-    int index = customers.indexWhere(
-      (e) => e.id == value,
-    );
+    int index = customers.indexWhere((e) => e.id == value);
     if (index != notFoundPosition) {
       addRenewalRequest.idCustomer = idCustomerValidationResult.value;
       customerSelected = customers[index];
@@ -87,51 +88,112 @@ class AddRenewalController extends GetxController {
     }
   }
 
-  void onChangedPreviousLoan(dynamic value) {
-    previousLoan = loansPrevious.firstWhere((e) => e.id == value,);
+  void onChangedNewLoan(dynamic value) {
+    newLoanSelected = loansNew.firstWhere((e) => e.id == value);
+    addRenewalRequest.idNewLoan = newLoanSelected?.id;
 
-    loansNew.clear();
-    loansNew = loansPrevious.where((e) => e.startDate.isAfter(previousLoan!.startDate)).toList();
-    update(['loans_new']);
+    renewalDateTextController.text =
+        newLoanSelected!.startDate.formatDMMYYY().orEmpty();
+    addRenewalRequest.date = newLoanSelected?.startDate;
+
+    if (getMetadataRenewalResponse == null) return;
+    loansPrevious.clear();
+    loansPrevious = getMetadataRenewalResponse!.previousLoans
+        .where((e) => e.startDate.isBefore(newLoanSelected!.startDate))
+        .toList();
+    update(['loans_previous']);
+
     onChangeVariation();
   }
 
-  void onChangedNewLoan(dynamic value) {
-    newLoan = loansNew.firstWhere((e) => e.id == value);
-    renewalDateTextController.text = newLoan!.startDate.formatDMMYYY().orEmpty();
+  void onChangedPreviousLoan(dynamic value) {
+    previousLoanSelected = loansPrevious.firstWhere((e) => e.id == value);
+    addRenewalRequest.idPreviousLoan = previousLoanSelected?.id;
 
     onChangeVariation();
   }
 
   void onChangeVariation() {
-    if ([newLoan, previousLoan].contains(null)) return;
-    double amountPrevious = previousLoan!.amount;
-    double amountNew = newLoan!.amount;
+    if ([newLoanSelected].contains(null)) return;
+    double amountPrevious = previousLoanSelected?.amount ?? defaultDouble;
+    double amountNew = newLoanSelected!.amount;
     double variation = amountNew - amountPrevious;
-    variationTextController = TextEditingController(text: variation.formatDecimals());
+    variationTextController =
+        TextEditingController(text: variation.formatDecimals());
+    addRenewalRequest.variationInAmount = variation;
 
     TypeRenewalEnum type = TypeRenewalEnum.same;
     if (variation > 0) type = TypeRenewalEnum.increase;
     if (variation < 0) type = TypeRenewalEnum.decrease;
     typeRenewalTextController = TextEditingController(text: type.title);
+    addRenewalRequest.idTypeRenewal = type.id;
 
     update([pageIdGet]);
   }
 
   void goCreate() async {
-    if (addRenewalRequest.validate.not()) {
-      showSnackbarWidget(context: Get.context!, typeSnackbar: TypeSnackbar.success, message: 'Dato no válido.');
+    String? message = addRenewalRequest.validate;
+    if (message != null) {
+      showSnackbarWidget(
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: message);
       return;
     }
+
+    message = (previousLoanSelected == null)
+        ? '¿Está seguro de crear la vinculación? No ha seleccionado un préstamo anterior.'
+        : '¿Está seguro de crear la vinculación?';
+
+    bool result = await showDialogWidget(
+        context: Get.context!,
+        message: message);
+    if (!result) return;
+    _goCreate();
+  }
+
+  void _goCreate() async {
     showLoading();
-    ResultType<RenewalEntity, ErrorEntity> resultType = await addRenewalUseCase.execute(addRenewalRequest);
+    ResultType<RenewalEntity, ErrorEntity> resultType =
+        await addRenewalUseCase.execute(addRenewalRequest);
     hideLoading();
     if (resultType is Error) {
       ErrorEntity errorEntity = resultType.error;
-      showSnackbarWidget(context: Get.context!, typeSnackbar: TypeSnackbar.success, message: errorEntity.errorMessage);
+      showSnackbarWidget(
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: errorEntity.errorMessage);
       return;
     }
-    Get.until((route) => route.settings.name == '/');
+
+    showSnackbarWidget(
+      context: Get.context!, 
+      typeSnackbar: TypeSnackbar.success, 
+      message: 'Renovación vinculada.');
+
+    clearInputs();
+    // ME QUEDE EN EL 14: LILIANA CONSUELO
+  }
+
+  Future<void> goRefresh() async {
+    clearInputs();
+    getCustomers();
+  }
+
+  void clearInputs() {
+    addRenewalRequest = AddRenewalRequest();
+    customerSelected = null;
+    newLoanSelected = null;
+    previousLoanSelected = null;
+
+    newLoanTextController.clear();
+    previousLoanTextController.clear();
+    renewalDateTextController.clear();
+    variationTextController.clear();
+    typeRenewalTextController.clear();
+    customerTextController.clear();
+    
+    update([pageIdGet]);
   }
 
 }

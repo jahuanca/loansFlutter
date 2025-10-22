@@ -51,7 +51,7 @@ class LoanEntity {
 
     bool get isCompleted => (idStateLoan == idOfCompleteLoan);
 
-    String get name => '#P$id - ${startDate.format(formatDate: 'dd MMM')}: S/ ${amount.formatDecimals()}';
+    String get name => '#P$id - ${startDate.format(formatDate: 'dd MMM')}: S/ ${amount.formatDecimals()}, ${paymentFrequencyEntity?.name}';
     
     factory LoanEntity.fromJson(Map<String, dynamic> json) => LoanEntity(
         id: json["id"],

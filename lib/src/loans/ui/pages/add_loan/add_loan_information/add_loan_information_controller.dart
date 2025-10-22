@@ -27,7 +27,6 @@ import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart
 import 'package:utils/utils.dart';
 
 class AddLoanInformationController extends GetxController {
-
   late SourceToLoanEnum sourceToLoanEnum;
   PayAndRenewalRequest? createRenewalRequest;
 
@@ -39,6 +38,7 @@ class AddLoanInformationController extends GetxController {
 
   List<CustomerEntity> customers = [];
   List<PaymentFrequencyEntity> frequencies = [];
+  List<PaymentFrequencyEntity> frequenciesOfCustomer = [];
   List<PaymentMethodEntity> methods = [];
 
   CustomerEntity? customerSelected;
@@ -68,7 +68,8 @@ class AddLoanInformationController extends GetxController {
 
   @override
   void onInit() {
-    sourceToLoanEnum = Get.setArgument(sourceToLoanArgument) ?? SourceToLoanEnum.normal;
+    sourceToLoanEnum =
+        Get.setArgument(sourceToLoanArgument) ?? SourceToLoanEnum.normal;
     createRenewalRequest = Get.setArgument(createRenewalRequestArgument);
     super.onInit();
   }
@@ -122,22 +123,23 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> getLoanToRenew() async {
-    ResultType<LoanEntity, ErrorEntity> resultType =
-        await getLoanUseCase.execute(GetLoanRequest(id: createRenewalRequest?.idLoanToRenew));    
+    ResultType<LoanEntity, ErrorEntity> resultType = await getLoanUseCase
+        .execute(GetLoanRequest(id: createRenewalRequest?.idLoanToRenew));
     if (resultType is Success) {
-      // TODO: set values' loan
-      LoanEntity loanToRenew = resultType.data as LoanEntity;
-      onChangedCustomer(loanToRenew.idCustomer);
-      onChangedFrequency(loanToRenew.idPaymentFrequency);
-      
-      onChangeAmount(loanToRenew.amount.toString());
-      amountTextController = TextEditingController(
-        text: loanToRenew.amount.formatDecimals()
-      );
-
-      onChangedMethodsPayment(loanToRenew.idPaymentMethod);
-      update([pageIdGet]);
+      setLoanToRenew(resultType.data as LoanEntity);
     }
+  }
+
+  void setLoanToRenew(LoanEntity loanToRenew) {
+    onChangedCustomer(loanToRenew.idCustomer);
+    onChangedFrequency(loanToRenew.idPaymentFrequency);
+
+    onChangeAmount(loanToRenew.amount.toString());
+    String amount = loanToRenew.amount.formatDecimals();
+    amountTextController = TextEditingController(text: amount);
+
+    onChangedMethodsPayment(loanToRenew.idPaymentMethod);
+    update([pageIdGet]);
   }
 
   void onChangedCustomer(dynamic value) {
@@ -153,6 +155,14 @@ class AddLoanInformationController extends GetxController {
       addLoanRequest.idCustomer = idCustomerValidationResult?.value;
       customerSelected = customers[index];
       addLoanRequest.customerEntity = customerSelected;
+
+      frequenciesOfCustomer.clear();
+      frequenciesOfCustomer = frequencies
+          .where(
+            (e) => e.idTypeCustomer == customerSelected?.idTypeCustomer,
+          )
+          .toList();
+      update([frequenciesIdGet]);
     }
   }
 
@@ -162,14 +172,14 @@ class AddLoanInformationController extends GetxController {
       RuleValidator.isRequired: true,
     });
 
-    int index = frequencies.indexWhere(
+    int index = frequenciesOfCustomer.indexWhere(
       (e) => e.id == value,
     );
     if (index != notFoundPosition) {
-      frequencySelected = frequencies[index];
+      frequencySelected = frequenciesOfCustomer[index];
       addLoanRequest.paymentFrequencyEntity = frequencySelected;
       addLoanRequest.idPaymentFrequency = frequencySelected?.id;
-      if(setPercentage) changePercentage();
+      if (setPercentage) changePercentage();
     }
   }
 
@@ -245,7 +255,7 @@ class AddLoanInformationController extends GetxController {
     );
     if (percentageValidationResult!.hasError.not()) {
       addLoanRequest.percentage = percentageValidationResult?.value;
-      if(addLoanRequest.amount != null){
+      if (addLoanRequest.amount != null) {
         onChangeAmount(addLoanRequest.amount.toString());
       }
     }
@@ -277,7 +287,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> goAddCustomer() async {
-    await Get.to(()=> AddCustomerPage(), binding: AddCustomerBinding());
+    await Get.to(() => AddCustomerPage(), binding: AddCustomerBinding());
     getCustomers();
   }
 
@@ -297,38 +307,37 @@ class AddLoanInformationController extends GetxController {
       goQuotas();
     } else {
       bool result = await showDialogWidget(
-        context: Get.context!, 
-        message: 'Se detecto un prestamo similar, ¿desea continuar?');
-      if(result) goQuotas();
+          context: Get.context!,
+          message: 'Se detecto un prestamo similar, ¿desea continuar?');
+      if (result) goQuotas();
     }
   }
 
   void goQuotas() {
-    Get.to(
-      ()=> AddLoanQuotasPage(), 
-      transition: Transition.noTransition,
-      opaque: false,
-      binding: AddLoanQuotasBinding(),
-    arguments: {
-      addLoanRequestArgument: addLoanRequest,
-      createRenewalRequestArgument: createRenewalRequest,
-    });
+    Get.to(() => AddLoanQuotasPage(),
+        transition: Transition.noTransition,
+        opaque: false,
+        binding: AddLoanQuotasBinding(),
+        arguments: {
+          addLoanRequestArgument: addLoanRequest,
+          createRenewalRequestArgument: createRenewalRequest,
+        });
   }
 
   void goBack() async {
-    bool result = await showDialogWidget(context: Get.context!, message: alertBackString);
+    bool result =
+        await showDialogWidget(context: Get.context!, message: alertBackString);
     if (result) Get.back();
   }
 
   Future<bool?> goValidate() async {
-    ResultType<bool, ErrorEntity> resultType = await validateLoanUseCase.execute(
-      ValidateLoanRequest(
-        idCustomer: addLoanRequest.idCustomer!, 
-        idPaymentFrequency: addLoanRequest.idPaymentFrequency!, 
-        percentage: addLoanRequest.percentage!, 
-        amount: addLoanRequest.amount!, 
-        startDate: addLoanRequest.startDate!)
-    );
+    ResultType<bool, ErrorEntity> resultType =
+        await validateLoanUseCase.execute(ValidateLoanRequest(
+            idCustomer: addLoanRequest.idCustomer!,
+            idPaymentFrequency: addLoanRequest.idPaymentFrequency!,
+            percentage: addLoanRequest.percentage!,
+            amount: addLoanRequest.amount!,
+            startDate: addLoanRequest.startDate!));
     if (resultType is Success) {
       return resultType.data;
     } else {

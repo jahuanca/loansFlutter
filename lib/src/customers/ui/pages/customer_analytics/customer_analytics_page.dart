@@ -40,12 +40,12 @@ class CustomerAnalyticsPage extends StatelessWidget {
         children: [
           Expanded(
               child: DropdownMenuWidget(
+                  initialValue: controller.customerSelected?.id,
                   items: controller.customers,
                   label: 'Clientes',
                   onChanged: controller.onChangedCustomer,
                   idLabel: 'aliasOrFullName',
                   hintText: 'Seleccione un cliente')),
-          // const IconButtonWidget(iconData: Icons.search),
         ],
       ),
     );

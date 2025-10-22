@@ -89,7 +89,7 @@ class AddLoanInformationPage extends StatelessWidget {
                           value: controller.addLoanRequest.idPaymentFrequency,
                           hintText: 'Seleccione la frecuencia',
                           label: 'Frecuencia de pago',
-                          items: controller.frequencies,
+                          items: controller.frequenciesOfCustomer,
                           idLabel: 'titleItem',
                           onChanged: controller.onChangedFrequency,
                         ),

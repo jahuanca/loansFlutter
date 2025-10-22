@@ -100,6 +100,7 @@ class AddCustomerPage extends StatelessWidget {
                     initialValue: controller.createCustomerRequest.address,
                     textInputType: TextInputType.streetAddress,
                     onChanged: controller.onChangedAddress,
+                    maxLength: 50,
                     isAlignLabel: true,
                     label: addressString,
                     hintText: 'Ingrese la dirección del cliente'),

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final customerEntity = customerEntityFromJson(jsonString);
-
 import 'dart:convert';
 
 List<CustomerEntity> customerEntityFromJson(String str) => List<CustomerEntity>.from(json.decode(str).map((x) => CustomerEntity.fromJson(x)));
@@ -17,6 +13,7 @@ class CustomerEntity {
     String? latitude;
     String? longitude;
     int idTypeDocument;
+    int idTypeCustomer;
     String document;
     DateTime createdAt;
     DateTime updatedAt;
@@ -26,6 +23,7 @@ class CustomerEntity {
         required this.name,
         required this.lastName,
         required this.address,
+        required this.idTypeCustomer,
         required this.idTypeDocument,
         required this.document,
         required this.createdAt,
@@ -53,11 +51,17 @@ class CustomerEntity {
         address: json["address"],
         latitude: json["latitude"],
         longitude: json["longitude"],
+        idTypeCustomer: json["id_type_customer"],
         idTypeDocument: json["id_type_document"],
         document: json["document"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
     );
+
+    Map<String, dynamic> toDropdown() => {
+      'id': id,
+      'aliasOrFullName': aliasOrFullName,
+    };
 
     Map<String, dynamic> toJson() => {
         "id": id,
@@ -67,6 +71,7 @@ class CustomerEntity {
         "address": address,
         "latitude": latitude,
         "longitude": longitude,
+        "id_type_customer": idTypeCustomer,
         "id_type_document": idTypeDocument,
         "document": document,
         "createdAt": createdAt.toIso8601String(),

@@ -50,8 +50,6 @@ class QuotaGroupPage extends StatelessWidget {
       iconData: Icons.more_vert,
       padding: defaultPadding,
       items: [
-        //TODO: crear un enum y que el enums tambien
-        //puedan ser pasados al MenuOverlay
         OptionMenu(id: 1, name: 'Filtrar'),
         OptionMenu(id: 2, name: 'Copiar'),
         OptionMenu(id: 3, name: 'Configurar'),

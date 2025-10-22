@@ -1,6 +1,3 @@
-
-import 'package:utils/utils.dart';
-
 class AddRenewalRequest {
 
   int? idCustomer;
@@ -8,7 +5,7 @@ class AddRenewalRequest {
   int? idNewLoan;
   DateTime? date;
   double? variationInAmount;
-  int? idTypeRenewal;
+  String? idTypeRenewal;
   String? observation;
 
   AddRenewalRequest({
@@ -21,8 +18,13 @@ class AddRenewalRequest {
     this.observation,
   });
 
-  bool get validate {
-    return [idCustomer, idNewLoan, idPreviousLoan, date, variationInAmount, idTypeRenewal].contains(null).not();
+  String? get validate {
+    if (idCustomer == null) return 'Seleccione un cliente';
+    if (idNewLoan == null) return 'Seleccione un nuevo crédito';
+    if (date == null) return 'Fecha de renovación es necesaria';
+    if (variationInAmount == null) return 'Variación es necesaria';
+    if (idTypeRenewal == null) return 'Tipo de renovación es necesario.';
+    return null;
   }
 
   Map<String, dynamic> toJson() => {

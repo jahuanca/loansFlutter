@@ -1,16 +1,16 @@
 class RenewalEntity {
 
   int idUser;
-  int idPreviousLoan;
+  int? idPreviousLoan;
   int idNewLoan;
   DateTime date;
   double variationInAmount;
-  int idTypeRenewal;
+  String idTypeRenewal;
   String? observation;
 
   RenewalEntity({
     required this.idUser,
-    required this.idPreviousLoan,
+    this.idPreviousLoan,
     required this.idNewLoan,
     required this.date,
     required this.variationInAmount,
@@ -23,7 +23,7 @@ class RenewalEntity {
     idPreviousLoan: json['id_previous_loan'], 
     idNewLoan: json['id_new_loan'], 
     date: DateTime.parse(json['date']), 
-    variationInAmount: json['variation_in_amount'], 
+    variationInAmount: (json['variation_in_amount'] as num).toDouble(), 
     idTypeRenewal: json['id_type_renewal']);
 
   Map<String, dynamic> toJson() => {

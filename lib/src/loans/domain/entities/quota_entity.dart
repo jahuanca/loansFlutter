@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final quotaEntity = quotaEntityFromJson(jsonString);
-
 import 'dart:convert';
 
 List<QuotaEntity> quotaEntityFromJson(String str) => List<QuotaEntity>.from(

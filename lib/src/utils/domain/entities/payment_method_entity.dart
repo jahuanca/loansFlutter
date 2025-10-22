@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final paymentMethodEntity = paymentMethodEntityFromJson(jsonString);
-
 import 'dart:convert';
 
 List<PaymentMethodEntity> paymentMethodEntityFromJson(String str) => List<PaymentMethodEntity>.from(json.decode(str).map((x) => PaymentMethodEntity.fromJson(x)));

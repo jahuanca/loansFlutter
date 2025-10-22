@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final paymentFrequencyEntity = paymentFrequencyEntityFromJson(jsonString);
-
 import 'dart:convert';
 
 List<PaymentFrequencyEntity> paymentFrequencyEntityFromJson(String str) =>
@@ -13,6 +9,7 @@ String paymentFrequencyEntityToJson(List<PaymentFrequencyEntity> data) =>
 
 class PaymentFrequencyEntity {
   int? id;
+  int? idTypeCustomer;
   String name;
   String? description;
   double recommendedPercentage;
@@ -24,6 +21,7 @@ class PaymentFrequencyEntity {
   PaymentFrequencyEntity({
     this.id,
     required this.name,
+    required this.idTypeCustomer,
     this.description,
     required this.recommendedPercentage,
     required this.monthlyInstallments,
@@ -37,6 +35,7 @@ class PaymentFrequencyEntity {
   factory PaymentFrequencyEntity.fromJson(Map<String, dynamic> json) =>
       PaymentFrequencyEntity(
         id: json["id"],
+        idTypeCustomer: json["id_type_customer"],
         name: json["name"],
         description: json["description"],
         recommendedPercentage:
@@ -49,6 +48,7 @@ class PaymentFrequencyEntity {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "id_type_customer": idTypeCustomer,
         "name": name,
         "description": description,
         "recommended_percentage": recommendedPercentage,
