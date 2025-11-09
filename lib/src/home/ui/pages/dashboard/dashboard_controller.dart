@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/home/domain/use_cases/get_summary_of_dasboard
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/error/error_service.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
@@ -48,6 +49,8 @@ class DashboardController extends GetxController {
         await getLogsUseCase.execute();
     if (resultType is Success) {
       logs = resultType.data;
+    } else {
+      showError(context: Get.context!, errorEntity: resultType.error);
     }
   }
 
@@ -59,6 +62,8 @@ class DashboardController extends GetxController {
       if (updateDateSelected) {
         dateSelected = defaultDate;
       }
+    } else {
+      showError(context: Get.context!, errorEntity: resultType.error);
     }
     await getQuotasByDay(dateSelected);
   }
@@ -67,27 +72,21 @@ class DashboardController extends GetxController {
     dateSelected = dateTime;
     update([calendarIdGet]);
     showLoading();
-    GetQuotasByDateRequest request = GetQuotasByDateRequest(
-      fromDate: dateTime,
-      untilDate: dateTime
-    );
+    GetQuotasByDateRequest request =
+        GetQuotasByDateRequest(fromDate: dateTime, untilDate: dateTime);
     ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getQuotasByDateUseCase.execute(request);
     if (resultType is Success) {
       quotasByDate = resultType.data;
       update([quotasIdGet]);
     } else {
-      ErrorEntity errorEntity = resultType.error;
-      showSnackbarWidget(
-          typeSnackbar: TypeSnackbar.error,
-          context: Get.context!,
-          message: errorEntity.errorMessage);
+      showError(context: Get.context!, errorEntity: resultType.error);
     }
     hideLoading();
   }
 
   void goToPaymentSummary() {
-    Get.to(()=> PaymentSummaryPage(), binding: PaymentSummaryBinding());
+    Get.to(() => PaymentSummaryPage(), binding: PaymentSummaryBinding());
   }
 
   void changeDatePicker(DateTime? dateTime) {
