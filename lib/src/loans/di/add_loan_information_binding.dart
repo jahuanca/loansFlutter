@@ -31,7 +31,7 @@ class AddLoanInformationBinding extends Bindings {
     Get.lazyReplace<UtilsRepository>(() => UtilsRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut<LoanRepository>(() => LoanRepositoryImplementation(datastore: Get.find()));
     
-    Get.lazyReplace(() => GetCustomersUseCase(repository: Get.find()));
+    Get.lazyReplace(() => GetCustomersUseCase(Get.find()));
     Get.lazyReplace(() => GetPaymentMethodsUseCase(repository: Get.find()));
     Get.lazyReplace(() => GetPaymentFrequenciesUseCase(repository: Get.find()));
     Get.lazyReplace(() => ValidateLoanUseCase(repository: Get.find()));

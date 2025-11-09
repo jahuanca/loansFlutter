@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
-import 'package:loands_flutter/src/customers/di/get_customer_analytics_binding.dart';
+import 'package:loands_flutter/src/customers/di/customer_analytics_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
@@ -50,7 +50,7 @@ class CustomersController extends GetxController {
 
   void goToCustomerAnalytic() {
     Get.to(() => CustomerAnalyticsPage(),
-        binding: GetCustomerAnalyticsBinding(),
+        binding: CustomerAnalyticsBinding(),
         arguments: {customersArgument: customers});
   }
 

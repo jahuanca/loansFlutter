@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
+import 'package:loands_flutter/src/customers/di/customer_analytics_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
+import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
@@ -162,7 +164,7 @@ class AddLoanInformationController extends GetxController {
             (e) => e.idTypeCustomer == customerSelected?.idTypeCustomer,
           )
           .toList();
-      update([frequenciesIdGet]);
+      update([frequenciesIdGet, customerIdGet]);
     }
   }
 
@@ -288,6 +290,17 @@ class AddLoanInformationController extends GetxController {
 
   Future<void> goAddCustomer() async {
     await Get.to(() => AddCustomerPage(), binding: AddCustomerBinding());
+    getCustomers();
+  }
+
+  Future<void> goCustomerAnalytics() async {
+    await Get.to(
+      () => CustomerAnalyticsPage(), 
+      binding: CustomerAnalyticsBinding(),
+      arguments: {
+        customerArgument: customerSelected
+      }
+    );
     getCustomers();
   }
 

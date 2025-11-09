@@ -12,7 +12,7 @@ class CustomersBinding extends Bindings {
     
     Get.lazyReplace<CustomerDatastore>(() => CustomerOnlineDatastore());
     Get.lazyReplace<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
-    Get.lazyPut(() => GetCustomersUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetCustomersUseCase(Get.find()));
   }
 
 }

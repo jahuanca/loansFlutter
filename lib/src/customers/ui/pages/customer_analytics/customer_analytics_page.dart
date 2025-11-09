@@ -7,6 +7,7 @@ import 'package:utils/utils.dart';
 class CustomerAnalyticsPage extends StatelessWidget {
   final CustomerAnalyticsController controller = CustomerAnalyticsController(
     getCustomerAnalyticsUseCase: Get.find(),
+    getCustomersUseCase: Get.find(),
   );
 
   CustomerAnalyticsPage({super.key});

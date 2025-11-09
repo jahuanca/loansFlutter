@@ -1,17 +1,8 @@
 FEATS:
     * Necesito saber cuantos creditos nuevos se activaron 
         y cuantos se renovaron con aumento.
-    * Necesito que una vez creado el préstamo se copie automaticamente su información.
+    * Necesito que una vez creado el préstamo se copie automaticamente su información para prestamos especiales.
+    * Necesito agregar el boton de analiticas en crear prestamo para obtener la informacion del cliente en un solo lado.
+    
 
-
-
- PUEDO CREAR UNA TABLA DE RENOVACIONES, PAGAR Y RENOVAR, PARA SABER LOS MOVIMIENTOS ENTRE
-    PRESTAMOS RENOVADOS, CREAR UNA ETIQUETA EN EL PRESTAMO PARA SABER SI ES NUEVO O RENOVADO.
-
-    DEBATE ENTRE CREAR UNA TABLA RENOVACIONES
-
-    O SOLO CREAR UN PARAMETRO LOAN_RELATED, SI TIENE ES RENOVADO, SI NO LO TIENE ES NUEVO.
-
-    CREAR UN METODO VALIDATE PARA QUE VALIDE SI AL CREAR EL PRESTAMO NO EXISTIA YA UNO ANTERIOR
-    PARA QUE SEA TOMADO COMO RENOVACION.
     

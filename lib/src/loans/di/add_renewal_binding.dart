@@ -21,7 +21,7 @@ class AddRenewalBinding extends Bindings {
     Get.lazyPut<RenewalRepository>(() => RenewalRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
 
-    Get.lazyPut(() => GetCustomersUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetCustomersUseCase(Get.find()));
     Get.lazyPut(() => GetMetadataRenewalUseCase(Get.find()));
     Get.lazyPut(() => AddRenewalUseCase(repository: Get.find()));
   }

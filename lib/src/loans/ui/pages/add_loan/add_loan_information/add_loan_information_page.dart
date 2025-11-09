@@ -7,7 +7,6 @@ import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanInformationPage extends StatelessWidget {
-
   final AddLoanInformationController controller = AddLoanInformationController(
     getCustomersUseCase: Get.find(),
     getPaymentFrequenciesUseCase: Get.find(),
@@ -43,11 +42,12 @@ class AddLoanInformationPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      flex: 5,
+                      flex: 3,
                       child: GetBuilder<AddLoanInformationController>(
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
-                                initialValue: controller.addLoanRequest.idCustomer,
+                                initialValue:
+                                    controller.addLoanRequest.idCustomer,
                                 focusNode: focusNodeCustomer,
                                 hintText: selectTheCustomer,
                                 label: customerString,
@@ -57,9 +57,25 @@ class AddLoanInformationPage extends StatelessWidget {
                               )),
                     ),
                     Expanded(
-                        child: IconButtonWidget(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButtonWidget(
                             onPressed: controller.goAddCustomer,
-                            iconData: Icons.add))
+                            iconData: Icons.add),
+                        GetBuilder<AddLoanInformationController>(
+                          id: customerIdGet,
+                          builder: (controller) => ChildOrElseWidget(
+                              condition: controller.customerSelected != null,
+                              child: IconButtonWidget(
+                                  onPressed: controller.goCustomerAnalytics,
+                                  backgroundColor: infoColor(),
+                                  iconData: Icons.analytics),
+                                  
+                              ),
+                        )
+                      ],
+                    ))
                   ],
                 ),
                 GetBuilder<AddLoanInformationController>(

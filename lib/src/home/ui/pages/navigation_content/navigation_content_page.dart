@@ -25,7 +25,7 @@ class NavigationContentPage extends StatelessWidget {
   final List<Widget> _pages = [
     DashboardPage(),
     HomeCalendarPage(),
-    LoansPage(),
+    LoansPage(tag: 'allLoans',),
     CustomersPage(),
     const HomeSettingsPage(),
   ];

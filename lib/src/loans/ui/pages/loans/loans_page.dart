@@ -7,13 +7,14 @@ import 'package:utils/utils.dart';
 
 class LoansPage extends StatelessWidget {
 
+  final String tag;
   final LoansController controller = LoansController(
     getLoansUseCase: Get.find(),
   );
   final TextEditingController searchController = TextEditingController();
   final FocusNode searchFocusNode = FocusNode();
 
-  LoansPage({super.key});
+  LoansPage({super.key, required this.tag});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class LoansPage extends StatelessWidget {
 
     return GetBuilder<LoansController>(
       init: controller,
+      tag: tag,
       id: pageIdGet,
       builder: (controller) => RefreshIndicator(
         onRefresh: controller.getLoans,
