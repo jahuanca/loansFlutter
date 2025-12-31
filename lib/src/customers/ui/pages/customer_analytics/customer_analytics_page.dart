@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/data/responses/customer_analytics_response.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_controller.dart';
+import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/cartesian_mapper.dart';
+import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:utils/utils.dart';
 
 class CustomerAnalyticsPage extends StatelessWidget {
@@ -102,10 +105,12 @@ class CustomerAnalyticsPage extends StatelessWidget {
     );
 
     return ChildOrElseWidget(
-        condition: controller.response != null, child: Column(
+        condition: controller.response != null,
+        child: Column(
           children: [
             content,
             _buttonOfSearchLoans(),
+            if (controller.response != null) _chart(),
           ],
         ));
   }
@@ -135,8 +140,21 @@ class CustomerAnalyticsPage extends StatelessWidget {
 
   Widget _buttonOfSearchLoans() {
     return ButtonWidget(
-      padding: defaultPadding,
-      onTap: controller.goAllLoans,
-      text: 'Ver préstamos');
+        padding: defaultPadding,
+        onTap: controller.goAllLoans,
+        text: 'Ver préstamos');
+  }
+
+  Widget _chart() {
+    List<LoanEntity> loans = controller.response?.loans ?? [];
+
+    return Center(
+        child: SfCartesianChart(
+      title: const ChartTitle(text: 'Avance de préstamos'),
+      legend: const Legend(isVisible: false),
+      series: CartesianMapper.getDefaultData(loans),
+      primaryXAxis: const CategoryAxis(),
+      tooltipBehavior: TooltipBehavior(enable: true),
+    ));
   }
 }

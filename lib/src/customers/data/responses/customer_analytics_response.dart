@@ -1,4 +1,8 @@
 
+import 'dart:convert';
+
+import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
+
 class CustomerAnalyticsResponse {
 
   int idCustomer;
@@ -7,6 +11,7 @@ class CustomerAnalyticsResponse {
   DateTime startDate;
   int loansInProgress;
   double amountInProgress;
+  List<LoanEntity> loans;
 
   CustomerAnalyticsResponse({
     required this.idCustomer,
@@ -15,6 +20,7 @@ class CustomerAnalyticsResponse {
     required this.startDate,
     required this.loansInProgress,
     required this.amountInProgress,
+    required this.loans,
   });
 
   factory CustomerAnalyticsResponse.fromJson(Map<String, dynamic> json) => CustomerAnalyticsResponse(
@@ -24,6 +30,7 @@ class CustomerAnalyticsResponse {
     loansInProgress: json['loans_in_progress'],
     amountInProgress: (json['amount_in_progress'] as num).toDouble(),
     startDate: DateTime.parse(json['start_date']),
+    loans: List<LoanEntity>.from(json["loans"].map((x) => LoanEntity.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -33,5 +40,6 @@ class CustomerAnalyticsResponse {
     'loans_in_progress': loansInProgress,
     'amount_in_progress': amountInProgress,
     'start_date': startDate,
+    'loans': List<dynamic>.from(loans.map((x) => x.toJson())),
   };
 }

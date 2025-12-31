@@ -16,6 +16,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.4
   utils:
     git: https://github.com/jahuanca/utilsFlutter
+  syncfusion_flutter_charts: ^32.1.20
 
 dev_dependencies:
   flutter_test:

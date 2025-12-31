@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/customers/di/customer_analytics_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
+import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_renewal_request.dart';
 import 'package:loands_flutter/src/loans/data/responses/get_metadata_renewal_response.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
@@ -10,6 +12,7 @@ import 'package:loands_flutter/src/loans/domain/use_cases/add_renewal_use_case.d
 import 'package:loands_flutter/src/loans/domain/use_cases/get_metadata_renewal_use_case.dart';
 import 'package:loands_flutter/src/utils/core/enums_of_app.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
@@ -172,8 +175,10 @@ class AddRenewalController extends GetxController {
       message: 'Renovación vinculada.');
 
     clearInputs();
-    // ME QUEDE EN EL 14: LILIANA CONSUELO
+    // ME QUEDE EN EL 11: VICTOR FLORES
   }
+
+  
 
   Future<void> goRefresh() async {
     clearInputs();
@@ -194,6 +199,16 @@ class AddRenewalController extends GetxController {
     customerTextController.clear();
     
     update([pageIdGet]);
+  }
+
+  Future<void> goCustomerAnalytics() async {
+    await Get.to(
+      () => CustomerAnalyticsPage(), 
+      binding: CustomerAnalyticsBinding(),
+      arguments: {
+        customerArgument: customerSelected
+      }
+    );
   }
 
 }

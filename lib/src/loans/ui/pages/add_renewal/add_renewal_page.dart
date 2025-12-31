@@ -26,7 +26,11 @@ class AddRenewalPage extends StatelessWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                DropdownMenuWidget(
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: DropdownMenuWidget(
                   controller: controller.customerTextController,
                   initialValue: controller.customerSelected?.id,
                   items: controller.customers.map((e) => e.toDropdown()).toList(),
@@ -34,6 +38,17 @@ class AddRenewalPage extends StatelessWidget {
                   hintText: selectTheCustomer,
                   label: customerString,
                   onChanged: controller.onChangedCustomer,
+                ),),
+                  Expanded(
+                    flex: 1,
+                    child: ChildOrElseWidget(
+                      condition: controller.customerSelected != null, 
+                      child: IconButtonWidget(
+                        onPressed: controller.goCustomerAnalytics,
+                        iconData: Icons.analytics),),
+                  )
+            
+                  ],
                 ),
                 GetBuilder<AddRenewalController>(
                   id: 'loans_new',

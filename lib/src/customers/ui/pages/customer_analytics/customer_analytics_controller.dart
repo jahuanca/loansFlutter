@@ -35,6 +35,9 @@ class CustomerAnalyticsController extends GetxController {
     List<CustomerEntity>? customersOfArgument  = Get.setArgument(customersArgument);
     if (customersOfArgument == null) {
       await getCustomers();
+    } else {
+      customers = customersOfArgument;
+      update([pageIdGet]);
     }
     CustomerEntity? customerOfArgument = Get.setArgument(customerArgument);
     if (customerOfArgument != null) {
@@ -73,7 +76,7 @@ class CustomerAnalyticsController extends GetxController {
     }
   }
 
-  void goAllLoans(){
+  void goAllLoans() {
     Get.to(()=> LoansPage(tag: 'loans_${customerSelected?.id}'), binding: LoansBinding(), arguments: {
       getLoansRequestArgument: GetLoansRequest(
         idCustomer: customerSelected?.id,
