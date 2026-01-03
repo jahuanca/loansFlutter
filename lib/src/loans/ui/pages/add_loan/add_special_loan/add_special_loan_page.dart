@@ -12,6 +12,7 @@ class AddSpecialLoanPage extends StatelessWidget {
     getPaymentFrequenciesUseCase: Get.find(),
     getPaymentMethodsUseCase: Get.find(),
     validateLoanUseCase: Get.find(),
+    getLoanUseCase: Get.find(),
   );
 
   final FocusNode customerFocusNode = FocusNode();
@@ -46,6 +47,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
                                 focusNode: customerFocusNode,
+                                initialValue: controller.addSpecialLoanRequest.idCustomer,
                                 hintText: selectTheCustomer,
                                 label: customerString,
                                 items: controller.customers,
@@ -80,6 +82,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: numberOfInstallmentsIdGet,
                   builder: (controller) => InputWidget(
+                    textEditingController: controller.numberOfInstallmentsTextController,
                     hintText: 'Número de cuotas',
                     label: 'Cuotas',
                     icon: const Icon(Icons.numbers),
@@ -90,6 +93,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: daysBetweenInstallmentsIdGet,
                   builder: (controller) => InputWidget(
+                      textEditingController: controller.daysBetweenInstallmentsTextController,
                       onChanged: controller.onChangeDaysBetweenInstallments,
                       textInputType: TextInputType.number,
                       hintText: 'Ingrese dias por cuota',
@@ -98,6 +102,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: amountIdGet,
                   builder: (controller) => InputWidget(
+                    textEditingController: controller.amountTextController,
                     hintText: 'Ingrese el monto',
                     label: amountString,
                     icon: const Icon(Icons.monetization_on),
@@ -108,6 +113,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: percentageIdGet,
                   builder: (controller) => InputWidget(
+                      textEditingController: controller.percentageTextController,
                       onChanged: controller.onChangedPercentage,
                       hintText: 'Ingrese un porcentaje',
                       label: percentageString),

@@ -11,11 +11,11 @@ class HomeCalendarBinding extends Bindings {
   
   @override
   void dependencies() {
-    Get.lazyReplace<SummaryDatastore>(() => SummaryOnlineDatastore());
-    Get.lazyReplace<SummaryRepository>(
+    Get.lazyPut<SummaryDatastore>(() => SummaryOnlineDatastore());
+    Get.lazyPut<SummaryRepository>(
         () => SummaryRepositoryImplementation(datastore: Get.find()));
-    Get.lazyReplace(() => GetSummaryOfCalendarUseCase(repository: Get.find()));
-    Get.lazyReplace(() => GetQuotasByDateUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetSummaryOfCalendarUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetQuotasByDateUseCase(repository: Get.find()));
     Get.lazyReplace(() => PayQuotaUseCase(repository: Get.find()), fenix: true);
   }
 }

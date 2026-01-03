@@ -9,9 +9,9 @@ class QuotaGroupBinding extends Bindings {
   
   @override
   void dependencies() {
-    Get.lazyReplace<QuotaDatastore>(() => QuotaOnlineDatastore());
-    Get.lazyReplace<QuotaRepository>(
+    Get.lazyPut<QuotaDatastore>(() => QuotaOnlineDatastore());
+    Get.lazyPut<QuotaRepository>(
         () => QuotaRepositoryImplementation(datastore: Get.find()));
-    Get.lazyReplace(() => GetAllQuotasUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetAllQuotasUseCase(repository: Get.find()));
   }
 }

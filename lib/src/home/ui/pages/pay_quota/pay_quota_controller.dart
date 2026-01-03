@@ -4,9 +4,12 @@ import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/pay_quota_use_case.dart';
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_special_request.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_information_binding.dart';
+import 'package:loands_flutter/src/loans/di/add_loan_special_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_page.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan/add_special_loan_page.dart';
 import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
@@ -17,8 +20,9 @@ import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaController extends GetxController {
-
   late SourceToLoanEnum sourceToLoanEnum;
+  late bool isSpecial;
+
   DashboardQuotaResponse? quota;
   PayQuotaUseCase payQuotaUseCase;
   TextEditingController dateToPayTextController = TextEditingController();
@@ -96,17 +100,47 @@ class PayQuotaController extends GetxController {
     bool goAction = await _goAction(
         'Se pagará la cuota y renovara el préstamo, ¿desea continuar?');
     if (goAction) {
-      AddLoanInformationBinding().dependencies();
-      Get.to(AddLoanInformationPage(),
-          arguments: {
-            sourceToLoanArgument: sourceToLoanEnum,
-            createRenewalRequestArgument: PayAndRenewalRequest(
-              idLoanToRenew: quota?.idLoan,
-              paidDate: payQuotaRequest.paidDate,
-              idOfQuota: payQuotaRequest.idOfQuota,
-            )
-          });
+      if (quota!.isSpecial.orFalse()) {
+        goToNewSpecialLoan();
+      } else {
+        goToNewRegularLoan();
+      }
     }
+  }
+
+  void goToNewRegularLoan() {
+    Map<String, dynamic> arguments = {
+      sourceToLoanArgument: sourceToLoanEnum,
+      createRenewalRequestArgument: PayAndRenewalRequest(
+        idLoanToRenew: quota?.idLoan,
+        paidDate: payQuotaRequest.paidDate,
+        idOfQuota: payQuotaRequest.idOfQuota,
+      )
+    };
+
+    AddLoanInformationBinding().dependencies();
+
+    Get.to(AddLoanInformationPage(), 
+      arguments: arguments,
+    );
+  }
+
+  void goToNewSpecialLoan() {
+    Map<String, dynamic> arguments = {
+      sourceToLoanArgument: sourceToLoanEnum,
+      createRenewalRequestArgument: PayAndRenewalSpecialRequest(
+        idLoanToRenew: quota?.idLoan,
+        paidDate: payQuotaRequest.paidDate,
+        idOfQuota: payQuotaRequest.idOfQuota,
+      )
+    };
+
+    AddLoanSpecialBinding().dependencies();
+
+    Get.to(
+      AddSpecialLoanPage(),
+      arguments: arguments,
+    );
   }
 
   Future<void> updateQuotaAndCopy(QuotaEntity quotaUpdated) async {

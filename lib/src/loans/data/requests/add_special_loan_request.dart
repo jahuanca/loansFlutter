@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.d
 import 'package:utils/utils.dart';
 
 class AddSpecialLoanRequest {
+  int? id;
   int? idCustomer;
   int? idPaymentFrequency;
   int? idPaymentMethod;
@@ -19,6 +20,7 @@ class AddSpecialLoanRequest {
   PaymentMethodEntity? paymentMethodEntity;
 
   AddSpecialLoanRequest({
+    this.id,
     this.idCustomer,
     this.idPaymentFrequency,
     this.idPaymentMethod,
@@ -76,6 +78,7 @@ class AddSpecialLoanRequest {
   }
 
   factory AddSpecialLoanRequest.fromJson(Map<String, dynamic> json) => AddSpecialLoanRequest(
+    id: json['id'],
     idCustomer: json['id_customer'],
     idPaymentFrequency: json['id_payment_frequency'],
     idPaymentMethod: json['id_payment_method'],
@@ -90,6 +93,7 @@ class AddSpecialLoanRequest {
   );
 
   Map<String, dynamic> toJson() => {
+    'id': id,
     'id_customer': idCustomer,
     'id_payment_frequency': idOfSpecialFrequency,
     'id_payment_method': idPaymentMethod,

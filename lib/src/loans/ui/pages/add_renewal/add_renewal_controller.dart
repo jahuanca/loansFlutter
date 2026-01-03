@@ -178,8 +178,6 @@ class AddRenewalController extends GetxController {
     // ME QUEDE EN EL 11: VICTOR FLORES
   }
 
-  
-
   Future<void> goRefresh() async {
     clearInputs();
     getCustomers();

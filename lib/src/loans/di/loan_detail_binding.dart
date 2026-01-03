@@ -20,7 +20,7 @@ class LoanDetailBinding extends Bindings {
       () => GetAllQuotasUseCase(repository: Get.find()),
     );
 
-    Get.lazyReplace(() => LoanDetailController(
+    Get.lazyPut(() => LoanDetailController(
           getAllQuotasUseCase: Get.find(),
         ));
   }

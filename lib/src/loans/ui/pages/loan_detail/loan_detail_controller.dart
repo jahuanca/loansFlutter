@@ -37,7 +37,7 @@ class LoanDetailController extends GetxController {
 
   Future<void> getQuotas() async {
     showLoading();
-    
+
     GetAllQuotasRequest request = GetAllQuotasRequest(
       idLoan: loanSelected?.id,
     );
@@ -53,7 +53,8 @@ class LoanDetailController extends GetxController {
   }
 
   Future<void> goToPayQuota() async {
-    QuotaEntity? quota = quotas.firstWhereOrNull((e) => e.idStateQuota == idOfPendingQuota);
+    QuotaEntity? quota =
+        quotas.firstWhereOrNull((e) => e.idStateQuota == idOfPendingQuota);
     if (quota == null) {
       showSnackbarWidget(
           context: Get.context!,
@@ -66,34 +67,35 @@ class LoanDetailController extends GetxController {
         context: Get.context!,
         message:
             '¿Desea iniciar el pago de la cuota ${quota.name}, Vence: ${quota.dateToPay.formatDMMYYY()}?');
-    if (result == false) return;
+    if (!result) return;
+    if (loanSelected?.isSpecial == null) return;
 
     DashboardQuotaResponse dashboardQuotaResponse = DashboardQuotaResponse(
-          id: quota.id!,
-          idLoan: quota.idLoan!,
-          name: quota.name,
-          customerName: loanSelected?.customerEntity?.fullName ?? emptyString,
-          amount: quota.amount,
-          ganancy: quota.ganancy,
-          idStateQuota: quota.idStateQuota,
-          dateToPay: quota.dateToPay,
-          paidDate: quota.paidDate,
-        );
+      id: quota.id!,
+      idLoan: quota.idLoan!,
+      name: quota.name,
+      customerName: loanSelected?.customerEntity?.fullName ?? emptyString,
+      amount: quota.amount,
+      ganancy: quota.ganancy,
+      idStateQuota: quota.idStateQuota,
+      dateToPay: quota.dateToPay,
+      paidDate: quota.paidDate,
+      isSpecial: loanSelected!.isSpecial,
+    );
 
-    QuotaEntity? quotaPaid = await Get.to<QuotaEntity>(
-      () => PayQuotaPage(), arguments: {
+    QuotaEntity? quotaPaid =
+        await Get.to<QuotaEntity>(() => PayQuotaPage(), arguments: {
       sourceToLoanArgument: SourceToLoanEnum.listLoans,
       dashboardQuotaResponseArgument: dashboardQuotaResponse,
     });
-    
-    if(quotaPaid != null) getQuotas();
+
+    if (quotaPaid != null) getQuotas();
   }
 
   void goShareInformation() async {
     if (loanSelected == null) return;
     shareInformation(
-      addLoanRequest: AddLoanRequest.fromLoanEntity(loanSelected!), 
-      quotas: quotas
-    );
+        addLoanRequest: AddLoanRequest.fromLoanEntity(loanSelected!),
+        quotas: quotas);
   }
 }

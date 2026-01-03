@@ -5,18 +5,25 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_special_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/di/add_special_loan_quotas_binding.dart';
+import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
+import 'package:loands_flutter/src/loans/domain/use_cases/get_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan_quotas/add_special_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencies_use_case.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_methods_use_case.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
 class AddSpecialLoanController extends GetxController {
@@ -24,6 +31,7 @@ class AddSpecialLoanController extends GetxController {
   GetPaymentFrequenciesUseCase getPaymentFrequenciesUseCase;
   GetPaymentMethodsUseCase getPaymentMethodsUseCase;
   ValidateLoanUseCase validateLoanUseCase;
+  GetLoanUseCase getLoanUseCase;
 
   List<CustomerEntity> customers = [];
   List<PaymentFrequencyEntity> frequencies = [];
@@ -37,6 +45,9 @@ class AddSpecialLoanController extends GetxController {
   TextEditingController percentageTextController = TextEditingController();
   TextEditingController ganancyTextController = TextEditingController();
   TextEditingController startDateTextController = TextEditingController();
+  TextEditingController amountTextController = TextEditingController();
+  TextEditingController numberOfInstallmentsTextController = TextEditingController();
+  TextEditingController daysBetweenInstallmentsTextController = TextEditingController();
 
   ValidateResult? startDateValidationResult,
       idCustomerValidationResult,
@@ -46,12 +57,24 @@ class AddSpecialLoanController extends GetxController {
       numberOfInstallmentsValidationResult,
       daysBetweenInstallmentsValidationResult;
 
+  PayAndRenewalSpecialRequest? createRenewalSpecialRequest;
+  late SourceToLoanEnum sourceToLoanEnum;
+
   AddSpecialLoanController({
     required this.getCustomersUseCase,
     required this.getPaymentFrequenciesUseCase,
     required this.getPaymentMethodsUseCase,
     required this.validateLoanUseCase,
+    required this.getLoanUseCase,
   });
+
+  @override
+  void onInit() {
+    sourceToLoanEnum =
+        Get.setArgument(sourceToLoanArgument) ?? SourceToLoanEnum.normal;
+    createRenewalSpecialRequest = Get.setArgument(createRenewalRequestArgument);
+    super.onInit();
+  }
 
   @override
   void onReady() {
@@ -60,11 +83,16 @@ class AddSpecialLoanController extends GetxController {
   }
 
   void getData() async {
+    showLoading();
     await Future.wait([
       getCustomers(),
       getPaymentFrecuencies(),
       getMethodsPayment(),
     ]);
+    if (createRenewalSpecialRequest != null) {
+      await getLoanToRenew();
+    }
+    hideLoading();
   }
 
   Future<void> getCustomers() async {
@@ -95,6 +123,39 @@ class AddSpecialLoanController extends GetxController {
     update([methodsIdGet]);
   }
 
+  Future<void> getLoanToRenew() async {
+
+    final request = GetLoanRequest(id: createRenewalSpecialRequest?.idLoanToRenew);
+
+    ResultType<LoanEntity, ErrorEntity> resultType = await getLoanUseCase.execute(request);
+    if (resultType is Success) {
+      setLoanToRenew(resultType.data as LoanEntity);
+    }
+  }
+
+  void setLoanToRenew(LoanEntity loanToRenew) {
+    onChangedCustomer(loanToRenew.idCustomer);
+
+    onChangeAmount(loanToRenew.amount.toString());
+    String amount = loanToRenew.amount.formatDecimals();
+    String percentage = loanToRenew.percentage.formatDecimals();
+    String numberOfInstallments = loanToRenew.installmentsNumber.toString();
+    String daysBetweenInstallments = loanToRenew.daysBetweenInstallments.toString();
+    
+
+    amountTextController = TextEditingController(text: amount);
+    percentageTextController = TextEditingController(text: percentage);
+    numberOfInstallmentsTextController = TextEditingController(text: numberOfInstallments);
+    daysBetweenInstallmentsTextController = TextEditingController(text: daysBetweenInstallments);
+
+    onChangedMethodsPayment(loanToRenew.idPaymentMethod);
+    onChangedPercentage(percentage);
+    onChangeAmount(amount);
+    onChangeNumberOfInstallments(numberOfInstallments);
+    onChangeDaysBetweenInstallments(daysBetweenInstallments);
+    update([pageIdGet]);
+  }
+
   void onChangedCustomer(dynamic value) {
     idCustomerValidationResult =
         validateText(text: value, label: customerString, rules: {
@@ -106,6 +167,7 @@ class AddSpecialLoanController extends GetxController {
     );
     if (index != notFoundPosition) {
       addSpecialLoanRequest.idCustomer = idCustomerValidationResult?.value;
+      addSpecialLoanRequest.customerEntity = customerSelected;
       customerSelected = customers[index];
     }
   }
@@ -250,6 +312,7 @@ class AddSpecialLoanController extends GetxController {
         binding: AddSpecialLoanQuotasBinding(),
         arguments: {
           addLoanRequestArgument: addSpecialLoanRequest,
+          createRenewalRequestArgument: createRenewalSpecialRequest,
         });
   }
 

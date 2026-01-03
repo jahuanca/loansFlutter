@@ -16,17 +16,17 @@ class DashboardBinding extends Bindings {
   
   @override
   void dependencies() {
-    Get.lazyReplace<SummaryDatastore>(() => SummaryOnlineDatastore());
-    Get.lazyReplace<UtilsDatastore>(() => UtilsOnlineDatastore());
+    Get.lazyPut<SummaryDatastore>(() => SummaryOnlineDatastore());
+    Get.lazyPut<UtilsDatastore>(() => UtilsOnlineDatastore());
 
-    Get.lazyReplace<SummaryRepository>(
+    Get.lazyPut<SummaryRepository>(
         () => SummaryRepositoryImplementation(datastore: Get.find()));    
-    Get.lazyReplace<UtilsRepository>(
+    Get.lazyPut<UtilsRepository>(
         () => UtilsRepositoryImplementation(datastore: Get.find()));
 
-    Get.lazyReplace(() => GetSummaryOfDasboardUseCase(repository: Get.find()));
-    Get.lazyReplace(() => GetQuotasByDateUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetSummaryOfDasboardUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetQuotasByDateUseCase(repository: Get.find()));
     Get.lazyReplace(() => PayQuotaUseCase(repository: Get.find()));
-    Get.lazyReplace(() => GetLogsUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetLogsUseCase(repository: Get.find()));
   }
 }

@@ -1,6 +1,4 @@
 
-import 'dart:convert';
-
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 
 class CustomerAnalyticsResponse {

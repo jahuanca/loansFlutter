@@ -19,7 +19,7 @@ class DashboardQuotaResponse {
   int idStateQuota;
   DateTime dateToPay;
   DateTime? paidDate;
-  
+  bool isSpecial;
 
   DashboardQuotaResponse({
     required this.id,
@@ -31,6 +31,7 @@ class DashboardQuotaResponse {
     required this.idStateQuota,
     required this.dateToPay,
     required this.paidDate,
+    required this.isSpecial,
     this.alias,
   });
 
@@ -48,6 +49,7 @@ class DashboardQuotaResponse {
       amount: (json["amount"] as num).toDouble(),
       ganancy: (json["ganancy"] as num).toDouble(),
       idStateQuota: json["id_state_quota"],
+      isSpecial: json['is_special'],
       dateToPay: DateTime.parse(json['date_to_pay']),
       paidDate: json['paid_date'] == null ? null : DateTime.tryParse(json['paid_date']),
     );
@@ -61,6 +63,7 @@ class DashboardQuotaResponse {
         "ganancy": ganancy,
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
+        'is_special': isSpecial,
         'date_to_pay': dateToPay.toIso8601String(),
         'paid_date': paidDate?.toIso8601String(),
       };

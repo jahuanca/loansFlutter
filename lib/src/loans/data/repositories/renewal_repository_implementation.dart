@@ -1,6 +1,7 @@
 
 import 'package:loands_flutter/src/loans/data/requests/add_renewal_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
+import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_special_request.dart';
 import 'package:loands_flutter/src/loans/data/responses/get_metadata_renewal_response.dart';
 import 'package:loands_flutter/src/loans/data/responses/pay_and_renewal_response.dart';
 import 'package:loands_flutter/src/loans/domain/datastores/renewal_datastore.dart';
@@ -36,6 +37,8 @@ class RenewalRepositoryImplementation extends RenewalRepository{
     return datastore.getMetadata(idCustomer);
   }
 
-
-
+  @override
+  Future<ResultType<PayAndRenewalResponse, ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request) {
+    return datastore.payAndRenewalSpecial(request);
+  }
 }

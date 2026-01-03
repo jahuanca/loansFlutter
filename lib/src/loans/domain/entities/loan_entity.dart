@@ -24,6 +24,8 @@ class LoanEntity {
     String evidence;
     DateTime createdAt;
     DateTime updatedAt;
+    int installmentsNumber;
+    int daysBetweenInstallments;
 
     CustomerEntity? customerEntity;
     PaymentFrequencyEntity? paymentFrequencyEntity;
@@ -43,6 +45,8 @@ class LoanEntity {
         required this.evidence,
         required this.createdAt,
         required this.updatedAt,
+        required this.installmentsNumber,
+        required this.daysBetweenInstallments,
         this.customerEntity,
         this.paymentFrequencyEntity,
     });
@@ -53,6 +57,8 @@ class LoanEntity {
 
     String get name => '#P$id - ${startDate.format(formatDate: 'dd MMM')}: S/ ${amount.formatDecimals()}, ${paymentFrequencyEntity?.name}';
     
+    bool get isSpecial => (idPaymentFrequency == idOfSpecialFrequency);
+
     factory LoanEntity.fromJson(Map<String, dynamic> json) => LoanEntity(
         id: json["id"],
         idCustomer: json["id_customer"],
@@ -66,6 +72,8 @@ class LoanEntity {
         observation: json["observation"],
         idStateLoan: json["id_state_loan"],
         evidence: json["evidence"],
+        installmentsNumber: json['number_of_installments'],
+        daysBetweenInstallments: json['days_between_installments'],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         customerEntity: json['Customer'] == null ? null : CustomerEntity.fromJson(json['Customer']),
@@ -85,6 +93,8 @@ class LoanEntity {
         "observation": observation,
         "id_state_loan": idStateLoan,
         "evidence": evidence,
+        'number_of_installments': installmentsNumber,
+        'days_between_installments': daysBetweenInstallments,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         'Customer': customerEntity?.toJson(),
