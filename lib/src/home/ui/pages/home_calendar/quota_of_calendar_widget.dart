@@ -8,31 +8,29 @@ class QuotaOfCalendarWidget extends StatelessWidget {
   final int idLoan;
   final String title;
   final String subtitle;
-  final String detail;
+  final String? detail;
   final double amount;
-  final int idStateQuota;
+  final int? idStateQuota;
   final bool isSelected;
 
   const QuotaOfCalendarWidget({
     super.key,
-    this.onTap,
-    this.onLongPress,
-    this.isSelected = false,
     required this.idLoan,
     required this.title,
     required this.subtitle,
     required this.amount,
-    required this.idStateQuota,
-    required this.detail,
+    this.idStateQuota,
+    this.onTap,
+    this.onLongPress,
+    this.isSelected = false,
+    this.detail,
   });
 
   @override
   Widget build(BuildContext context) {
 
-    StateQuotaEnum enumOfStateQuota = findStateQuotaEnum(idStateQuota);
+    StateQuotaEnum? enumOfStateQuota = findStateQuotaEnum(idStateQuota);
     String amountValue = amount.formatDecimals();
-    String nameStateQuota = enumOfStateQuota.name;
-    Color colorStateQuota = enumOfStateQuota.color;
 
     return Padding(
       padding: defaultPadding,
@@ -68,17 +66,19 @@ class QuotaOfCalendarWidget extends StatelessWidget {
                   children: [
                     Text('#P$idLoan: $title'),
                     Text(subtitle.orEmpty()),
+                    if (detail != null)
                     Text(detail.orEmpty()),
                   ],
                 ),
               ),
+              if (enumOfStateQuota != null)
               Expanded(
                   flex: 2,
                   child: TagWidget(
                       alignmentOfContent: MainAxisAlignment.center,
-                      backgroundColor: colorStateQuota,
+                      backgroundColor: enumOfStateQuota.color,
                       textColorAndIcon: Colors.white,
-                      title: nameStateQuota)),
+                      title: enumOfStateQuota.name)),
             ],
           ),
         ),

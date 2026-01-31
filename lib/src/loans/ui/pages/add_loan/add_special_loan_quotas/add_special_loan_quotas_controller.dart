@@ -139,19 +139,19 @@ class AddSpecialLoanQuotasController extends GetxController {
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {
     addLoanSpecialRequest.id = newLoan.id;
-    String information = shareInformationSpecial(
-      request: addLoanSpecialRequest,
-      quotas: quotas,
-    );
-    await copyToClipboard(information);
-    information += "\n";
+
     DashboardQuotaResponse quotaMapped = toDashboardResponse(
       newLoan: newLoan,
       quota: quota,
       customerName: addLoanSpecialRequest.customerEntity!.aliasOrFullName.orEmpty(),
       isSpecial: true,
     );
-    information += getInformationOfQuota(quotaMapped);
+    String information = getInformationOfQuota(quotaMapped);
+    information += "\n";
+    information += shareInformationSpecial(
+      request: addLoanSpecialRequest,
+      quotas: quotas,
+    );
     await copyToClipboard(information);
     showSnackbarWidget(
         context: Get.context!,

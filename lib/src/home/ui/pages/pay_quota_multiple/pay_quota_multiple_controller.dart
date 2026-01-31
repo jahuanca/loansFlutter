@@ -3,54 +3,31 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/pay_quota_use_case.dart';
-import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
-import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_special_request.dart';
-import 'package:loands_flutter/src/loans/di/add_loan_information_binding.dart';
-import 'package:loands_flutter/src/loans/di/add_loan_special_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_page.dart';
-import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan/add_special_loan_page.dart';
-import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
-import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
-import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
-class PayQuotaController extends GetxController {
-  late SourceToLoanEnum sourceToLoanEnum;
-  late bool isSpecial;
+class PayQuotaMultipleController extends GetxController {
+  bool isPending = true;
 
-  DashboardQuotaResponse? quota;
   PayQuotaUseCase payQuotaUseCase;
   TextEditingController dateToPayTextController = TextEditingController();
-
   PayQuotaRequest payQuotaRequest = PayQuotaRequest();
+  List<DashboardQuotaResponse> quotas = [];
 
-  PayQuotaController({
+  PayQuotaMultipleController({
     required this.payQuotaUseCase,
   });
 
-  bool get isPending => (quota?.idStateQuota == idOfPendingQuota);
-
-  bool get isLastQuota {
-    if (quota == null) return false;
-    List<String> parts = quota!.name.split('/');
-    return (parts.first == parts.last);
-  }
-
   @override
   void onInit() {
-    quota = Get.setArgument(dashboardQuotaResponseArgument);
-    sourceToLoanEnum = Get.setArgument(sourceToLoanArgument);
-    if (quota?.dateToPay != null) {
-      onChangedStartDate(quota?.dateToPay);
-    }
-    payQuotaRequest.idOfQuota = quota?.id;
+    quotas = Get.setArgument(quotasSelectedArgument);
     super.onInit();
+    update([pageIdGet]);
   }
 
   void onChangedStartDate(DateTime? date) {
@@ -100,70 +77,23 @@ class PayQuotaController extends GetxController {
     }
   }
 
-  void goPayQuotaAndRenewLoan() async {
-    bool goAction = await _goAction(
-        'Se pagará la cuota y renovara el préstamo, ¿desea continuar?');
-    if (goAction) {
-      if (quota!.isSpecial.orFalse()) {
-        goToNewSpecialLoan();
-      } else {
-        goToNewRegularLoan();
-      }
-    }
-  }
-
-  void goToNewRegularLoan() {
-    Map<String, dynamic> arguments = {
-      sourceToLoanArgument: sourceToLoanEnum,
-      createRenewalRequestArgument: PayAndRenewalRequest(
-        idLoanToRenew: quota?.idLoan,
-        paidDate: payQuotaRequest.paidDate,
-        idOfQuota: payQuotaRequest.idOfQuota,
-      )
-    };
-
-    AddLoanInformationBinding().dependencies();
-
-    Get.to(AddLoanInformationPage(), 
-      arguments: arguments,
-    );
-  }
-
-  void goToNewSpecialLoan() {
-    Map<String, dynamic> arguments = {
-      sourceToLoanArgument: sourceToLoanEnum,
-      createRenewalRequestArgument: PayAndRenewalSpecialRequest(
-        idLoanToRenew: quota?.idLoan,
-        paidDate: payQuotaRequest.paidDate,
-        idOfQuota: payQuotaRequest.idOfQuota,
-      )
-    };
-
-    AddLoanSpecialBinding().dependencies();
-
-    Get.to(
-      AddSpecialLoanPage(),
-      arguments: arguments,
-    );
-  }
-
   Future<void> updateQuotaAndCopy(QuotaEntity quotaUpdated) async {
-    quota!.paidDate = quotaUpdated.paidDate;
+    /* quota!.paidDate = quotaUpdated.paidDate;
     String information = getInformationOfQuota(quota!);
     await copyToClipboard(information);
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
-        message: 'Información copiada');
+        message: 'Información copiada');*/
   }
 
   Future<void> copyPaidQuota() async {
-    String information = getInformationOfQuota(quota!);
+    /*String information = getInformationOfQuota(quota!);
     await copyToClipboard(information);
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
-        message: 'Información copiada');
+        message: 'Información copiada');*/
   }
 
 }

@@ -25,4 +25,9 @@ enum StateQuotaEnum {
   final String name;
 }
 
-StateQuotaEnum findStateQuotaEnum(int idStateQuota) => StateQuotaEnum.values.firstWhere((e) => e.id == idStateQuota);
+StateQuotaEnum? findStateQuotaEnum(int? idStateQuota) {
+  if (idStateQuota == null) {
+    return null;
+  }
+  return StateQuotaEnum.values.firstWhere((e) => e.id == idStateQuota);
+}
