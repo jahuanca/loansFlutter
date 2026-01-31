@@ -56,7 +56,7 @@ class AddSpecialLoanRequest {
     ValidateResult validateGanancy =
         validateText(text: ganancy, label: ganancyString);
     ValidateResult validateStartDate =
-        validateText(text: startDate, label: startDateString);
+        validateText(text: startDate, label: startDateString, rules: {RuleValidator.isRequired: true});
     ValidateResult validateDaysBetweenInstallments =
         validateText(text: daysBetweenInstallments, label: 'Dias entre cuotas');
     ValidateResult validateNumberOfInstallments =

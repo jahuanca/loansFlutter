@@ -9,7 +9,7 @@ import 'package:loands_flutter/src/loans/domain/entities/renewal_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/renewal_repository.dart';
 import 'package:utils/utils.dart';
 
-class RenewalRepositoryImplementation extends RenewalRepository{
+class RenewalRepositoryImplementation extends RenewalRepository {
 
   RenewalDataStore datastore;
 
@@ -20,11 +20,6 @@ class RenewalRepositoryImplementation extends RenewalRepository{
   @override
   Future<ResultType<PayAndRenewalResponse, ErrorEntity>> payAndRenewal(PayAndRenewalRequest request) {
     return datastore.payAndRenewal(request);
-  }
-
-  @override
-  Future<ResultType<List<RenewalEntity>, ErrorEntity>> get() {
-    return datastore.get();
   }
 
   @override

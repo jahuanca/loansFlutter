@@ -10,6 +10,7 @@ import 'package:loands_flutter/src/loans/di/add_loan_special_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_page.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan/add_special_loan_page.dart';
+import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
 import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
@@ -145,24 +146,21 @@ class PayQuotaController extends GetxController {
 
   Future<void> updateQuotaAndCopy(QuotaEntity quotaUpdated) async {
     quota!.paidDate = quotaUpdated.paidDate;
-    copyPaidQuota(false);
-  }
-
-  Future<void> copyPaidQuota([bool showSnackbar = true]) async {
-    if (quota == null) return;
-
-    String message = emptyString;
-    String nameOfDate = quota!.paidDate.format(formatDate: 'EEEE').orEmpty();
-    message += 'Préstamo #${quota!.idLoan}:';
-    message += ' ${quota!.aliasOrName},';
-    message += ' cuota ${quota!.name}';
-    message += ' monto de S/ ${quota!.amount.formatDecimals()},';
-    message += ' pagado el $nameOfDate ${quota!.paidDate.formatDMMYYY()}.';
-    copyToClipboard(message);
-    if (showSnackbar == false) return;
+    String information = getInformationOfQuota(quota!);
+    await copyToClipboard(information);
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
         message: 'Información copiada');
   }
+
+  Future<void> copyPaidQuota() async {
+    String information = getInformationOfQuota(quota!);
+    await copyToClipboard(information);
+    showSnackbarWidget(
+        context: Get.context!,
+        typeSnackbar: TypeSnackbar.success,
+        message: 'Información copiada');
+  }
+
 }

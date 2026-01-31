@@ -162,13 +162,11 @@ class AddSpecialLoanController extends GetxController {
       RuleValidator.isRequired: true,
     });
 
-    int index = customers.indexWhere(
-      (e) => e.id == value,
-    );
+    int index = customers.indexWhere((e) => e.id == value);
     if (index != notFoundPosition) {
       addSpecialLoanRequest.idCustomer = idCustomerValidationResult?.value;
-      addSpecialLoanRequest.customerEntity = customerSelected;
       customerSelected = customers[index];
+      addSpecialLoanRequest.customerEntity = customerSelected;
     }
   }
 
@@ -325,13 +323,15 @@ class AddSpecialLoanController extends GetxController {
   }
 
   Future<bool?> goValidate() async {
-    ResultType<bool, ErrorEntity> resultType =
-        await validateLoanUseCase.execute(ValidateLoanRequest(
+    ValidateLoanRequest request = ValidateLoanRequest(
             idCustomer: addSpecialLoanRequest.idCustomer!,
             idPaymentFrequency: idOfSpecialFrequency,
             percentage: addSpecialLoanRequest.percentage!,
             amount: addSpecialLoanRequest.amount!,
-            startDate: addSpecialLoanRequest.startDate!));
+            startDate: addSpecialLoanRequest.startDate!);
+
+    ResultType<bool, ErrorEntity> resultType =
+        await validateLoanUseCase.execute(request);
     if (resultType is Success) {
       return resultType.data;
     } else {

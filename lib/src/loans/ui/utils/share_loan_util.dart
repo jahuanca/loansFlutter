@@ -1,16 +1,14 @@
-
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/instance_manager.dart';
+import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:utils/utils.dart';
 
-void shareInformation({
+String shareInformation({
   required AddLoanRequest addLoanRequest,
   required List<QuotaEntity> quotas,
-}) async {
+}) {
 
     QuotaEntity firstQuota = quotas.first;
     String information = emptyString;
@@ -39,18 +37,25 @@ void shareInformation({
       information += '\n${quotaInformation.toCapitalize()}';
     }
 
-    await copyToClipboard(information);
-    showSnackbarWidget(
-      context: Get.context!, 
-      typeSnackbar: TypeSnackbar.success, 
-      message: 'Información copiada');
+    return information;
+  }
+
+String getInformationOfQuota(DashboardQuotaResponse quota) {
+    String message = emptyString;
+    String nameOfDate = quota.paidDate.format(formatDate: 'EEEE').orEmpty();
+    message += 'Préstamo #${quota.idLoan}:';
+    message += ' ${quota.aliasOrName},';
+    message += ' cuota ${quota.name}';
+    message += ' monto de S/ ${quota.amount.formatDecimals()},';
+    message += ' pagado el $nameOfDate ${quota.paidDate.formatDMMYYY()}.';
+    return message;
   }
 
 
-void shareInformationSpecial({
+String shareInformationSpecial({
   required AddSpecialLoanRequest request,
   required List<QuotaEntity> quotas,
-}) async {
+}) {
 
     QuotaEntity firstQuota = quotas.first;
     String information = emptyString;
@@ -78,12 +83,6 @@ void shareInformationSpecial({
       String quotaInformation = quota.dateToPay.format(formatDate: FormatDate.summary).orEmpty();
       information += '\n${quotaInformation.toCapitalize()}';
     }
-
-    await copyToClipboard(information);
-    showSnackbarWidget(
-      context: Get.context!, 
-      typeSnackbar: TypeSnackbar.success, 
-      message: 'Información copiada');
+    return information;
+// TODO:ambos metodos tienen mucho en similitud debe hacerse uno solo.
   }
-
-// TODO: ambos metodos tienen mucho en similitud debe hacerse uno solo.

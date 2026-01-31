@@ -23,9 +23,13 @@ class QuotaGroupController extends GetxController {
   DateTimeRange? dateTimeRange;
   bool isGroup = false;
 
+  List<DashboardQuotaResponse> quotasSelected = [];
+
   QuotaGroupController({
     required this.getQuotasByDateUseCase,
   });
+
+  bool get isMultiple => quotasSelected.isNotEmpty;
 
   @override
   void onInit() {
@@ -161,4 +165,19 @@ class QuotaGroupController extends GetxController {
     String endDate = dateTimeRange!.end.formatDMMYYY().orEmpty();
     title = '$startDate - $endDate';
   }
+
+  void onLongPress(DashboardQuotaResponse value) {
+    int index = quotasSelected.indexWhere((e) => e.id == value.id);
+    if (index == notFoundPosition) {
+      quotasSelected.add(value);
+    } else {
+      quotasSelected.remove(value);
+    }
+    update([pageIdGet]);
+  }
+
+  void goToMultiplePay() {
+
+  }
+
 }

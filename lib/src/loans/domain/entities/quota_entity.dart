@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
+import 'package:utils/utils.dart';
+
 List<QuotaEntity> quotaEntityFromJson(String str) => List<QuotaEntity>.from(
     json.decode(str).map((x) => QuotaEntity.fromJson(x)));
 
@@ -43,11 +47,17 @@ class QuotaEntity {
         amount: (json["amount"] as num).toDouble(),
         ganancy: (json["ganancy"] as num).toDouble(),
         dateToPay: DateTime.parse(json["date_to_pay"]),
-        paidDate: json["paid_date"] == null ? null : DateTime.tryParse(json["paid_date"]),
+        paidDate: json["paid_date"] == null
+            ? null
+            : DateTime.tryParse(json["paid_date"]),
         amountDelinquency: json["amount_delinquency"],
         idStateQuota: json["id_state_quota"],
-        createdAt: json["createdAt"] == null ? null : DateTime.tryParse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.tryParse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null
+            ? null
+            : DateTime.tryParse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : DateTime.tryParse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,3 +75,21 @@ class QuotaEntity {
         "updatedAt": updatedAt?.toIso8601String(),
       };
 }
+
+toDashboardResponse({
+  required LoanEntity newLoan,
+  required QuotaEntity quota,
+  required String customerName,
+  required bool isSpecial,
+}) =>
+    DashboardQuotaResponse(
+        id: quota.id.orZero(),
+        idLoan: newLoan.id.orZero(),
+        name: quota.name,
+        customerName: customerName,
+        amount: quota.amount,
+        ganancy: quota.ganancy,
+        idStateQuota: quota.idStateQuota,
+        dateToPay: quota.dateToPay,
+        paidDate: quota.paidDate,
+        isSpecial: isSpecial);

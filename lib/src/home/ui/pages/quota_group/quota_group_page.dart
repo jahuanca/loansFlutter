@@ -64,7 +64,45 @@ class QuotaGroupPage extends StatelessWidget {
   }
 
   Widget _bottomNavigation() {
+    return ChildOrElseWidget(
+        condition: controller.isMultiple,
+        elseWidget: _bottomNavigationSingle(),
+        child: _bottomNavigationMultiple());
+  }
 
+  Widget _bottomNavigationMultiple() {
+    List<DashboardQuotaResponse> quotas = controller.quotasSelected;
+    List<double> ganancys = quotas.map((e) => e.ganancy).toList();
+    List<double> capitals = quotas.map((e) => (e.amount - e.ganancy)).toList();
+
+    double ganancy = (ganancys.isEmpty)
+        ? defaultDouble
+        : ganancys.reduce((value, element) => value + element);
+    double capital = (capitals.isEmpty)
+        ? defaultDouble
+        : capitals.reduce((value, element) => value + element);
+
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: TotalsBottomsWidget(values: {
+            'Capital': capital.formatDecimals(),
+            'Ganancia': ganancy.formatDecimals(),
+          }),
+        ),
+        
+        Expanded(
+            flex: 1,
+            child: ButtonWidget(
+                buttonStyle: ButtonStyleWidget.info,
+                padding: defaultPadding,
+                text: 'Pagar')),
+      ],
+    );
+  }
+
+  Widget _bottomNavigationSingle() {
     String capital = controller.amountOfCapital.formatDecimals();
     String ganancy = controller.amountOfGanancy.formatDecimals();
     String pendingCapital = controller.amountOfPendingCapital.formatDecimals();
@@ -162,6 +200,10 @@ class QuotaGroupPage extends StatelessWidget {
   }
 
   Widget _itemOfCalendar(DashboardQuotaResponse quota) {
+    bool isSelected = controller.quotasSelected.any(
+      (e) => e.id == quota.id,
+    );
+
     return QuotaOfCalendarWidget(
       idStateQuota: quota.idStateQuota,
       amount: quota.amount,
@@ -169,8 +211,24 @@ class QuotaGroupPage extends StatelessWidget {
       detail: quota.dateToPay.formatDMMYYY().orEmpty(),
       idLoan: quota.idLoan.orZero(),
       title: quota.name,
-      onTap: () => controller.goToQuota(quota.id),
+      onTap: () => onTapItem(quota),
+      onLongPress: () => onLongPress(quota),
+      isSelected: isSelected,
     );
+  }
+
+  void onTapItem(DashboardQuotaResponse quota) {
+    if (controller.isMultiple) {
+      controller.onLongPress(quota);
+    } else {
+      controller.goToQuota(quota.id);
+    }
+  }
+
+  void onLongPress(DashboardQuotaResponse quota) {
+    if (controller.isMultiple.not()) {
+      controller.onLongPress(quota);
+    }
   }
 
   Future<void> _showDatePickerRange() async {

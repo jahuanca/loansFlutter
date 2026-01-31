@@ -4,16 +4,20 @@ import 'package:utils/utils.dart';
 
 class QuotaOfCalendarWidget extends StatelessWidget {
   final void Function()? onTap;
+  final void Function()? onLongPress;
   final int idLoan;
   final String title;
   final String subtitle;
   final String detail;
   final double amount;
   final int idStateQuota;
+  final bool isSelected;
 
   const QuotaOfCalendarWidget({
     super.key,
     this.onTap,
+    this.onLongPress,
+    this.isSelected = false,
     required this.idLoan,
     required this.title,
     required this.subtitle,
@@ -34,8 +38,10 @@ class QuotaOfCalendarWidget extends StatelessWidget {
       padding: defaultPadding,
       child: GestureDetector(
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Container(
           decoration: BoxDecoration(
+            color: infoColor().withAlpha( isSelected ? 55 : 0),
             borderRadius: BorderRadius.circular(borderRadius()),
             border: Border.all(),
           ),

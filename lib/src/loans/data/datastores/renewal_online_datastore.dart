@@ -29,12 +29,6 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   }
 
   @override
-  Future<ResultType<List<RenewalEntity>, ErrorEntity>> get() {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-
-  @override
   Future<ResultType<RenewalEntity, ErrorEntity>> add(AddRenewalRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =

@@ -94,8 +94,13 @@ class LoanDetailController extends GetxController {
 
   void goShareInformation() async {
     if (loanSelected == null) return;
-    shareInformation(
+    String information = shareInformation(
         addLoanRequest: AddLoanRequest.fromLoanEntity(loanSelected!),
         quotas: quotas);
+    await copyToClipboard(information);
+    showSnackbarWidget(
+      context: Get.context!, 
+      typeSnackbar: TypeSnackbar.success, 
+      message: 'Información copiada');
   }
 }
