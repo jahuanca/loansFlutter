@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar
 import 'package:loands_flutter/src/home/ui/pages/quota_group/quota_group_controller.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/totals_bottoms_widget.dart';
 import 'package:utils/utils.dart';
 
@@ -95,9 +96,10 @@ class QuotaGroupPage extends StatelessWidget {
         Expanded(
             flex: 1,
             child: ButtonWidget(
+                onTap: controller.goToMultiplePay,
                 buttonStyle: ButtonStyleWidget.info,
                 padding: defaultPadding,
-                text: 'Pagar')),
+                text: payString)),
       ],
     );
   }

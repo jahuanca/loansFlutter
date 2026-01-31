@@ -37,7 +37,7 @@ class AddCustomerController extends GetxController {
     CustomerEntity? customerEntity = Get.setArgument(customerArgument);
     if (customerEntity != null) {
       isEditing = true;
-      
+
       createCustomerRequest.id = customerEntity.id;
       createCustomerRequest.idTypeDocument = customerEntity.idTypeDocument;
       createCustomerRequest.alias = customerEntity.alias;
@@ -68,9 +68,10 @@ class AddCustomerController extends GetxController {
     } else {
       ErrorEntity errorEntity = resultType.error as ErrorEntity;
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
-          message: errorEntity.title);
+          message: errorEntity.title,
+      );
     }
     hideLoading();
   }
@@ -90,7 +91,8 @@ class AddCustomerController extends GetxController {
     validateDocument = validateText(
         rules: {RuleValidator.isRequired: true},
         text: value,
-        label: documentString);
+        label: documentString,
+    );
     if (validateDocument!.hasError.not()) {
       createCustomerRequest.document = validateDocument?.value;
     }
@@ -99,7 +101,10 @@ class AddCustomerController extends GetxController {
 
   void onChangedName(String value) {
     validateName = validateText(
-        rules: {RuleValidator.isRequired: true}, text: value, label: nameString);
+        rules: {RuleValidator.isRequired: true},
+        text: value,
+        label: nameString,
+    );
 
     if (validateName!.hasError) {
     } else {
@@ -116,7 +121,8 @@ class AddCustomerController extends GetxController {
     validateLastname = validateText(
         rules: {RuleValidator.isRequired: true},
         text: value,
-        label: lastNameString);
+        label: lastNameString,
+    );
 
     if (validateLastname?.hasError ?? false) {
     } else {
@@ -129,12 +135,12 @@ class AddCustomerController extends GetxController {
     validateAddress = validateText(
         rules: {RuleValidator.isRequired: true},
         text: value,
-        label: addressString);
+        label: addressString,
+    );
 
     if (validateAddress!.hasError) {
     } else {
       createCustomerRequest.address = validateAddress?.value;
-      createCustomerRequest;
     }
   }
 
@@ -149,23 +155,25 @@ class AddCustomerController extends GetxController {
       validateLastname,
       validateAddress,
     ];
-    ValidateResult? firstError = allRules.firstWhereOrNull((e) => e!.hasError.orFalse(),);
+    ValidateResult? firstError = allRules.firstWhereOrNull(
+      (e) => e!.hasError.orFalse(),
+    );
     return firstError?.error;
   }
 
   void goConfirm() async {
     String? message = validate();
-    if(message != null) {
+    if (message != null) {
       showSnackbarWidget(
-        context: Get.context!,
-        typeSnackbar: TypeSnackbar.error, 
-        message: message
-      );
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: message);
       return;
     }
     bool result = await showDialogWidget(
-            context: Get.overlayContext!,
-            message: '¿Está seguro de ${isEditing ? 'editar' : 'agregar'} el cliente?');
+      context: Get.context!,
+      message: (isEditing) ? areSureToEditCustomer : areSureToAddCustomer,
+    );
     if (result) _execute();
   }
 
@@ -182,13 +190,13 @@ class AddCustomerController extends GetxController {
 
     if (resultType is Success) {
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.success,
           message: 'Exito');
       Get.back(result: true);
     } else {
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: 'Ocurrio un error');
     }

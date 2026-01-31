@@ -84,5 +84,5 @@ String shareInformationSpecial({
       information += '\n${quotaInformation.toCapitalize()}';
     }
     return information;
-// TODO:ambos metodos tienen mucho en similitud debe hacerse uno solo.
+    // TODO: ambos metodos tienen mucho en similitud debe hacerse uno solo.
   }

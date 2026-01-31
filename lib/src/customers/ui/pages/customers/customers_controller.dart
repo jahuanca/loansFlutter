@@ -36,7 +36,7 @@ class CustomersController extends GetxController {
       customersToShow.addAll(customers);
     } else {
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: 'Ocurrio un error');
     }

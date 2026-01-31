@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_controller.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/text/subtitle_widget.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaPage extends StatelessWidget {
@@ -28,13 +30,9 @@ class PayQuotaPage extends StatelessWidget {
             bottomNavigationBar: _bottomNavigation(),
             body: ListView(
               children: [
-                ChildOrElseWidget(
-                    condition: (controller.quota != null),
-                    child: _cardDetail(size: size, quota: controller.quota!)),
-                ChildOrElseWidget(
-                    condition: (controller.isPending),
-                    elseWidget: _paidQuotaWidget(),
-                    child: _form(context))
+                if (controller.isPending) _form(context),
+                _content(),
+                if (controller.isPending.not()) _paidQuotaWidget()
               ],
             ),
           ),
@@ -43,29 +41,47 @@ class PayQuotaPage extends StatelessWidget {
     );
   }
 
-  Widget _paidQuotaWidget() {
-    return Column(
-      children: [
-        EmptyWidget(
-          iconData: Icons.check,
-          title: 'Esta cuota ya ha sido pagada.',
-        ),
-        GestureDetector(
-          onTap: controller.copyPaidQuota,
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconWidget(
-                  padding: EdgeInsets.only(
-                    top: 64,
-                    bottom: 8,
-                  ),
-                  iconData: Icons.copy_outlined),
-              Text('Copiar información de pago')
-            ],
+  Widget _content() {
+    DashboardQuotaResponse quota = controller.quota!;
+    return Card(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SubtitleWidget(
+            padding: defaultPadding,
+            text: (controller.isPending) ? 'Cuota a pagar:' : 'Cuota pagada',),
+          Padding(
+            padding: defaultPadding,
+            child: ChildOrElseWidget(
+                condition: (controller.quota != null),
+                child: QuotaOfCalendarWidget(
+                  amount: quota.amount,
+                  subtitle: quota.customerName,
+                  idLoan: quota.idLoan.orZero(),
+                  title: quota.name,
+                )),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+
+  Widget _paidQuotaWidget() {
+    return GestureDetector(
+      onTap: controller.copyPaidQuota,
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconWidget(
+              padding: EdgeInsets.only(
+                top: 64,
+                bottom: 8,
+              ),
+              iconData: Icons.copy_outlined),
+          Text('Copiar información de pago')
+        ],
+      ),
     );
   }
 
@@ -73,7 +89,7 @@ class PayQuotaPage extends StatelessWidget {
     return Column(
       children: [
         InputWidget(
-          hintText: 'Seleccione la fecha de pago',
+          hintText: pickPayDateString,
           label: paymentDateString,
           onTap: () async {
             DateTime? dateSelected = await showDatePicker(
@@ -94,47 +110,6 @@ class PayQuotaPage extends StatelessWidget {
     );
   }
 
-  Widget _cardDetail({
-    required DashboardQuotaResponse quota,
-    required Size size,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Card(
-        elevation: 7,
-        child: SizedBox(
-            width: size.width,
-            height: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(quota.customerName),
-                Text(
-                  quota.alias.orEmpty(),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w300, fontSize: 12),
-                ),
-                Padding(
-                  padding: defaultPadding,
-                  child: Text(
-                    'S/ ${quota.amount.formatDecimals()}',
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Text(
-                  'Cuota: ${quota.name} - ${quota.dateToPay.formatDMMYYY()}',
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            )),
-      ),
-    );
-  }
-
   Widget _bottomNavigation() {
     return ChildOrElseWidget(
       condition: (controller.isPending),
@@ -143,22 +118,25 @@ class PayQuotaPage extends StatelessWidget {
   }
 
   Widget _buttomsNavigation() {
+    final String payToText =
+        '$payString  S/${controller.quota?.amount.formatDecimals()}';
+
     return Row(
       children: [
         Expanded(
             child: ButtonWidget(
           padding: defaultPadding,
-          text: 'Pagar',
+          text: payToText,
           onTap: controller.goPayQuota,
         )),
         if (controller.isLastQuota)
-        Expanded(
-            child: ButtonWidget(
-          padding: defaultPadding,
-          text: 'Pagar y renovar',
-          buttonStyle: ButtonStyleWidget.success,
-          onTap: controller.goPayQuotaAndRenewLoan,
-        )),
+          Expanded(
+              child: ButtonWidget(
+            padding: defaultPadding,
+            text: 'Pagar y renovar',
+            buttonStyle: ButtonStyleWidget.success,
+            onTap: controller.goPayQuotaAndRenewLoan,
+          )),
       ],
     );
   }

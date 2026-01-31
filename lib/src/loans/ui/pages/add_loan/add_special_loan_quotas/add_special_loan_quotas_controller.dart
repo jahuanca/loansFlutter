@@ -8,6 +8,7 @@ import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_special_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/pay_and_renewal_special_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
+import 'package:loands_flutter/src/utils/core/routes_name.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -97,9 +98,10 @@ class AddSpecialLoanQuotasController extends GetxController {
       if (resultType is Error) {
         ErrorEntity errorEntity = resultType.error;
         showSnackbarWidget(
-            context: Get.overlayContext!,
+            context: Get.context!,
             typeSnackbar: TypeSnackbar.error,
-            message: errorEntity.errorMessage);
+            message: errorEntity.errorMessage,
+        );
         return;
       } else {
         PayAndRenewalResponse response = resultType.data;
@@ -112,14 +114,14 @@ class AddSpecialLoanQuotasController extends GetxController {
         await createSpecialLoanUseCase.execute(addLoanSpecialRequest);
     if (resultType is Error) {
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: resultType.error);
       return;
     } else {
       LoanEntity newLoan = resultType.data;
       _successCreate(newLoan);
-      Get.until((route) => route.settings.name == '/');
+      Get.until((route) => route.settings.name == RoutesName.initial.route);
     }
   }
 
@@ -134,29 +136,31 @@ class AddSpecialLoanQuotasController extends GetxController {
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
         message: 'Información copiada');
-    Get.until((route) => route.settings.name == '/');
+    Get.until((route) => route.settings.name == RoutesName.initial.route);
   }
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {
-    addLoanSpecialRequest.id = newLoan.id;
-    String information = shareInformationSpecial(
-      request: addLoanSpecialRequest,
-      quotas: quotas,
-    );
-    await copyToClipboard(information);
-    information += "\n";
+
     DashboardQuotaResponse quotaMapped = toDashboardResponse(
       newLoan: newLoan,
       quota: quota,
       customerName: addLoanSpecialRequest.customerEntity!.aliasOrFullName.orEmpty(),
       isSpecial: true,
     );
+    
+    String information = 'Cuota anterior\n';
     information += getInformationOfQuota(quotaMapped);
+    information += "\nRenovación\n";
+    addLoanSpecialRequest.id = newLoan.id;
+    information += shareInformationSpecial(
+      request: addLoanSpecialRequest,
+      quotas: quotas,
+    );
     await copyToClipboard(information);
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
         message: 'Información copiada');
-    Get.until((route) => route.settings.name == '/');
+    Get.until((route) => route.settings.name == RoutesName.initial.route);
   }
 }

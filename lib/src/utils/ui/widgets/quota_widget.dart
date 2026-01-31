@@ -125,7 +125,7 @@ class QuotaWidget extends StatelessWidget {
                 width: 150,
                 height: 50,
                 child: ButtonWidget(
-                    onTap: onTapButton, fontSize: 14, text: 'Pagar'),
+                    onTap: onTapButton, fontSize: 14, text: payString),
               )
           ],
         ),

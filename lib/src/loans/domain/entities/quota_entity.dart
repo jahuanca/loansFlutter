@@ -84,7 +84,7 @@ toDashboardResponse({
 }) =>
     DashboardQuotaResponse(
         id: quota.id.orZero(),
-        idLoan: newLoan.id.orZero(),
+        idLoan: quota.idLoan.orZero(),
         name: quota.name,
         customerName: customerName,
         amount: quota.amount,

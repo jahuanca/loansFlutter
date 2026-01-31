@@ -308,7 +308,7 @@ class AddLoanInformationController extends GetxController {
     ValidateResult resultInformation = validate();
     if (resultInformation.hasError) {
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: resultInformation.error ?? emptyString);
       return;

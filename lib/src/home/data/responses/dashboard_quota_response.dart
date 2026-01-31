@@ -37,7 +37,9 @@ class DashboardQuotaResponse {
 
   String get aliasOrName => alias ?? customerName;
 
-  StateQuotaEnum get stateQuota => findStateQuotaEnum(idStateQuota);
+  StateQuotaEnum get stateQuota {
+    return findStateQuotaEnum(idStateQuota) ?? StateQuotaEnum.pendingQuota;
+  }
 
   factory DashboardQuotaResponse.fromJson(Map<String, dynamic> json) =>
     DashboardQuotaResponse(

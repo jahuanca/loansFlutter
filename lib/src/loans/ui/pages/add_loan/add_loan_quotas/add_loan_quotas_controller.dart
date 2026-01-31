@@ -8,6 +8,7 @@ import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/pay_and_renewal_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
+import 'package:loands_flutter/src/utils/core/routes_name.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -91,7 +92,7 @@ class AddLoanQuotasController extends GetxController {
     if (resultType is Error) {
       ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.errorMessage);
       return;
@@ -107,7 +108,7 @@ class AddLoanQuotasController extends GetxController {
     if (resultType is Error) {
       ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.errorMessage);
       return;
@@ -131,29 +132,29 @@ class AddLoanQuotasController extends GetxController {
   void _successCreate(LoanEntity newLoan) async {
     addLoanRequest.id = newLoan.id;
     goShareInformation();
-    Get.until((route) => route.settings.name == '/');
+    Get.until((route) => route.settings.name == RoutesName.initial.route);
   }
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {
-    addLoanRequest.id = newLoan.id;
-    String information = shareInformation(
-      addLoanRequest: addLoanRequest,
-      quotas: quotas,
-    );
-    await copyToClipboard(information);
-    information += "\n";
     DashboardQuotaResponse quotaMapped = toDashboardResponse(
       newLoan: newLoan,
       quota: quota,
       customerName: addLoanRequest.customerEntity!.aliasOrFullName.orEmpty(),
       isSpecial: false,
     );
+    String information = 'Cuota anterior\n';
     information += getInformationOfQuota(quotaMapped);
-    copyToClipboard(information);
+    information += "\nRenovación\n";
+    addLoanRequest.id = newLoan.id;
+    information += shareInformation(
+      addLoanRequest: addLoanRequest,
+      quotas: quotas,
+    );
+    await copyToClipboard(information);
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
         message: 'Información copiada');
-    Get.until((route) => route.settings.name == '/');
+    Get.until((route) => route.settings.name == RoutesName.initial.route);
   }
 }

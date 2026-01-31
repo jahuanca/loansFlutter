@@ -1,7 +1,8 @@
 FEATS:
+    * Necesito desde la UI cambiar el tipo de usuario.
+    * Necesito un listado de los que estan en la ultima cuota.
     * Necesito saber cuantos creditos nuevos se activaron 
         y cuantos se renovaron con aumento.
-    * Necesito que una vez creado el préstamo se copie automaticamente su información para prestamos especiales.
     * Necesito agregar el boton de analiticas en crear prestamo para obtener la informacion del cliente en un solo lado.
     
 

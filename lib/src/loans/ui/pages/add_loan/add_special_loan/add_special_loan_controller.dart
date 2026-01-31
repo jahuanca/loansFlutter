@@ -286,7 +286,7 @@ class AddSpecialLoanController extends GetxController {
     String? message = addSpecialLoanRequest.validate;
     if (message != null) {
       showSnackbarWidget(
-          context: Get.overlayContext!,
+          context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: message);
       return;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
+import 'package:loands_flutter/src/home/ui/pages/pay_quota_multiple/pay__quota_multiple_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
@@ -177,7 +178,10 @@ class QuotaGroupController extends GetxController {
   }
 
   void goToMultiplePay() {
-
+    if (quotasSelected.isEmpty) return;
+    Get.to(() => PayQuotaMultiplePage(), arguments: {
+      quotasSelectedArgument: quotasSelected,
+    });
   }
 
 }
