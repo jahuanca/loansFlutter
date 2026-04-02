@@ -4,8 +4,8 @@ import 'package:loands_flutter/src/customers/data/datastores/customer_online_dat
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
 import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/get_customer_analytics_use_case.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customer_analytics_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 
 class CustomerAnalyticsBinding extends Bindings {
 

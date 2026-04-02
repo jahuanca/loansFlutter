@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/data/responses/customer_analytics_response.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/get_customer_analytics_use_case.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customer_analytics_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/di/loans_binding.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_page.dart';

@@ -18,7 +18,8 @@ class AddCustomerPage extends StatelessWidget {
   final AddCustomerController controller = AddCustomerController(
     getTypesDocumentUseCase: Get.find(),
     createCustomerUseCase: Get.find(),
-    updateCustomerUseCase: Get.find(),
+    updateCustomerUseCase: Get.find(), 
+    getTypesCustomerUseCase: Get.find(), 
   );
 
   @override
@@ -104,6 +105,17 @@ class AddCustomerPage extends StatelessWidget {
                     isAlignLabel: true,
                     label: addressString,
                     hintText: 'Ingrese la dirección del cliente'),
+              ),
+              GetBuilder<AddCustomerController>(
+                id: typesCustomerIdGet,
+                builder: (controller) => DropdownWidget(
+                  isAlignLabel: true,
+                  label: typeCustomerString,
+                  hintText: 'Seleccione el tipo de cliente',
+                  items: controller.typesCustomer,
+                  value: controller.typeCustomerSelected?.id,
+                  onChanged: controller.onChangedTypeCustomer,
+                ),
               ),
             ],
           ),

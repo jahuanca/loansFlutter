@@ -1,11 +1,16 @@
 
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/type_customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
+import 'package:loands_flutter/src/customers/data/repositories/type_customer_repository_implementation.dart';
 import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
+import 'package:loands_flutter/src/customers/domain/datastores/type_customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/create_customer_use_case.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/update_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/repositories/type_customer_repository.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
 import 'package:loands_flutter/src/utils/domain/datastore/utils_datastore.dart';
@@ -22,9 +27,14 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut(() => GetTypesDocumentUseCase(repository: Get.find()));
     
     Get.lazyPut<CustomerDatastore>(() => CustomerOnlineDatastore());
+    Get.lazyPut<TypeCustomerDatastore>(() => TypeCustomerOnlineDatastore());
+
     Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
+    Get.lazyPut<TypeCustomerRepository>(() => TypeCustomerRepositoryImplementation(datastore: Get.find()));
+
     Get.lazyPut(() => CreateCustomerUseCase(repository: Get.find()));
     Get.lazyPut(() => UpdateCustomerUseCase(repository: Get.find()));
+    Get.lazyPut(() => GetTypesCustomerUseCase(Get.find()));
   }
 
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/get_customers_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';

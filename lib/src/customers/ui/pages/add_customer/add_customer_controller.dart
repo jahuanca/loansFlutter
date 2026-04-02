@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/create_customer_use_case.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/update_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/entities/type_customer_entity.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -16,9 +18,12 @@ class AddCustomerController extends GetxController {
   GetTypesDocumentUseCase getTypesDocumentUseCase;
   CreateCustomerUseCase createCustomerUseCase;
   UpdateCustomerUseCase updateCustomerUseCase;
+  GetTypesCustomerUseCase getTypesCustomerUseCase;
 
   List<TypeDocumentEntity> typesDocument = [];
+  List<TypeCustomerEntity> typesCustomer = [];
   TypeDocumentEntity? typeDocumentSelected;
+  TypeCustomerEntity? typeCustomerSelected;
   CreateCustomerRequest createCustomerRequest = CreateCustomerRequest();
   ValidateResult? validateDocument,
       validateName,
@@ -30,6 +35,7 @@ class AddCustomerController extends GetxController {
     required this.getTypesDocumentUseCase,
     required this.createCustomerUseCase,
     required this.updateCustomerUseCase,
+    required this.getTypesCustomerUseCase,
   });
 
   @override
@@ -53,6 +59,7 @@ class AddCustomerController extends GetxController {
   @override
   void onReady() {
     getTypesDocument();
+    getTypesCustomer();
     super.onReady();
   }
 
@@ -76,6 +83,26 @@ class AddCustomerController extends GetxController {
     hideLoading();
   }
 
+  void getTypesCustomer() async {
+    showLoading();
+    ResultType<List<TypeCustomerEntity>, ErrorEntity> resultType =
+        await getTypesCustomerUseCase.execute();
+    if (resultType is Success) {
+      typesCustomer = resultType.data as List<TypeCustomerEntity>;
+      if (typesCustomer.isNotEmpty) {
+        onChangedTypeCustomer(typesCustomer.first.id);
+      }
+    } else {
+      ErrorEntity errorEntity = resultType.error as ErrorEntity;
+      showSnackbarWidget(
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.error,
+          message: errorEntity.title,
+      );
+    }
+    hideLoading();
+  }
+
   void onChangedTypeDocument(dynamic value) {
     int index = typesDocument.indexWhere(
       (e) => e.id == value,
@@ -85,6 +112,17 @@ class AddCustomerController extends GetxController {
       createCustomerRequest.idTypeDocument = value;
     }
     update([typesDocumentIdGet]);
+  }
+
+  void onChangedTypeCustomer(dynamic value) {
+    int index = typesCustomer.indexWhere(
+      (e) => e.id == value,
+    );
+    if (index != notFoundPosition) {
+      typeCustomerSelected = typesCustomer[index];
+      createCustomerRequest.idTypeDocument = value;
+    }
+    update([typesCustomerIdGet]);
   }
 
   void onChangedDocument(String value) {
