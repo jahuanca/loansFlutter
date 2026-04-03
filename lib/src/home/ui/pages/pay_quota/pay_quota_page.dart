@@ -60,6 +60,7 @@ class PayQuotaPage extends StatelessWidget {
                   subtitle: quota.customerName,
                   idLoan: quota.idLoan.orZero(),
                   title: quota.name,
+                  isLast: quota.isLast,
                 )),
           ),
         ],

@@ -20,6 +20,7 @@ class DashboardQuotaResponse {
   DateTime dateToPay;
   DateTime? paidDate;
   bool isSpecial;
+  bool isLast;
 
   DashboardQuotaResponse({
     required this.id,
@@ -32,6 +33,7 @@ class DashboardQuotaResponse {
     required this.dateToPay,
     required this.paidDate,
     required this.isSpecial,
+    required this.isLast,
     this.alias,
   });
 
@@ -46,6 +48,7 @@ class DashboardQuotaResponse {
       id: json["id"],
       idLoan: json["id_loan"],
       name: json["name"],
+      isLast: json["is_last"],
       customerName: json["customer_name"],
       alias: json["alias"],
       amount: (json["amount"] as num).toDouble(),
@@ -60,6 +63,7 @@ class DashboardQuotaResponse {
         "id": id,
         "id_loan": idLoan,
         "name": name,
+        "is_last": isLast,
         "alias": alias,
         "amount": amount,
         "ganancy": ganancy,

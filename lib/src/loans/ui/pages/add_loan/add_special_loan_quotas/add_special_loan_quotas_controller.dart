@@ -61,6 +61,7 @@ class AddSpecialLoanQuotasController extends GetxController {
           amount: amountQuota,
           dateToPay: startDate,
           idStateQuota: idOfPendingQuota,
+          isLast: false,
           ganancy: interest);
       quotas.add(quota);
     }
@@ -146,6 +147,7 @@ class AddSpecialLoanQuotasController extends GetxController {
       quota: quota,
       customerName: addLoanSpecialRequest.customerEntity!.aliasOrFullName.orEmpty(),
       isSpecial: true,
+      isLast: quota.isLast,
     );
     
     String information = 'Cuota anterior\n';

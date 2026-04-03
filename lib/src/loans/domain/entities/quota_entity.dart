@@ -23,6 +23,7 @@ class QuotaEntity {
   int idStateQuota;
   DateTime? createdAt;
   DateTime? updatedAt;
+  bool isLast;
 
   QuotaEntity({
     this.id,
@@ -35,6 +36,7 @@ class QuotaEntity {
     this.amountDelinquency,
     required this.idStateQuota,
     required this.ganancy,
+    required this.isLast,
     this.createdAt,
     this.updatedAt,
   });
@@ -44,6 +46,7 @@ class QuotaEntity {
         name: json["name"],
         description: json["description"],
         idLoan: json["id_loan"],
+        isLast: json["is_last"],
         amount: (json["amount"] as num).toDouble(),
         ganancy: (json["ganancy"] as num).toDouble(),
         dateToPay: DateTime.parse(json["date_to_pay"]),
@@ -65,6 +68,7 @@ class QuotaEntity {
         "name": name,
         "description": description,
         "id_loan": idLoan,
+        "is_last": isLast,
         "amount": amount,
         "ganancy": ganancy,
         "date_to_pay": dateToPay.toIso8601String(),
@@ -81,6 +85,7 @@ toDashboardResponse({
   required QuotaEntity quota,
   required String customerName,
   required bool isSpecial,
+  required bool isLast,
 }) =>
     DashboardQuotaResponse(
         id: quota.id.orZero(),
@@ -92,4 +97,6 @@ toDashboardResponse({
         idStateQuota: quota.idStateQuota,
         dateToPay: quota.dateToPay,
         paidDate: quota.paidDate,
-        isSpecial: isSpecial);
+        isSpecial: isSpecial,
+        isLast: isLast,
+      );

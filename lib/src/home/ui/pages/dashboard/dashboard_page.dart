@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_controller.dart';
-import 'package:loands_flutter/src/home/ui/pages/dashboard/card_dasboard_widget.dart';
+import 'package:loands_flutter/src/home/ui/widgets/item_action_widget.dart';
 import 'package:loands_flutter/src/home/ui/widgets/item_activity_widget.dart';
-import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -46,7 +45,7 @@ class DashboardPage extends StatelessWidget {
   Widget _cards({
     required Size size,
   }) {
-    const double heightOfCard = 150;
+    const double heightOfCard = 120;
 
     SummaryOfDashboardResponse? response =
         controller.summaryOfDashboardResponse;
@@ -59,23 +58,40 @@ class DashboardPage extends StatelessWidget {
 
     return SizedBox(
       height: heightOfCard,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
+      child: Column(
         children: [
-          cardDashboardWidget(
-              size: size,
-              title: 'Créditos',
-              values: valuesOfLoans,
-              onTap: null),
-          cardDashboardWidget(
-              size: size,
-              title: 'Total prestado',
-              values: valuesOfAmount,
-              onTap: controller.goToPaymentSummary),
-          cardDashboardWidget(
-            size: size,
-            title: ganancyString,
-            values: valuesOfGanancy,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ItemActionWidget(
+                size: size,
+                title: 'Creditos',
+                value: '56',
+              ),
+              ItemActionWidget(
+                size: size,
+                title: 'Capital',
+                value: '39 000',
+                onTap: controller.goToPaymentSummary,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ItemActionWidget(
+                size: size,
+                title: 'Ganancia',
+                value: '7 000',
+              ),
+              ItemActionWidget(
+                size: size,
+                title: 'Próximos',
+                value: '10',
+              ),
+            ],
           ),
         ],
       ),
@@ -105,7 +121,8 @@ class DashboardPage extends StatelessWidget {
           child: ListView.separated(
             separatorBuilder: (context, index) => const Divider(),
             itemCount: controller.logs.length,
-            itemBuilder: (context, index) => ItemActivityWidget(log: controller.logs[index]),
+            itemBuilder: (context, index) =>
+                ItemActivityWidget(log: controller.logs[index]),
           ),
         ),
       ],

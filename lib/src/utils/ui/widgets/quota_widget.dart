@@ -19,6 +19,7 @@ class QuotaWidget extends StatelessWidget {
   final double? amountDelinquency;
   final int? daysLate;
   final void Function()? onTapButton;
+  final bool isLast;
 
   const QuotaWidget({
     super.key,
@@ -31,6 +32,7 @@ class QuotaWidget extends StatelessWidget {
     required this.amortization,
     required this.ganancy,
     this.idStateQuota,
+    this.isLast = false,
     this.initiallyExpanded = false,
     this.onTapButton,
     this.paidDate,

@@ -81,6 +81,7 @@ class LoanDetailController extends GetxController {
       dateToPay: quota.dateToPay,
       paidDate: quota.paidDate,
       isSpecial: loanSelected!.isSpecial,
+      isLast: quota.isLast,
     );
 
     QuotaEntity? quotaPaid =

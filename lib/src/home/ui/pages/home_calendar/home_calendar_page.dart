@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/home_calendar_controller.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
+import 'package:loands_flutter/src/home/ui/widgets/item_action_widget.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
 
 class HomeCalendarPage extends StatelessWidget {
-  static const double _heightOfCard = 50;
 
   final HomeCalendarController controller = HomeCalendarController(
       getSummaryOfCalendarUseCase: Get.find(),
@@ -54,49 +54,19 @@ class HomeCalendarPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _card(
+        ItemActionWidget(
           size: size,
           title: 'Por semana',
           value: '$paymentsOfToday',
-          color: successColor(),
           onTap: controller.goToQuotaGroupOfWeek,
         ),
-        _card(
+        ItemActionWidget(
           size: size,
           title: 'Vencidos',
           value: '$overduePayments',
-          color: dangerColor(),
           onTap: controller.goToQuotaGroupOfDefeated,
         ),
       ],
-    );
-  }
-
-  Widget _card({
-    required Size size,
-    required String title,
-    required String value,
-    required Color color,
-    required void Function()? onTap,
-  }) {
-    const double height = _heightOfCard / 2;
-
-    return Padding(
-      padding: defaultPadding,
-      child: Container(
-        alignment: Alignment.center,
-        width: size.width * 0.5 - 32,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius()),
-          border: Border.all(),
-        ),
-        child: ListTile(
-          onTap: onTap,
-          minTileHeight: height,
-          title: Text(title),
-          trailing: Text(value),
-        ),
-      ),
     );
   }
 
@@ -213,6 +183,7 @@ class HomeCalendarPage extends StatelessWidget {
   }
 
   Widget _contentQuotas({required Size size}) {
+    
     return GetBuilder<HomeCalendarController>(
       id: quotasIdGet,
       builder: (controller) => ChildOrElseWidget(
@@ -225,6 +196,7 @@ class HomeCalendarPage extends StatelessWidget {
         child: ListView.builder(
           itemCount: controller.quotasByDate.length,
           itemBuilder: (context, index) => QuotaOfCalendarWidget(
+            isLast: controller.quotasByDate[index].isLast,
             idStateQuota: controller.quotasByDate[index].idStateQuota,
             amount: controller.quotasByDate[index].amount,
             subtitle: controller.quotasByDate[index].customerName,

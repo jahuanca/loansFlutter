@@ -216,6 +216,7 @@ class QuotaGroupPage extends StatelessWidget {
       onTap: () => onTapItem(quota),
       onLongPress: () => onLongPress(quota),
       isSelected: isSelected,
+      isLast: quota.isLast,
     );
   }
 
