@@ -73,6 +73,11 @@ class AddSpecialLoanController extends GetxController {
     sourceToLoanEnum =
         Get.setArgument(sourceToLoanArgument) ?? SourceToLoanEnum.normal;
     createRenewalSpecialRequest = Get.setArgument(createRenewalRequestArgument);
+
+    if (createRenewalSpecialRequest != null) {
+      startDateTextController.text = createRenewalSpecialRequest?.paidDate.formatDMMYYY() ?? emptyString;
+      onChangedStartDate(createRenewalSpecialRequest?.paidDate);
+    }
     super.onInit();
   }
 

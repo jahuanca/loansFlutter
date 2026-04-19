@@ -93,4 +93,21 @@ class SummaryOnlineDatastore extends SummaryDatastore {
               errorMessage: response.body));
     }
   }
+
+  @override
+  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final AppResponseHttp response = await appHttpManager.get(
+      url: '/utils/next-renewal',
+    );
+    if (response.isSuccessful) {
+      return Success(data: dashboardQuotasResponseFromJson(response.body));
+    } else {
+      return Error(
+          error: ErrorEntity(
+              statusCode: response.statusCode,
+              title: '',
+              errorMessage: response.body));
+    }
+  }
 }

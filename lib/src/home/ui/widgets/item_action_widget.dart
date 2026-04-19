@@ -6,7 +6,7 @@ const double _heightOfCard = 50;
 class ItemActionWidget extends StatelessWidget {
   final Size size;
   final String title;
-  final String value;
+  final String? value;
   final void Function()? onTap;
   
   const ItemActionWidget({
@@ -34,7 +34,7 @@ class ItemActionWidget extends StatelessWidget {
           onTap: onTap,
           minTileHeight: height,
           title: Text(title),
-          trailing: Text(value),
+          trailing: Text(value.orEmpty()),
         ),
       ),
     );

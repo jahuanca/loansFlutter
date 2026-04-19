@@ -50,12 +50,6 @@ class DashboardPage extends StatelessWidget {
     SummaryOfDashboardResponse? response =
         controller.summaryOfDashboardResponse;
 
-    Map<String, dynamic> valuesOfLoans = response?.loansInfo ?? {};
-
-    Map<String, dynamic> valuesOfAmount = response?.amountsInfo ?? {};
-
-    Map<String, dynamic> valuesOfGanancy = response?.ganancyInfo ?? {};
-
     return SizedBox(
       height: heightOfCard,
       child: Column(
@@ -67,12 +61,12 @@ class DashboardPage extends StatelessWidget {
               ItemActionWidget(
                 size: size,
                 title: 'Creditos',
-                value: '56',
+                value: response?.loans,
               ),
               ItemActionWidget(
                 size: size,
                 title: 'Capital',
-                value: '39 000',
+                value: response?.amounts,
                 onTap: controller.goToPaymentSummary,
               ),
             ],
@@ -84,12 +78,13 @@ class DashboardPage extends StatelessWidget {
               ItemActionWidget(
                 size: size,
                 title: 'Ganancia',
-                value: '7 000',
+                value: response?.ganancy,
               ),
               ItemActionWidget(
                 size: size,
-                title: 'Próximos',
-                value: '10',
+                title: 'Renovar',
+                value: response?.renovar,
+                onTap: controller.goToNextRenewal,
               ),
             ],
           ),

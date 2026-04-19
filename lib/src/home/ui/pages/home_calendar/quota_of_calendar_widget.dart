@@ -24,7 +24,7 @@ class QuotaOfCalendarWidget extends StatelessWidget {
     this.idStateQuota,
     this.onTap,
     this.onLongPress,
-    required this.isLast,
+    this.isLast = false,
     this.isSelected = false,
     this.detail,
   });

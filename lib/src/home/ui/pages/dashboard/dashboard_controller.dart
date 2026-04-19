@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
+import 'package:loands_flutter/src/home/di/next_renewal_binding.dart';
 import 'package:loands_flutter/src/home/di/payment_summary_binding.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_summary_of_dasboard_use_case.dart';
+import 'package:loands_flutter/src/home/ui/pages/next_renewal/next_renewal_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
@@ -87,6 +89,10 @@ class DashboardController extends GetxController {
 
   void goToPaymentSummary() {
     Get.to(() => PaymentSummaryPage(), binding: PaymentSummaryBinding());
+  }
+
+  void goToNextRenewal() {
+    Get.to(() => const NextRenewalPage(), binding: NextRenewalBinding());
   }
 
   void changeDatePicker(DateTime? dateTime) {

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
 import 'package:loands_flutter/src/home/ui/pages/quota_group/quota_group_controller.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/options_menu_widget.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
@@ -42,22 +43,11 @@ class QuotaGroupPage extends StatelessWidget {
           iconData: Icons.calendar_month_outlined,
         ),
       ),
-      _menu(),
+      OptionsMenuWidget(onTapItem: controller.onChangedMenuOverlay),
     ]);
   }
 
-  Widget _menu() {
-    return MenuOverlayWidget(
-      iconData: Icons.more_vert,
-      padding: defaultPadding,
-      items: [
-        OptionMenu(id: 1, name: 'Filtrar'),
-        OptionMenu(id: 2, name: 'Copiar'),
-        OptionMenu(id: 3, name: 'Configurar'),
-      ],
-      onTapItem: controller.onChangedMenuOverlay,
-    );
-  }
+  
 
   Widget _body() {
     return ChildOrElseWidget(
