@@ -43,4 +43,9 @@ class SummaryRepositoryImplementation extends SummaryRepository {
   Future<ResultType<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() {
     return datastore.getSummaryOfCalendar();
   }
+
+  @override
+  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() {
+    return datastore.getNextRenewal();
+  }
 }

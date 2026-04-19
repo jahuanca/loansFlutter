@@ -14,4 +14,5 @@ abstract class SummaryDatastore {
   Future<ResultType<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths();
   Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(GetQuotasByDateRequest request);
   Future<ResultType<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest);
+  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal();
 }

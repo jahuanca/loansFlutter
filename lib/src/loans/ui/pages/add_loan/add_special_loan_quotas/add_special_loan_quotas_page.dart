@@ -45,7 +45,7 @@ class AddSpecialLoanQuotasPage extends StatelessWidget {
       );
     }).toList());
 
-    return Column(
+    return ListView(
       children: quotas,
     );
   }

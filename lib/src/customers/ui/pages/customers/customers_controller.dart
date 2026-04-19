@@ -5,7 +5,6 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
-import 'package:loands_flutter/src/customers/ui/pages/customer_detail/customer_detail_page.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
@@ -65,10 +64,20 @@ class CustomersController extends GetxController {
     if (result) {}
   }
 
-  void goToDetail(CustomerEntity customer) {
-    Get.to(() => const CustomerDetailPage(), arguments: {
+  void goToDetail(CustomerEntity customer) async {
+
+    final int index = customers.indexWhere((e) => customer.id == e.id);
+    if (index == notFoundPosition) return;
+
+    final result = await Get.to<CustomerEntity>(() => AddCustomerPage(), binding: AddCustomerBinding(), arguments: {
       customerArgument: customer,
     });
+
+    if (result != null) {
+      customers[index] = result;
+      update([pageIdGet]);
+    }
+
   }
 
   void onChangedSearch(String value) {

@@ -5,25 +5,29 @@ SummaryOfDashboardResponse summaryOfDashboardResponseFromJson(String str) => Sum
 String dashboardSummaryResponseToJson(SummaryOfDashboardResponse data) => json.encode(data.toJson());
 
 class SummaryOfDashboardResponse {
-    Map<String, dynamic> loansInfo;
-    Map<String, dynamic> amountsInfo;
-    Map<String, dynamic> ganancyInfo;
+    String loans;
+    String amounts;
+    String ganancy;
+    String renovar;
 
     SummaryOfDashboardResponse({
-        required this.loansInfo,
-        required this.amountsInfo,
-        required this.ganancyInfo,
+        required this.loans,
+        required this.amounts,
+        required this.ganancy,
+        required this.renovar,
     });
 
     factory SummaryOfDashboardResponse.fromJson(Map<String, dynamic> json) => SummaryOfDashboardResponse(
-        loansInfo: json["loans_info"],
-        amountsInfo: json["amounts_info"],
-        ganancyInfo: json["ganancy_info"],
+        loans: json["loans"],
+        amounts: json["amounts"],
+        ganancy: json["ganancy"],
+        renovar: json["renovar"],
     );
 
     Map<String, dynamic> toJson() => {
-        "loans_info": loansInfo,
-        "amounts_info": amountsInfo,
-        'ganancy_info': ganancyInfo,
+        "loans": loans,
+        "amounts": amounts,
+        'ganancy': ganancy,
+        'renovar': renovar,
     };
 }

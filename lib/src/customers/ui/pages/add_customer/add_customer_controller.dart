@@ -40,26 +40,35 @@ class AddCustomerController extends GetxController {
 
   @override
   void onInit() {
+    setInitialValues();
+    super.onInit();
+  }
+
+
+  void setInitialValues() {
+
     CustomerEntity? customerEntity = Get.setArgument(customerArgument);
     if (customerEntity != null) {
       isEditing = true;
 
       createCustomerRequest.id = customerEntity.id;
       createCustomerRequest.idTypeDocument = customerEntity.idTypeDocument;
+      createCustomerRequest.idTypeCustomer = customerEntity.idTypeCustomer;
       createCustomerRequest.alias = customerEntity.alias;
       createCustomerRequest.name = customerEntity.name;
       createCustomerRequest.lastName = customerEntity.lastName;
       createCustomerRequest.document = customerEntity.document;
       createCustomerRequest.address = customerEntity.address;
+      
       onChangedTypeDocument(createCustomerRequest.idTypeDocument);
+      onChangedTypeCustomer(createCustomerRequest.idTypeCustomer);
     }
-    super.onInit();
   }
 
   @override
   void onReady() {
     getTypesDocument();
-    getTypesCustomer();
+    getTypesCustomer(initialValue: createCustomerRequest.idTypeCustomer);
     super.onReady();
   }
 
@@ -83,14 +92,16 @@ class AddCustomerController extends GetxController {
     hideLoading();
   }
 
-  void getTypesCustomer() async {
+  void getTypesCustomer({
+    int? initialValue
+    }) async {
     showLoading();
     ResultType<List<TypeCustomerEntity>, ErrorEntity> resultType =
         await getTypesCustomerUseCase.execute();
     if (resultType is Success) {
       typesCustomer = resultType.data as List<TypeCustomerEntity>;
       if (typesCustomer.isNotEmpty) {
-        onChangedTypeCustomer(typesCustomer.first.id);
+        onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
       }
     } else {
       ErrorEntity errorEntity = resultType.error as ErrorEntity;
@@ -120,7 +131,7 @@ class AddCustomerController extends GetxController {
     );
     if (index != notFoundPosition) {
       typeCustomerSelected = typesCustomer[index];
-      createCustomerRequest.idTypeDocument = value;
+      createCustomerRequest.idTypeCustomer = value;
     }
     update([typesCustomerIdGet]);
   }
@@ -227,11 +238,12 @@ class AddCustomerController extends GetxController {
     hideLoading();
 
     if (resultType is Success) {
+      CustomerEntity customer = resultType.data as CustomerEntity;
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.success,
           message: 'Exito');
-      Get.back(result: true);
+      Get.back(result: customer);
     } else {
       showSnackbarWidget(
           context: Get.context!,

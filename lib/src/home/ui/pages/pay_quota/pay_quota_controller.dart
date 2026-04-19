@@ -47,7 +47,11 @@ class PayQuotaController extends GetxController {
     quota = Get.setArgument(dashboardQuotaResponseArgument);
     sourceToLoanEnum = Get.setArgument(sourceToLoanArgument);
     if (quota?.dateToPay != null) {
-      onChangedStartDate(quota?.dateToPay);
+      DateTime dateToPay = quota?.dateToPay ?? defaultDate;
+      if (dateToPay.isAfter(defaultDate)) {
+        dateToPay = defaultDate;
+      }
+      onChangedStartDate(dateToPay);
     }
     payQuotaRequest.idOfQuota = quota?.id;
     super.onInit();

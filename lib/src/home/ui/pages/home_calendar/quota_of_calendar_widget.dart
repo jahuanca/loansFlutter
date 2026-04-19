@@ -14,6 +14,7 @@ class QuotaOfCalendarWidget extends StatelessWidget {
   final int? idStateQuota;
   final bool isSelected;
   final bool isLast;
+  final Widget? stateWidget;
 
   const QuotaOfCalendarWidget({
     super.key,
@@ -24,9 +25,10 @@ class QuotaOfCalendarWidget extends StatelessWidget {
     this.idStateQuota,
     this.onTap,
     this.onLongPress,
-    required this.isLast,
+    this.isLast = false,
     this.isSelected = false,
     this.detail,
+    this.stateWidget,
   });
 
   @override
@@ -53,11 +55,13 @@ class QuotaOfCalendarWidget extends StatelessWidget {
                 condition: isLast && idStateQuota != idOfCompleteQuota,
                 child: Icon(Icons.info, color: infoColor()),
               ),
-              if (enumOfStateQuota != null)
-                _stateWidget(
-                  title: enumOfStateQuota.name,
-                  color: enumOfStateQuota.color,
-                )
+              stateWidget ?? ChildOrElseWidget(
+                      condition: enumOfStateQuota != null,
+                      child: _stateWidget(
+                        title: enumOfStateQuota?.name,
+                        color: enumOfStateQuota?.color,
+                      ),
+              ),
             ],
           ),
         ),
@@ -95,8 +99,8 @@ class QuotaOfCalendarWidget extends StatelessWidget {
   }
 
   Widget _stateWidget({
-    required String title,
-    required Color color,
+    required String? title,
+    required Color? color,
   }) {
     return Expanded(
         flex: 2,
@@ -104,6 +108,6 @@ class QuotaOfCalendarWidget extends StatelessWidget {
             alignmentOfContent: MainAxisAlignment.center,
             backgroundColor: color,
             textColorAndIcon: Colors.white,
-            title: title));
+            title: title.orEmpty()));
   }
 }

@@ -6,5 +6,3 @@ FEATS:
         y cuantos se renovaron con aumento.
     * Necesito agregar el boton de analiticas en crear prestamo para obtener la informacion del cliente en un solo lado.
     
-
-    

@@ -15,6 +15,7 @@ class DashboardQuotaResponse {
   String customerName;
   String? alias;
   double amount;
+  double? amountOfLoan;
   double ganancy;
   int idStateQuota;
   DateTime dateToPay;
@@ -22,12 +23,15 @@ class DashboardQuotaResponse {
   bool isSpecial;
   bool isLast;
 
+  double? amountOfLastLoan;
+
   DashboardQuotaResponse({
     required this.id,
     required this.idLoan,
     required this.name,
     required this.customerName,
     required this.amount,
+    this.amountOfLoan,
     required this.ganancy,
     required this.idStateQuota,
     required this.dateToPay,
@@ -35,6 +39,7 @@ class DashboardQuotaResponse {
     required this.isSpecial,
     required this.isLast,
     this.alias,
+    this.amountOfLastLoan,
   });
 
   String get aliasOrName => alias ?? customerName;
@@ -51,7 +56,9 @@ class DashboardQuotaResponse {
       isLast: json["is_last"],
       customerName: json["customer_name"],
       alias: json["alias"],
-      amount: (json["amount"] as num).toDouble(),
+      amount: json["amount"] == null ? 0 : (json["amount"] as num).toDouble(),
+      amountOfLoan: json["amount_of_loan"] == null ? null : (json["amount_of_loan"] as num).toDouble(),
+      amountOfLastLoan: json["amount_of_last_loan"] == null ? null : (json["amount_of_last_loan"] as num).toDouble(),
       ganancy: (json["ganancy"] as num).toDouble(),
       idStateQuota: json["id_state_quota"],
       isSpecial: json['is_special'],
@@ -66,6 +73,24 @@ class DashboardQuotaResponse {
         "is_last": isLast,
         "alias": alias,
         "amount": amount,
+        "amount_of_loan": amountOfLoan,
+        "amount_of_last_loan": amountOfLastLoan,
+        "ganancy": ganancy,
+        "customer_name": customerName,
+        "id_state_quota": idStateQuota,
+        'is_special': isSpecial,
+        'date_to_pay': dateToPay.toIso8601String(),
+        'paid_date': paidDate?.toIso8601String(),
+      };
+
+  Map<String, dynamic> toJsonForRenewal() => {
+        "id": id,
+        "id_loan": idLoan,
+        "name": name,
+        "is_last": isLast,
+        "alias": alias,
+        "amount": amount,
+        "amount_of_loan": amountOfLoan,
         "ganancy": ganancy,
         "customer_name": customerName,
         "id_state_quota": idStateQuota,

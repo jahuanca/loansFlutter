@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_controller.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/loan_widget.dart';
 import 'package:loands_flutter/src/utils/ui/paddings.dart';
 import 'package:utils/utils.dart';
 
@@ -98,30 +99,23 @@ class LoansPage extends StatelessWidget {
       ? loan.customerEntity?.aliasOrFullName
       : 'Ganancia: S/ ${loan.ganancy.formatDecimals()}';
 
-    return ListTile(
+    return LoanWidget(
+      onTap: () => controller.goToDetail(loan),
+      id: loan.id.orZero(), 
+      loanName: loan.formatTitle, 
+      customerName: subtitle.orEmpty(),
+      isCompleted: loan.isCompleted, 
+      date: loan.startDate.formatDMMYYY(),
+    );
+
+    /* return ListTile(
       onTap: () => controller.goToDetail(loan),
       leading: Text('${loan.id}'),
       title: _titleItem(loan),
       subtitle: Text(subtitle.orEmpty()),
       trailing: Text(loan.startDate.formatDMMYYY() ?? emptyString),
-    );
+    );*/
   }
-
-  Widget _titleItem(LoanEntity loan) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(loan.formatTitle),
-        if (loan.isCompleted) _iconComplete()
-      ],
-    );
-  }
-
-  Widget _iconComplete() => IconWidget(
-      padding: const EdgeInsets.only(left: 8.0),
-      color: successColor(),
-      iconData: Icons.check);
 
   Widget _searchInput() {
     return SearchInputWidget(
