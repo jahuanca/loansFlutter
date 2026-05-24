@@ -7,6 +7,7 @@ import 'package:loands_flutter/src/loans/ui/widgets/options_menu_widget.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/ui/paddings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/totals_bottoms_widget.dart';
 import 'package:utils/utils.dart';
 
@@ -15,10 +16,14 @@ class QuotaGroupPage extends StatelessWidget {
     getQuotasByDateUseCase: Get.find(),
   );
 
+  final TextEditingController searchController = TextEditingController();
+
   QuotaGroupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.sizeOf(context);
+
     return GetBuilder<QuotaGroupController>(
       init: controller,
       id: pageIdGet,
@@ -26,7 +31,7 @@ class QuotaGroupPage extends StatelessWidget {
         onRefresh: controller.getQuotas,
         child: Scaffold(
           appBar: _appBar(),
-          body: _body(),
+          body: _body(size),
           bottomNavigationBar: _bottomNavigation(),
         ),
       ),
@@ -47,11 +52,10 @@ class QuotaGroupPage extends StatelessWidget {
     ]);
   }
 
-  
-
-  Widget _body() {
+  Widget _body(Size size) {
     return ChildOrElseWidget(
-        condition: controller.quotas.isNotEmpty, child: _listOfContent());
+        condition: controller.allQuotas.isNotEmpty,
+        child: _listOfContent(size));
   }
 
   Widget _bottomNavigation() {
@@ -82,7 +86,6 @@ class QuotaGroupPage extends StatelessWidget {
             'Ganancia': ganancy.formatDecimals(),
           }),
         ),
-        
         Expanded(
             flex: 1,
             child: ButtonWidget(
@@ -106,15 +109,30 @@ class QuotaGroupPage extends StatelessWidget {
     });
   }
 
-  Widget _listOfContent() {
-    return (controller.isGroup) ? _listOfGroup() : _listOfCalendar();
+  Widget _listOfContent(Size size) {
+    return (controller.isGroup) ? _listOfGroup() : _listOfCalendar(size);
   }
 
-  Widget _listOfCalendar() {
-    return ListView.builder(
-      itemCount: controller.quotas.length,
-      itemBuilder: (context, index) =>
-          _itemOfCalendar(controller.quotas[index]),
+  Widget _listOfCalendar(Size size) {
+    return Column(
+      children: [
+        SearchInputWidget(
+          padding: Paddings.search,
+          hintText: 'Buscar cuota',
+          controller: searchController,
+          onChanged: controller.onChangedSearch,
+          isSearching: controller.isSearching,
+          onClear: _clearSearch,
+          textOfResults: _textOfResults,
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: controller.quotasToShow.length,
+            itemBuilder: (context, index) =>
+                _itemOfCalendar(controller.quotasToShow[index]),
+          ),
+        )
+      ],
     );
   }
 
@@ -232,5 +250,18 @@ class QuotaGroupPage extends StatelessWidget {
       lastDate: defaultDate.add(halfYearDuration),
     );
     controller.onChangedDateTimeRange(range);
+  }
+
+  void _clearSearch() {
+    searchController.clear();
+    controller.clearSearch();
+  }
+
+  String get _textOfResults {
+    int results = controller.allQuotas.length;
+    int resultsOfShow = controller.quotasToShow.length;
+    return (controller.isSearching.not())
+        ? 'Total: $results'
+        : 'Total: $results, $resultsOfShow coincidencias.';
   }
 }

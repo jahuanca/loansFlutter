@@ -60,7 +60,7 @@ class DashboardPage extends StatelessWidget {
             children: [
               ItemActionWidget(
                 size: size,
-                title: 'Creditos',
+                title: 'Créditos',
                 value: response?.loans,
               ),
               ItemActionWidget(
@@ -77,7 +77,7 @@ class DashboardPage extends StatelessWidget {
             children: [
               ItemActionWidget(
                 size: size,
-                title: 'Ganancia',
+                title: 'Lucro',
                 value: response?.ganancy,
               ),
               ItemActionWidget(

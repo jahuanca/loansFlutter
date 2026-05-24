@@ -13,6 +13,7 @@ class AddLoanInformationPage extends StatelessWidget {
     getPaymentMethodsUseCase: Get.find(),
     validateLoanUseCase: Get.find(),
     getLoanUseCase: Get.find(),
+    getMetadataRenewalUseCase: Get.find(),
   );
 
   final FocusNode focusNodeCustomer = FocusNode();
@@ -53,7 +54,8 @@ class AddLoanInformationPage extends StatelessWidget {
                                 label: customerString,
                                 items: controller.customers,
                                 idLabel: 'aliasOrFullName',
-                                onChanged: controller.onChangedCustomer,
+                                onChanged: (value) =>
+                                    controller.onChangedCustomer(value: value),
                               )),
                     ),
                     Expanded(
@@ -66,13 +68,12 @@ class AddLoanInformationPage extends StatelessWidget {
                         GetBuilder<AddLoanInformationController>(
                           id: customerIdGet,
                           builder: (controller) => ChildOrElseWidget(
-                              condition: controller.customerSelected != null,
-                              child: IconButtonWidget(
-                                  onPressed: controller.goCustomerAnalytics,
-                                  backgroundColor: infoColor(),
-                                  iconData: Icons.analytics),
-                                  
-                              ),
+                            condition: controller.customerSelected != null,
+                            child: IconButtonWidget(
+                                onPressed: controller.goCustomerAnalytics,
+                                backgroundColor: infoColor(),
+                                iconData: Icons.analytics),
+                          ),
                         )
                       ],
                     ))
@@ -156,6 +157,19 @@ class AddLoanInformationPage extends StatelessWidget {
                     onChanged: controller.onChangedMethodsPayment,
                   ),
                 ),
+                if (controller.loansPrevious.isNotEmpty)
+                  GetBuilder<AddLoanInformationController>(
+                    id: 'loans_previous',
+                    builder: (controller) => DropdownMenuWidget(
+                      initialValue: controller.previousLoanSelected?.id,
+                      items: controller.loansPrevious
+                          .map((e) => e.toJson())
+                          .toList(),
+                      label: 'Préstamo anterior',
+                      hintText: 'Préstamo anterior',
+                      onChanged: controller.onChangedPreviousLoan,
+                    ),
+                  ),
               ],
             ),
           ),

@@ -19,10 +19,12 @@ class QuotaGroupController extends GetxController {
   late GetQuotasByDateRequest getQuotasByDateRequest;
   String title = emptyString;
 
-  List<DashboardQuotaResponse> quotas = [];
+  List<DashboardQuotaResponse> allQuotas = [];
+  List<DashboardQuotaResponse> quotasToShow = [];
   Map<dynamic, List<Map<String, dynamic>>> groupByDate = {};
   DateTimeRange? dateTimeRange;
   bool isGroup = false;
+  bool isSearching = false;
 
   List<DashboardQuotaResponse> quotasSelected = [];
 
@@ -53,21 +55,21 @@ class QuotaGroupController extends GetxController {
   }
 
   double get amountOfCapital {
-    List<double> capital = quotas.map((e) => e.amount - e.ganancy).toList();
+    List<double> capital = allQuotas.map((e) => e.amount - e.ganancy).toList();
     return (capital.isNotEmpty)
         ? capital.reduce((value, element) => value + element)
         : defaultDouble;
   }
 
   double get amountOfGanancy {
-    List<double> ganancy = quotas.map((e) => e.ganancy).toList();
+    List<double> ganancy = allQuotas.map((e) => e.ganancy).toList();
     return (ganancy.isNotEmpty)
         ? ganancy.reduce((value, element) => value + element)
         : defaultDouble;
   }
 
   double get amountOfPendingGanancy {
-    List<double> pendingGanancy = quotas
+    List<double> pendingGanancy = allQuotas
         .map((e) =>
             (e.idStateQuota == idOfPendingQuota) ? e.ganancy : defaultDouble)
         .toList();
@@ -77,7 +79,7 @@ class QuotaGroupController extends GetxController {
   }
 
   double get amountOfPendingCapital {
-    List<double> pendingCapital = quotas
+    List<double> pendingCapital = allQuotas
         .map((e) =>
             (e.idStateQuota == idOfPendingQuota) ? (e.amount - e.ganancy) : defaultDouble)
         .toList();
@@ -93,24 +95,26 @@ class QuotaGroupController extends GetxController {
     hideLoading();
 
     if (resultType is Success) {
-      quotas = resultType.data;
+      allQuotas = resultType.data;
       groupByDate = groupBy(
-        values: quotas
+        values: allQuotas
             .map(
               (e) => e.toJson(),
             )
             .toList(),
         functionKey: (p0) => p0['date_to_pay'],
       );
+
+      quotasToShow = allQuotas.toList();
       update([pageIdGet]);
     }
   }
 
   Future<void> goToQuota(int idOfQuota) async {
-    int index = quotas.indexWhere(
+    int index = allQuotas.indexWhere(
       (e) => e.id == idOfQuota,
     );
-    DashboardQuotaResponse quotaSelected = quotas[index];
+    DashboardQuotaResponse quotaSelected = allQuotas[index];
     QuotaEntity? result = await Get.to(() => PayQuotaPage(), arguments: {
       dashboardQuotaResponseArgument: quotaSelected,
       sourceToLoanArgument: SourceToLoanEnum.quotaGroup,
@@ -132,7 +136,7 @@ class QuotaGroupController extends GetxController {
               .format(formatDate: FormatDate.summary)
               .orEmpty()
               .toCapitalize();
-          data += '\n$title\n';
+          if (value.isNotEmpty) data += '\n$title\n';
           for (Map<String, dynamic> element in value) {
             DashboardQuotaResponse quota =
                 DashboardQuotaResponse.fromJson(element);
@@ -182,6 +186,25 @@ class QuotaGroupController extends GetxController {
     Get.to(() => PayQuotaMultiplePage(), arguments: {
       quotasSelectedArgument: quotasSelected,
     });
+  }
+
+  void onChangedSearch(String value) {
+    if (value == emptyString) {
+      clearSearch();
+      return;
+    }
+    isSearching = true;
+    quotasToShow.clear();
+    quotasToShow.addAll(allQuotas.where(
+        (e) => e.aliasOrName.toLowerCase().contains(value.toLowerCase())));
+    update([pageIdGet]);
+  }
+
+  void clearSearch() {
+    isSearching = false;
+    quotasToShow.clear();
+    quotasToShow.addAll(allQuotas);
+    update([pageIdGet]);
   }
 
 }

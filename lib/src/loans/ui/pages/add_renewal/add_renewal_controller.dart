@@ -195,6 +195,8 @@ class AddRenewalController extends GetxController {
     variationTextController.clear();
     typeRenewalTextController.clear();
     customerTextController.clear();
+    loansNew.clear();
+    loansPrevious.clear();
     
     update([pageIdGet]);
   }

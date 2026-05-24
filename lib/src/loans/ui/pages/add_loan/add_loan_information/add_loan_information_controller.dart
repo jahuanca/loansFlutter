@@ -10,9 +10,11 @@ import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
+import 'package:loands_flutter/src/loans/data/responses/get_metadata_renewal_response.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loan_use_case.dart';
+import 'package:loands_flutter/src/loans/domain/use_cases/get_metadata_renewal_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
@@ -37,15 +39,18 @@ class AddLoanInformationController extends GetxController {
   GetPaymentMethodsUseCase getPaymentMethodsUseCase;
   ValidateLoanUseCase validateLoanUseCase;
   GetLoanUseCase getLoanUseCase;
+  GetMetadataRenewalUseCase getMetadataRenewalUseCase;
 
   List<CustomerEntity> customers = [];
   List<PaymentFrequencyEntity> frequencies = [];
   List<PaymentFrequencyEntity> frequenciesOfCustomer = [];
   List<PaymentMethodEntity> methods = [];
+  List<LoanEntity> loansPrevious = [];
 
   CustomerEntity? customerSelected;
   PaymentFrequencyEntity? frequencySelected;
   PaymentMethodEntity? methodSelected;
+  LoanEntity? previousLoanSelected;
 
   AddLoanRequest addLoanRequest = AddLoanRequest();
   TextEditingController percentageTextController = TextEditingController();
@@ -66,6 +71,7 @@ class AddLoanInformationController extends GetxController {
     required this.getPaymentMethodsUseCase,
     required this.validateLoanUseCase,
     required this.getLoanUseCase,
+    required this.getMetadataRenewalUseCase,
   });
 
   @override
@@ -97,6 +103,21 @@ class AddLoanInformationController extends GetxController {
       await getLoanToRenew();
     }
     hideLoading();
+  }
+
+  void getLoans(int idCustomer) async {
+    loansPrevious.clear();
+    addLoanRequest.idLoanToRenew = null;
+    showLoading();
+    ResultType<GetMetadataRenewalResponse, ErrorEntity> resultType =
+        await getMetadataRenewalUseCase.execute(idCustomer);
+    hideLoading();
+    if (resultType is Error) {
+      return;
+    }
+    GetMetadataRenewalResponse? getMetadataRenewalResponse = resultType.data as GetMetadataRenewalResponse;
+    loansPrevious.addAll(getMetadataRenewalResponse.previousLoans);
+    update([pageIdGet]);
   }
 
   Future<void> getCustomers() async {
@@ -137,7 +158,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   void setLoanToRenew(LoanEntity loanToRenew) {
-    onChangedCustomer(loanToRenew.idCustomer);
+    onChangedCustomer(value: loanToRenew.idCustomer, isForChange: false);
     onChangedFrequency(loanToRenew.idPaymentFrequency);
 
     onChangeAmount(loanToRenew.amount.toString());
@@ -148,7 +169,10 @@ class AddLoanInformationController extends GetxController {
     update([pageIdGet]);
   }
 
-  void onChangedCustomer(dynamic value) {
+  void onChangedCustomer({
+    required dynamic value, 
+    bool isForChange = true,
+    }) {
     idCustomerValidationResult =
         validateText(text: value, label: customerString, rules: {
       RuleValidator.isRequired: true,
@@ -168,8 +192,17 @@ class AddLoanInformationController extends GetxController {
             (e) => e.idTypeCustomer == customerSelected?.idTypeCustomer,
           )
           .toList();
+      if (isForChange) getLoans(customerSelected!.id);
       update([frequenciesIdGet, customerIdGet]);
     }
+  }
+
+  void onChangedPreviousLoan(dynamic value) {
+    int index = loansPrevious.indexWhere((e) => e.id == value);
+    if (index != notFoundPosition) {
+      previousLoanSelected = loansPrevious[index];
+    }
+    update(['loans_previous']);
   }
 
   void onChangedFrequency(dynamic value, [bool setPercentage = true]) {
@@ -270,7 +303,7 @@ class AddLoanInformationController extends GetxController {
 
   ValidateResult validate() {
     onChangedStartDate(addLoanRequest.startDate);
-    onChangedCustomer(addLoanRequest.idCustomer);
+    onChangedCustomer(value: addLoanRequest.idCustomer, isForChange: false);
     onChangedFrequency(addLoanRequest.idPaymentFrequency, false);
     onChangedPercentage(addLoanRequest.percentage.toString());
     onChangeAmount(addLoanRequest.amount.toString());
@@ -317,6 +350,13 @@ class AddLoanInformationController extends GetxController {
           message: resultInformation.error ?? emptyString);
       return;
     }
+
+    if (loansPrevious.isNotEmpty && previousLoanSelected == null) {
+      bool isOkay = await showDialogWidget(
+        context: Get.context!,
+        message: 'Este prestamo será marcado sin renovación, ¿está seguro?');
+      if (isOkay.not()) return;
+    }
     addLoanRequest = resultInformation.value as AddLoanRequest;
     bool? isValidate = await goValidate();
     if (isValidate == null) return;
@@ -331,6 +371,11 @@ class AddLoanInformationController extends GetxController {
   }
 
   void goQuotas() {
+
+    if (previousLoanSelected != null) {
+      addLoanRequest.idLoanToRenew = previousLoanSelected?.id;
+    }
+
     Get.to(() => AddLoanQuotasPage(),
         transition: Transition.noTransition,
         opaque: false,
