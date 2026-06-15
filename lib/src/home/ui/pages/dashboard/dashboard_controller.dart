@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
+import 'package:loands_flutter/src/home/di/injections_binding.dart';
 import 'package:loands_flutter/src/home/di/next_renewal_binding.dart';
 import 'package:loands_flutter/src/home/di/payment_summary_binding.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_summary_of_dasboard_use_case.dart';
+import 'package:loands_flutter/src/home/ui/pages/injections/injections_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/next_renewal/next_renewal_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
@@ -64,26 +66,30 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getLogs() async {
-    ResultType<List<ActivityLogEntity>, ErrorEntity> resultType =
+    Result<List<ActivityLogEntity>, ErrorEntity> resultType =
         await getLogsUseCase.execute();
-    if (resultType is Success) {
-      logs = resultType.data;
-    } else {
+    switch (resultType) {
+      case Success(): 
+        logs = resultType.value;
+        break;
+      case Error():
       showError(context: Get.context!, errorEntity: resultType.error);
+        break;
     }
   }
 
   Future<void> getSummary([bool updateDateSelected = true]) async {
-    ResultType<SummaryOfDashboardResponse, ErrorEntity> resultType =
+    Result<SummaryOfDashboardResponse, ErrorEntity> resultType =
         await getSummaryDasboardUseCase.execute();
-    if (resultType is Success) {
-      summaryOfDashboardResponse = resultType.data;
-      if (updateDateSelected) {
-        dateSelected = defaultDate;
-      }
-    } else {
+    switch (resultType) {
+      case Success(): 
+        summaryOfDashboardResponse = resultType.value;
+        break;
+      case Error():
       showError(context: Get.context!, errorEntity: resultType.error);
+        break;
     }
+
     await getQuotasByDay(dateSelected);
   }
 
@@ -93,13 +99,16 @@ class DashboardController extends GetxController {
     showLoading();
     GetQuotasByDateRequest request =
         GetQuotasByDateRequest(fromDate: dateTime, untilDate: dateTime);
-    ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getQuotasByDateUseCase.execute(request);
-    if (resultType is Success) {
-      quotasByDate = resultType.data;
-      update([quotasIdGet]);
-    } else {
+    switch (resultType) {
+      case Success(): 
+        quotasByDate = resultType.value;
+        update([quotasIdGet]);
+        break;
+      case Error():
       showError(context: Get.context!, errorEntity: resultType.error);
+        break;
     }
     hideLoading();
   }
@@ -110,6 +119,10 @@ class DashboardController extends GetxController {
 
   void goToNextRenewal() {
     Get.to(() => const NextRenewalPage(), binding: NextRenewalBinding());
+  }
+
+  void goToInjections() {
+    Get.to(() => InjectionsPage(), binding: InjectionsBinding());
   }
 
   void changeDatePicker(DateTime? dateTime) {

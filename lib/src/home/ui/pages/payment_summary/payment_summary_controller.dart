@@ -39,11 +39,15 @@ class PaymentSummaryController extends GetxController {
 
   Future<void> getSummaryMonths() async {
     showLoading();
-    ResultType<List<SummaryMonthResponse>, ErrorEntity> resultType =
+    Result<List<SummaryMonthResponse>, ErrorEntity> resultType =
         await getSummaryMonthsUseCase.execute();
     hideLoading();
-    if (resultType is Success) {
-      summary = resultType.data;
+    switch (resultType) {
+      case Success():
+      summary = resultType.value;
+        break;
+      case Error(): 
+        break;
     }
     update([pageIdGet]);
   }

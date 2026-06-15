@@ -9,7 +9,7 @@ class GetCustomerAnalyticsUseCase {
 
   GetCustomerAnalyticsUseCase(this.repository);
 
-  Future<ResultType<CustomerAnalyticsResponse, ErrorEntity>> execute(int idOfCustomer) {
+  Future<Result<CustomerAnalyticsResponse, ErrorEntity>> execute(int idOfCustomer) {
     return repository.getAnalytics(idOfCustomer);
   }
 

@@ -6,8 +6,8 @@ import 'package:loands_flutter/src/utils/domain/entities/type_document_entity.da
 import 'package:utils/utils.dart';
 
 abstract class UtilsRepository {
-  Future<ResultType<List<TypeDocumentEntity>, ErrorEntity>> getTypesDocument();
-  Future<ResultType<List<PaymentFrequencyEntity>, ErrorEntity>> getPaymentFrecuencies();
-  Future<ResultType<List<PaymentMethodEntity>, ErrorEntity>> getMethodsPayment();
-  Future<ResultType<List<ActivityLogEntity>, ErrorEntity>> getLastsLog();
+  Future<Result<List<TypeDocumentEntity>, ErrorEntity>> getTypesDocument();
+  Future<Result<List<PaymentFrequencyEntity>, ErrorEntity>> getPaymentFrecuencies();
+  Future<Result<List<PaymentMethodEntity>, ErrorEntity>> getMethodsPayment();
+  Future<Result<List<ActivityLogEntity>, ErrorEntity>> getLastsLog();
 }

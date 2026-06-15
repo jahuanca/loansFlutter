@@ -8,15 +8,15 @@ import 'package:utils/utils.dart';
 class UtilsOnlineDatastore extends UtilsDatastore {
 
   @override
-  Future<ResultType<List<TypeDocumentEntity>, ErrorEntity>>
+  Future<Result<List<TypeDocumentEntity>, ErrorEntity>>
       getTypesDocument() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/type-document');
     if (response.isSuccessful) {
-      return Success(data: typeDocumentEntityFromJson(response.body));
+      return Success( typeDocumentEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -24,15 +24,15 @@ class UtilsOnlineDatastore extends UtilsDatastore {
   }
 
   @override
-  Future<ResultType<List<PaymentMethodEntity>, ErrorEntity>>
+  Future<Result<List<PaymentMethodEntity>, ErrorEntity>>
       getMethodsPayment() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/payment-method');
     if (response.isSuccessful) {
-      return Success(data: paymentMethodEntityFromJson(response.body));
+      return Success( paymentMethodEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -40,15 +40,15 @@ class UtilsOnlineDatastore extends UtilsDatastore {
   }
 
   @override
-  Future<ResultType<List<PaymentFrequencyEntity>, ErrorEntity>>
+  Future<Result<List<PaymentFrequencyEntity>, ErrorEntity>>
       getPaymentFrecuencies() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/payment-frequency');
     if (response.isSuccessful) {
-      return Success(data: paymentFrequencyEntityFromJson(response.body));
+      return Success( paymentFrequencyEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -56,14 +56,14 @@ class UtilsOnlineDatastore extends UtilsDatastore {
   }
 
   @override
-  Future<ResultType<List<ActivityLogEntity>, ErrorEntity>> getLastsLog() async {
+  Future<Result<List<ActivityLogEntity>, ErrorEntity>> getLastsLog() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/log');
     if (response.isSuccessful) {
-      return Success(data: activityLogEntityFromJson(response.body));
+      return Success( activityLogEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));

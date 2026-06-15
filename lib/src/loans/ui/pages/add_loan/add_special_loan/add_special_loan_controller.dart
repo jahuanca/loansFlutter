@@ -101,29 +101,41 @@ class AddSpecialLoanController extends GetxController {
   }
 
   Future<void> getCustomers() async {
-    ResultType<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>, ErrorEntity> resultType =
         await getCustomersUseCase.execute();
-    if (resultType is Success) {
-      customers = resultType.data;
+    switch (resultType) {
+      case Success():
+      customers = resultType.value;
+        break;
+      case Error(): 
+        break;
     }
     update([customersIdGet]);
   }
 
   Future<void> getPaymentFrecuencies() async {
-    ResultType<List<PaymentFrequencyEntity>, ErrorEntity> resultType =
+    Result<List<PaymentFrequencyEntity>, ErrorEntity> resultType =
         await getPaymentFrequenciesUseCase.execute();
-    if (resultType is Success) {
-      frequencies = resultType.data;
+    switch (resultType) {
+      case Success():
+      frequencies = resultType.value;
+        break;
+      case Error(): 
+        break;
     }
     update([frequenciesIdGet]);
   }
 
   Future<void> getMethodsPayment() async {
-    ResultType<List<PaymentMethodEntity>, ErrorEntity> resultType =
+    Result<List<PaymentMethodEntity>, ErrorEntity> resultType =
         await getPaymentMethodsUseCase.execute();
-    if (resultType is Success) {
-      methods = resultType.data;
+    switch (resultType) {
+      case Success():
+      methods = resultType.value;
       onChangedMethodsPayment(idOfMethodPaymentDefault);
+        break;
+      case Error(): 
+        break;
     }
     update([methodsIdGet]);
   }
@@ -132,9 +144,13 @@ class AddSpecialLoanController extends GetxController {
 
     final request = GetLoanRequest(id: createRenewalSpecialRequest?.idLoanToRenew);
 
-    ResultType<LoanEntity, ErrorEntity> resultType = await getLoanUseCase.execute(request);
-    if (resultType is Success) {
-      setLoanToRenew(resultType.data as LoanEntity);
+    Result<LoanEntity, ErrorEntity> resultType = await getLoanUseCase.execute(request);
+    switch (resultType) {
+      case Success():
+      setLoanToRenew(resultType.value);
+        break;
+      case Error(): 
+        break;
     }
   }
 
@@ -335,11 +351,12 @@ class AddSpecialLoanController extends GetxController {
             amount: addSpecialLoanRequest.amount!,
             startDate: addSpecialLoanRequest.startDate!);
 
-    ResultType<bool, ErrorEntity> resultType =
+    Result<bool, ErrorEntity> resultType =
         await validateLoanUseCase.execute(request);
-    if (resultType is Success) {
-      return resultType.data;
-    } else {
+    switch (resultType) {
+      case Success():
+      return resultType.value;
+      case Error(): 
       return null;
     }
   }

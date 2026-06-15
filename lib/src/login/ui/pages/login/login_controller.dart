@@ -38,13 +38,17 @@ class LoginController extends GetxController {
     showLoading();
     LoginRequest request =
         LoginRequest(email: username!.value, password: password!.value);
-    ResultType<LoginEntity, ErrorEntity> resultType =
+    Result<LoginEntity, ErrorEntity> resultType =
         await loginUseCase.execute(request);
-    if (resultType is Success) {
-      LoginEntity loginEntity = resultType.data as LoginEntity;
+    switch (resultType) {
+      case Success():
+      LoginEntity loginEntity = resultType.value;
       await UserPreferences().setToken(loginEntity.token);
       Get.off(() => NavigationContentPage(),
           binding: NavigationContentBinding());
+        break;
+      case Error(): 
+        break;
     }
     hideLoading();
   }

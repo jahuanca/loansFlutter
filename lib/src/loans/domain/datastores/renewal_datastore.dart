@@ -8,8 +8,8 @@ import 'package:loands_flutter/src/loans/domain/entities/renewal_entity.dart';
 import 'package:utils/utils.dart';
 
 abstract class RenewalDataStore {
-  Future<ResultType<GetMetadataRenewalResponse,ErrorEntity>> getMetadata(int idCustomer);
-  Future<ResultType<RenewalEntity,ErrorEntity>> add(AddRenewalRequest request);
-  Future<ResultType<PayAndRenewalResponse,ErrorEntity>> payAndRenewal(PayAndRenewalRequest request);
-  Future<ResultType<PayAndRenewalResponse,ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request);
+  Future<Result<GetMetadataRenewalResponse,ErrorEntity>> getMetadata(int idCustomer);
+  Future<Result<RenewalEntity,ErrorEntity>> add(AddRenewalRequest request);
+  Future<Result<PayAndRenewalResponse,ErrorEntity>> payAndRenewal(PayAndRenewalRequest request);
+  Future<Result<PayAndRenewalResponse,ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request);
 }

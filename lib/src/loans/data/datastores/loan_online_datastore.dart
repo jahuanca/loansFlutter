@@ -11,16 +11,16 @@ import 'package:utils/utils.dart';
 
 class LoanOnlineDatastore extends LoanDatastore {
   @override
-  Future<ResultType<LoanEntity, ErrorEntity>> create(
+  Future<Result<LoanEntity, ErrorEntity>> create(
       AddLoanRequest addLoanRequest) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.post(
         url: '/loan/create', body: addLoanRequest.toJson());
     if (response.isSuccessful) {
-      return Success(data: LoanEntity.fromJson(jsonDecode(response.body)));
+      return Success( LoanEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -28,14 +28,14 @@ class LoanOnlineDatastore extends LoanDatastore {
   }
 
   @override
-  Future<ResultType<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request) async {
+  Future<Result<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/loan', query: request.toJson());
     if (response.isSuccessful) {
-      return Success(data: loanEntityFromJson(response.body));
+      return Success( loanEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -43,16 +43,16 @@ class LoanOnlineDatastore extends LoanDatastore {
   }
 
   @override
-  Future<ResultType<LoanEntity, ErrorEntity>> createSpecial(
+  Future<Result<LoanEntity, ErrorEntity>> createSpecial(
       AddSpecialLoanRequest addSpecialLoanRequest) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.post(
         url: '/loan/create-special', body: addSpecialLoanRequest.toJson());
     if (response.isSuccessful) {
-      return Success(data: LoanEntity.fromJson(jsonDecode(response.body)));
+      return Success( LoanEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -60,16 +60,16 @@ class LoanOnlineDatastore extends LoanDatastore {
   }
 
   @override
-  Future<ResultType<bool, ErrorEntity>> validate(
+  Future<Result<bool, ErrorEntity>> validate(
       ValidateLoanRequest validateLoanRequest) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.post(
         url: '/loan/validate', body: validateLoanRequest.toJson());
     if (response.isSuccessful) {
-      return Success(data: jsonDecode(response.body) as bool);
+      return Success( jsonDecode(response.body) as bool);
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -77,14 +77,14 @@ class LoanOnlineDatastore extends LoanDatastore {
   }
   
   @override
-  Future<ResultType<LoanEntity, ErrorEntity>> get(GetLoanRequest request) async {
+  Future<Result<LoanEntity, ErrorEntity>> get(GetLoanRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/loan/id/${request.id}');
     if (response.isSuccessful) {
-      return Success(data: LoanEntity.fromJson(jsonDecode(response.body)));
+      return Success( LoanEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));

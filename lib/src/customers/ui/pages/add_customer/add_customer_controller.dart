@@ -74,20 +74,23 @@ class AddCustomerController extends GetxController {
 
   void getTypesDocument() async {
     showLoading();
-    ResultType<List<TypeDocumentEntity>, ErrorEntity> resultType =
+    Result<List<TypeDocumentEntity>, ErrorEntity> resultType =
         await getTypesDocumentUseCase.execute();
-    if (resultType is Success) {
-      typesDocument = resultType.data as List<TypeDocumentEntity>;
+    switch (resultType) {
+      case Success():
+      typesDocument = resultType.value;
       if (typesDocument.isNotEmpty) {
         onChangedTypeDocument(typesDocument.first.id);
       }
-    } else {
-      ErrorEntity errorEntity = resultType.error as ErrorEntity;
+        break;
+      case Error(): 
+      ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.title,
       );
+        break;
     }
     hideLoading();
   }
@@ -96,20 +99,24 @@ class AddCustomerController extends GetxController {
     int? initialValue
     }) async {
     showLoading();
-    ResultType<List<TypeCustomerEntity>, ErrorEntity> resultType =
+    Result<List<TypeCustomerEntity>, ErrorEntity> resultType =
         await getTypesCustomerUseCase.execute();
-    if (resultType is Success) {
-      typesCustomer = resultType.data as List<TypeCustomerEntity>;
+
+    switch (resultType) {
+      case Success():
+      typesCustomer = resultType.value;
       if (typesCustomer.isNotEmpty) {
         onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
       }
-    } else {
-      ErrorEntity errorEntity = resultType.error as ErrorEntity;
+        break;
+      case Error(): 
+      ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.title,
       );
+        break;
     }
     hideLoading();
   }
@@ -227,7 +234,7 @@ class AddCustomerController extends GetxController {
   }
 
   void _execute() async {
-    late ResultType<CustomerEntity, ErrorEntity> resultType;
+    late Result<CustomerEntity, ErrorEntity> resultType;
 
     showLoading();
     if (isEditing) {
@@ -237,18 +244,22 @@ class AddCustomerController extends GetxController {
     }
     hideLoading();
 
-    if (resultType is Success) {
-      CustomerEntity customer = resultType.data as CustomerEntity;
+    switch (resultType) {
+      case Success():
+      CustomerEntity customer = resultType.value;
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.success,
           message: 'Exito');
       Get.back(result: customer);
-    } else {
+        break;
+      case Error(): 
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: 'Ocurrio un error');
+        break;
     }
+
   }
 }

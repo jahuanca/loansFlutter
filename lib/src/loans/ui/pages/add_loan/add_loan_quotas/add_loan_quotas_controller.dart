@@ -88,33 +88,37 @@ class AddLoanQuotasController extends GetxController {
     createRenewalRequest?.idPaymentMethod = addLoanRequest.idPaymentMethod;
     createRenewalRequest?.ganancy = addLoanRequest.ganancy;
 
-    ResultType<PayAndRenewalResponse, ErrorEntity> resultType =
+    Result<PayAndRenewalResponse, ErrorEntity> resultType =
         await createRenewalUseCase.execute(createRenewalRequest!);
-    if (resultType is Error) {
+    switch (resultType) {
+      case Success():
+      PayAndRenewalResponse response = resultType.value;
+      _successCreateRenewal(response.loan, response.quota);
+        break;
+      case Error(): 
       ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.errorMessage);
-      return;
-    } else {
-      PayAndRenewalResponse response = resultType.data;
-      _successCreateRenewal(response.loan, response.quota);
+        break;
     }
   }
 
   void _createLoan() async {
-    ResultType<LoanEntity, ErrorEntity> resultType =
+    Result<LoanEntity, ErrorEntity> resultType =
         await createLoanUseCase.execute(addLoanRequest);
-    if (resultType is Error) {
+    switch (resultType) {
+      case Success():
+      _successCreate(resultType.value);
+        break;
+      case Error(): 
       ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.errorMessage);
-      return;
-    } else {
-      _successCreate(resultType.data as LoanEntity);
+        break;
     }
   }
 

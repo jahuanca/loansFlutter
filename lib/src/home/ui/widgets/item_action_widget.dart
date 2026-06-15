@@ -22,10 +22,10 @@ class ItemActionWidget extends StatelessWidget {
     const double height = _heightOfCard / 2;
 
     return Padding(
-      padding: defaultPadding,
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
       child: Container(
         alignment: Alignment.center,
-        width: size.width * 0.5 - 32,
+        width: size.width * 0.5 - 16,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius()),
           border: Border.all(),

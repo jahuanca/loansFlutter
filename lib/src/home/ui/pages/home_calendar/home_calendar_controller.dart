@@ -37,10 +37,17 @@ class HomeCalendarController extends GetxController {
 
   Future<void> getSummaryOfCalendar() async {
     showLoading();
-    ResultType<SummaryOfCalendarResponse, ErrorEntity> resultType =
+    Result<SummaryOfCalendarResponse, ErrorEntity> resultType =
         await getSummaryOfCalendarUseCase.execute();
-    if (resultType is Success) {
-      summaryOfCalendarResponse = resultType.data;
+
+    switch (resultType) {
+      case Success(): 
+        summaryOfCalendarResponse = resultType.value;
+        update([quotasIdGet]);
+        break;
+      case Error():
+      // showError(context: Get.context!, errorEntity: resultType.error);
+        break;
     }
     update([pageIdGet]);
     await getQuotasByDay(dateSelected);
@@ -55,16 +62,19 @@ class HomeCalendarController extends GetxController {
       fromDate: dateTime,
       untilDate: dateTime
     );
-    ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getQuotasByDateUseCase.execute(request);
-    if (resultType is Success) {
-      quotasByDate = resultType.data;
+    switch (resultType) {
+      case Success():
+      quotasByDate = resultType.value;
       update([quotasIdGet]);
-    } else {
+        break;
+      case Error(): 
       showSnackbarWidget(
           typeSnackbar: TypeSnackbar.error,
           context: Get.context!,
-          message: resultType.error.toString());
+          message: resultType.toString());
+        break;
     }
     hideLoading();
   }

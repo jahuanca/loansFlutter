@@ -28,16 +28,19 @@ class CustomersController extends GetxController {
   Future<void> getCustomers() async {
     customersToShow.clear();
     showLoading();
-    ResultType<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>, ErrorEntity> resultType =
         await getCustomersUseCase.execute();
-    if (resultType is Success) {
-      customers = resultType.data as List<CustomerEntity>;
+    switch (resultType) {
+      case Success():
+      customers = resultType.value;
       customersToShow.addAll(customers);
-    } else {
+        break;
+      case Error(): 
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: 'Ocurrio un error');
+        break;
     }
     hideLoading();
     update([pageIdGet]);

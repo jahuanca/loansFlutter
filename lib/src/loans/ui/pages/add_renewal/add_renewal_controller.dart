@@ -53,28 +53,34 @@ class AddRenewalController extends GetxController {
 
   void getCustomers() async {
     showLoading();
-    ResultType<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>, ErrorEntity> resultType =
         await getCustomersUseCase.execute();
     hideLoading();
-    if (resultType is Error) {
-      return;
+    switch (resultType) {
+      case Success():
+    customers = resultType.value;
+        break;
+      case Error(): 
+        break;
     }
-    customers = resultType.data as List<CustomerEntity>;
     update([pageIdGet]);
   }
 
   void getLoans(int idCustomer) async {
     showLoading();
-    ResultType<GetMetadataRenewalResponse, ErrorEntity> resultType =
+    Result<GetMetadataRenewalResponse, ErrorEntity> resultType =
         await getMetadataRenewalUseCase.execute(idCustomer);
     hideLoading();
-    if (resultType is Error) {
-      return;
-    }
+    switch (resultType) {
+      case Success():
     loansNew.clear();
-    getMetadataRenewalResponse = resultType.data as GetMetadataRenewalResponse;
+    getMetadataRenewalResponse = resultType.value;
     loansNew = getMetadataRenewalResponse?.newLoans ?? [];
     update([pageIdGet]);
+        break;
+      case Error(): 
+        break;
+    }
   }
 
   void onChangedCustomer(dynamic value) {
@@ -157,10 +163,13 @@ class AddRenewalController extends GetxController {
 
   void _goCreate() async {
     showLoading();
-    ResultType<RenewalEntity, ErrorEntity> resultType =
+    Result<RenewalEntity, ErrorEntity> resultType =
         await addRenewalUseCase.execute(addRenewalRequest);
     hideLoading();
-    if (resultType is Error) {
+    switch (resultType) {
+      case Success():
+        break;
+      case Error(): 
       ErrorEntity errorEntity = resultType.error;
       showSnackbarWidget(
           context: Get.context!,

@@ -11,7 +11,7 @@ class GetQuotaUseCase {
     required this.repository,
   });
 
-    Future<ResultType<QuotaEntity,ErrorEntity>> execute(int idOfQuota){
+    Future<Result<QuotaEntity,ErrorEntity>> execute(int idOfQuota){
       return repository.getQuota(idOfQuota);
     }
 

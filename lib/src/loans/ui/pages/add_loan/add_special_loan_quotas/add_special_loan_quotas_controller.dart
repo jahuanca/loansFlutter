@@ -94,35 +94,39 @@ class AddSpecialLoanQuotasController extends GetxController {
     createRenewalSpecialRequest?.numberOfInstallments = addLoanSpecialRequest.numberOfInstallments;
     createRenewalSpecialRequest?.daysBetweenInstallments = addLoanSpecialRequest.daysBetweenInstallments;
 
-    ResultType<PayAndRenewalResponse, ErrorEntity> resultType =
+    Result<PayAndRenewalResponse, ErrorEntity> resultType =
           await payAndRenewalSpecialUseCase.execute(createRenewalSpecialRequest!);
-      if (resultType is Error) {
+      switch (resultType) {
+      case Success():
+        PayAndRenewalResponse response = resultType.value;
+        _successCreateRenewal(response.loan, response.quota);
+        break;
+      case Error(): 
         ErrorEntity errorEntity = resultType.error;
         showSnackbarWidget(
             context: Get.context!,
             typeSnackbar: TypeSnackbar.error,
             message: errorEntity.errorMessage,
         );
-        return;
-      } else {
-        PayAndRenewalResponse response = resultType.data;
-        _successCreateRenewal(response.loan, response.quota);
-      }
+        break;
+    }
   }
 
   Future<void> _createLoan() async {
-    ResultType<LoanEntity, ErrorEntity> resultType =
+    Result<LoanEntity, ErrorEntity> resultType =
         await createSpecialLoanUseCase.execute(addLoanSpecialRequest);
-    if (resultType is Error) {
+    switch (resultType) {
+      case Success():
+      LoanEntity newLoan = resultType.value;
+      _successCreate(newLoan);
+      Get.until((route) => route.settings.name == RoutesName.initial.route);
+        break;
+      case Error(): 
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
-          message: resultType.error);
-      return;
-    } else {
-      LoanEntity newLoan = resultType.data;
-      _successCreate(newLoan);
-      Get.until((route) => route.settings.name == RoutesName.initial.route);
+          message: resultType.error.errorMessage);
+        break;
     }
   }
 

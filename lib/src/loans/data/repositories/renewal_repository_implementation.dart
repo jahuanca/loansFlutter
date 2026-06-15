@@ -18,22 +18,22 @@ class RenewalRepositoryImplementation extends RenewalRepository {
   });
 
   @override
-  Future<ResultType<PayAndRenewalResponse, ErrorEntity>> payAndRenewal(PayAndRenewalRequest request) {
+  Future<Result<PayAndRenewalResponse, ErrorEntity>> payAndRenewal(PayAndRenewalRequest request) {
     return datastore.payAndRenewal(request);
   }
 
   @override
-  Future<ResultType<RenewalEntity, ErrorEntity>> add(AddRenewalRequest request) {
+  Future<Result<RenewalEntity, ErrorEntity>> add(AddRenewalRequest request) {
     return datastore.add(request);
   }
 
   @override
-  Future<ResultType<GetMetadataRenewalResponse, ErrorEntity>> getMetadata(int idCustomer) {
+  Future<Result<GetMetadataRenewalResponse, ErrorEntity>> getMetadata(int idCustomer) {
     return datastore.getMetadata(idCustomer);
   }
 
   @override
-  Future<ResultType<PayAndRenewalResponse, ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request) {
+  Future<Result<PayAndRenewalResponse, ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request) {
     return datastore.payAndRenewalSpecial(request);
   }
 }

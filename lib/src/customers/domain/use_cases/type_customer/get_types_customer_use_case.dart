@@ -8,7 +8,7 @@ class GetTypesCustomerUseCase {
 
   GetTypesCustomerUseCase(this.repository);
 
-  Future<ResultType<List<TypeCustomerEntity>, ErrorEntity>> execute() async {
+  Future<Result<List<TypeCustomerEntity>, ErrorEntity>> execute() async {
     return repository.getAll();
   }
 }

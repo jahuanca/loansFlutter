@@ -7,16 +7,16 @@ import 'package:utils/utils.dart';
 
 class QuotaOnlineDatastore extends QuotaDatastore {
   @override
-  Future<ResultType<List<QuotaEntity>, ErrorEntity>> getAll(
+  Future<Result<List<QuotaEntity>, ErrorEntity>> getAll(
       GetAllQuotasRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.get(url: '/quota', query: request.toJson());
     if (response.isSuccessful) {
-      return Success(data: quotaEntityFromJson(response.body));
+      return Success( quotaEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: '',
               errorMessage: response.body));
@@ -24,15 +24,15 @@ class QuotaOnlineDatastore extends QuotaDatastore {
   }
 
   @override
-  Future<ResultType<QuotaEntity, ErrorEntity>> getQuota(int idOfQuota) async {
+  Future<Result<QuotaEntity, ErrorEntity>> getQuota(int idOfQuota) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.get(url: '/quota/$idOfQuota');
     if (response.isSuccessful) {
-      return Success(data: QuotaEntity.fromJson(jsonDecode(response.body)));
+      return Success( QuotaEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: 'Error',
               errorMessage: response.body));

@@ -9,7 +9,7 @@ class GetMetadataRenewalUseCase {
 
   GetMetadataRenewalUseCase(this.repository);
 
-  Future<ResultType<GetMetadataRenewalResponse, ErrorEntity>> execute(int idCustomer) {
+  Future<Result<GetMetadataRenewalResponse, ErrorEntity>> execute(int idCustomer) {
     return repository.getMetadata(idCustomer);
   }
 

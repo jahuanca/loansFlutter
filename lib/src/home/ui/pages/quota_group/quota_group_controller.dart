@@ -90,12 +90,12 @@ class QuotaGroupController extends GetxController {
 
   Future<void> getQuotas() async {
     showLoading();
-    ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getQuotasByDateUseCase.execute(getQuotasByDateRequest);
     hideLoading();
-
-    if (resultType is Success) {
-      allQuotas = resultType.data;
+    switch (resultType) {
+      case Success():
+      allQuotas = resultType.value;
       groupByDate = groupBy(
         values: allQuotas
             .map(
@@ -107,6 +107,9 @@ class QuotaGroupController extends GetxController {
 
       quotasToShow = allQuotas.toList();
       update([pageIdGet]);
+        break;
+      case Error(): 
+        break;
     }
   }
 
@@ -136,11 +139,17 @@ class QuotaGroupController extends GetxController {
               .format(formatDate: FormatDate.summary)
               .orEmpty()
               .toCapitalize();
-          if (value.isNotEmpty) data += '\n$title\n';
+          bool hasTitle = false;
           for (Map<String, dynamic> element in value) {
+            
             DashboardQuotaResponse quota =
                 DashboardQuotaResponse.fromJson(element);
             if (quota.idStateQuota != idOfPendingQuota) continue;
+
+            if (hasTitle.not()) {
+              data += '\n$title\n';
+              hasTitle = true;
+            }
             double amount = quota.amount;
             double sendMe = amount - (quota.ganancy / 2);
             data +=
@@ -206,5 +215,4 @@ class QuotaGroupController extends GetxController {
     quotasToShow.addAll(allQuotas);
     update([pageIdGet]);
   }
-
 }

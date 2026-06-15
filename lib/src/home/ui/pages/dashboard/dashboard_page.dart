@@ -45,7 +45,7 @@ class DashboardPage extends StatelessWidget {
   Widget _cards({
     required Size size,
   }) {
-    const double heightOfCard = 120;
+    const double heightOfCard = 200;
 
     SummaryOfDashboardResponse? response =
         controller.summaryOfDashboardResponse;
@@ -88,6 +88,24 @@ class DashboardPage extends StatelessWidget {
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ItemActionWidget(
+                size: size,
+                title: 'Inyección',
+                value: response?.injection.formatDecimals(),
+                onTap: controller.goToInjections,
+              ),
+              ItemActionWidget(
+                size: size,
+                title: 'Cesaron',
+                value: response?.renovar,
+                onTap: controller.goToNextRenewal,
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -105,14 +123,14 @@ class DashboardPage extends StatelessWidget {
     return Column(
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: defaultPadding,
           child: Text(
             'Actividad',
             style: subtitleStyle,
           ),
         ),
         SizedBox(
-          height: size.height * 0.5,
+          height: size.height * 0.45,
           child: ListView.separated(
             separatorBuilder: (context, index) => const Divider(),
             itemCount: controller.logs.length,

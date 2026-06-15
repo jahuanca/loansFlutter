@@ -11,7 +11,7 @@ class GetLoanUseCase {
     required this.repository,
   });
 
-  Future<ResultType<LoanEntity,ErrorEntity>> execute(GetLoanRequest request) {
+  Future<Result<LoanEntity,ErrorEntity>> execute(GetLoanRequest request) {
     return repository.get(request);
   }
 

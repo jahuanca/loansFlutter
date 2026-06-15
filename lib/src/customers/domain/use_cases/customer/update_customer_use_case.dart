@@ -10,7 +10,7 @@ class UpdateCustomerUseCase {
     required this.repository,
   });
 
-  Future<ResultType<CustomerEntity, ErrorEntity>> execute(
+  Future<Result<CustomerEntity, ErrorEntity>> execute(
       CreateCustomerRequest request) {
     return repository.update(request);
   }

@@ -87,20 +87,23 @@ class PayQuotaController extends GetxController {
         'Se registrara la cuota como pagada, ¿desea continuar?');
     if (goAction) {
       showLoading();
-      ResultType<QuotaEntity, ErrorEntity> resultType =
+      Result<QuotaEntity, ErrorEntity> resultType =
           await payQuotaUseCase.execute(payQuotaRequest);
       hideLoading();
-      if (resultType is Success) {
-        QuotaEntity quotaToReturn = resultType.data;
+      switch (resultType) {
+      case Success():
+        QuotaEntity quotaToReturn = resultType.value;
         updateQuotaAndCopy(quotaToReturn);
         Get.back(result: quotaToReturn);
-      } else {
+        break;
+      case Error(): 
         ErrorEntity errorEntity = resultType.error;
         showSnackbarWidget(
             context: Get.context!,
             typeSnackbar: TypeSnackbar.error,
             message: errorEntity.errorMessage);
-      }
+        break;
+    }
     }
   }
 

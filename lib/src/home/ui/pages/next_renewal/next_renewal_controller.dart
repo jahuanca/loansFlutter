@@ -26,13 +26,17 @@ class NextRenewalController extends GetxController {
 
   Future<void> getRenewals() async {
     showLoading();
-    ResultType<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getNextRenewalUseCase.execute();
     hideLoading();
-    if (resultType is Success) {
-      quotas = resultType.data;
-      update([pageIdGet]);
+    switch (resultType) {
+      case Success():
+      quotas = resultType.value;
+        break;
+      case Error(): 
+        break;
     }
+    update([pageIdGet]);
   }
 
   void goToDetail(LoanEntity loanSelected) async {

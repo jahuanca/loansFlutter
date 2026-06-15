@@ -11,7 +11,7 @@ class GetSummaryOfDasboardUseCase {
     required this.repository
   });
 
-  Future<ResultType<SummaryOfDashboardResponse, ErrorEntity>> execute() async {
+  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> execute() async {
     return repository.getSummaryOfDashboard();
   }
 }

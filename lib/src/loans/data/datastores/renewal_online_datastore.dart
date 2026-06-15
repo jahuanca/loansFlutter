@@ -13,15 +13,15 @@ import 'package:utils/utils.dart';
 class RenewalOnlineDatastore extends RenewalDataStore {
 
   @override
-  Future<ResultType<PayAndRenewalResponse, ErrorEntity>> payAndRenewal(PayAndRenewalRequest request) async {
+  Future<Result<PayAndRenewalResponse, ErrorEntity>> payAndRenewal(PayAndRenewalRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.post(url: '/renewal/pay_and_renewal', body: request.toApi());
     if (response.isSuccessful) {
-      return Success(data: PayAndRenewalResponse.fromJson(jsonDecode(response.body)));
+      return Success( PayAndRenewalResponse.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -29,15 +29,15 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   }
 
   @override
-  Future<ResultType<RenewalEntity, ErrorEntity>> add(AddRenewalRequest request) async {
+  Future<Result<RenewalEntity, ErrorEntity>> add(AddRenewalRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.post(url: '/renewal/create', body: request.toJson());
     if (response.isSuccessful) {
-      return Success(data: RenewalEntity.fromJson(jsonDecode(response.body)));
+      return Success( RenewalEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -45,15 +45,15 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   }
 
   @override
-  Future<ResultType<GetMetadataRenewalResponse, ErrorEntity>> getMetadata(int idCustomer) async {
+  Future<Result<GetMetadataRenewalResponse, ErrorEntity>> getMetadata(int idCustomer) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.get(url: '/renewal/metadata', query: {'id_customer': idCustomer});
     if (response.isSuccessful) {
-      return Success(data: GetMetadataRenewalResponse.fromJson(jsonDecode(response.body)));
+      return Success( GetMetadataRenewalResponse.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -61,15 +61,15 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   }
 
   @override
-  Future<ResultType<PayAndRenewalResponse, ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request) async {
+  Future<Result<PayAndRenewalResponse, ErrorEntity>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.post(url: '/renewal/pay_and_renewal_special', body: request.toApi());
     if (response.isSuccessful) {
-      return Success(data: PayAndRenewalResponse.fromJson(jsonDecode(response.body)));
+      return Success( PayAndRenewalResponse.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));

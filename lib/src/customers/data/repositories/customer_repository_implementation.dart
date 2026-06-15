@@ -15,22 +15,22 @@ class CustomerRepositoryImplementation extends CustomerRepository {
   });
 
   @override
-  Future<ResultType<CustomerEntity, ErrorEntity>> create(CreateCustomerRequest request) {
+  Future<Result<CustomerEntity, ErrorEntity>> create(CreateCustomerRequest request) {
     return datastore.create(request);
   }
 
   @override
-  Future<ResultType<List<CustomerEntity>, ErrorEntity>> getAll() {
+  Future<Result<List<CustomerEntity>, ErrorEntity>> getAll() {
     return datastore.getAll();
   }
   
   @override
-  Future<ResultType<CustomerEntity, ErrorEntity>> update(CreateCustomerRequest request) {
+  Future<Result<CustomerEntity, ErrorEntity>> update(CreateCustomerRequest request) {
     return datastore.update(request);
   }
   
   @override
-  Future<ResultType<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer) {
+  Future<Result<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer) {
     return datastore.getAnalytics(idOfCustomer);
   }
 }

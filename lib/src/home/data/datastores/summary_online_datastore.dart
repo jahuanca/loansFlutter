@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/home/data/responses/injection_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_calendar_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
@@ -13,16 +14,16 @@ import 'package:utils/utils.dart';
 class SummaryOnlineDatastore extends SummaryDatastore {
 
   @override
-  Future<ResultType<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() async {
+  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
       url: '/utils/summary-of-dashboard',
     );
     if (response.isSuccessful) {
-      return Success(data: summaryOfDashboardResponseFromJson(response.body));
+      return Success( summaryOfDashboardResponseFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: '',
               errorMessage: response.body));
@@ -30,64 +31,64 @@ class SummaryOnlineDatastore extends SummaryDatastore {
   }
 
   @override
-  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(
+  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(
       GetQuotasByDateRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
         url: '/utils/quotasOfDate',
         query: request.toJson());
     if (response.isSuccessful) {
-      return Success(data: dashboardQuotasResponseFromJson(response.body));
+      return Success( dashboardQuotasResponseFromJson(response.body));
     }
     return Error(
-        error: ErrorEntity(
+        ErrorEntity(
             statusCode: response.statusCode,
             title: '',
             errorMessage: response.body));
   }
 
   @override
-  Future<ResultType<QuotaEntity, ErrorEntity>> payQuota(
+  Future<Result<QuotaEntity, ErrorEntity>> payQuota(
       PayQuotaRequest payQuotaRequest) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.post(url: '/quota/pay', body: payQuotaRequest.toJson());
     if (response.isSuccessful) {
-      return Success(data: QuotaEntity.fromJson(jsonDecode(response.body)));
+      return Success( QuotaEntity.fromJson(jsonDecode(response.body)));
     }
     return Error(
-        error: ErrorEntity(
+        ErrorEntity(
             statusCode: response.statusCode,
             title: response.title,
             errorMessage: response.body));
   }
   
   @override
-  Future<ResultType<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() async {
+  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response =
         await appHttpManager.get(url: '/utils/summary-months');
     if (response.isSuccessful) {
-      return Success(data: summaryMonthFromJson(response.body));
+      return Success( summaryMonthFromJson(response.body));
     }
     return Error(
-        error: ErrorEntity(
+        ErrorEntity(
             statusCode: response.statusCode,
             title: response.title,
             errorMessage: response.body));
   }
   
   @override
-  Future<ResultType<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() async {
+  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
       url: '/utils/summary-of-calendar',
     );
     if (response.isSuccessful) {
-      return Success(data: summaryOfCalendarResponseFromJson(response.body));
+      return Success( summaryOfCalendarResponseFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: '',
               errorMessage: response.body));
@@ -95,16 +96,33 @@ class SummaryOnlineDatastore extends SummaryDatastore {
   }
 
   @override
-  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() async {
+  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
       url: '/utils/next-renewal',
     );
     if (response.isSuccessful) {
-      return Success(data: dashboardQuotasResponseFromJson(response.body));
+      return Success( dashboardQuotasResponseFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
+              statusCode: response.statusCode,
+              title: '',
+              errorMessage: response.body));
+    }
+  }
+
+  @override
+  Future<Result<List<InjectionResponse>, ErrorEntity>> getInjections() async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final AppResponseHttp response = await appHttpManager.get(
+      url: '/utils/injections',
+    );
+    if (response.isSuccessful) {
+      return Success( injectionResponseFromJson(response.body));
+    } else {
+      return Error(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: '',
               errorMessage: response.body));

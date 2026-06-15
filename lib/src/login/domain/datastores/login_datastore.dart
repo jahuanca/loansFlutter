@@ -4,5 +4,5 @@ import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
 import 'package:utils/utils.dart';
 
 abstract class LoginDatastore {
-  Future<ResultType<LoginEntity, ErrorEntity>> login(LoginRequest request);
+  Future<Result<LoginEntity, ErrorEntity>> login(LoginRequest request);
 }

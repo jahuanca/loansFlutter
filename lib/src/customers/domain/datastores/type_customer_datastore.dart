@@ -3,5 +3,5 @@ import 'package:loands_flutter/src/customers/domain/entities/type_customer_entit
 import 'package:utils/utils.dart';
 
 abstract class TypeCustomerDatastore {
-  Future<ResultType<List<TypeCustomerEntity>, ErrorEntity>> getAll();
+  Future<Result<List<TypeCustomerEntity>, ErrorEntity>> getAll();
 }

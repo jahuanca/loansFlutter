@@ -13,12 +13,12 @@ class QuotaRepositoryImplementation extends QuotaRepository {
   });
 
   @override
-  Future<ResultType<List<QuotaEntity>, ErrorEntity>> getAll(GetAllQuotasRequest request) {
+  Future<Result<List<QuotaEntity>, ErrorEntity>> getAll(GetAllQuotasRequest request) {
     return datastore.getAll(request);
   }
   
   @override
-  Future<ResultType<QuotaEntity, ErrorEntity>> getQuota(int idOfQuota) {
+  Future<Result<QuotaEntity, ErrorEntity>> getQuota(int idOfQuota) {
     return datastore.getQuota(idOfQuota);
   }
 }

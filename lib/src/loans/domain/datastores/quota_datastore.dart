@@ -4,7 +4,7 @@ import 'package:utils/utils.dart';
 
 abstract class QuotaDatastore {
 
-  Future<ResultType<List<QuotaEntity>,ErrorEntity>> getAll(GetAllQuotasRequest request);
+  Future<Result<List<QuotaEntity>,ErrorEntity>> getAll(GetAllQuotasRequest request);
 
-  Future<ResultType<QuotaEntity,ErrorEntity>> getQuota(int idOfQuota);
+  Future<Result<QuotaEntity,ErrorEntity>> getQuota(int idOfQuota);
 }

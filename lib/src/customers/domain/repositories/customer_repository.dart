@@ -5,8 +5,8 @@ import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dar
 import 'package:utils/utils.dart';
 
 abstract class CustomerRepository {
-  Future<ResultType<List<CustomerEntity>, ErrorEntity>> getAll();
-  Future<ResultType<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer);
-  Future<ResultType<CustomerEntity, ErrorEntity>> create(CreateCustomerRequest request);
-  Future<ResultType<CustomerEntity, ErrorEntity>> update(CreateCustomerRequest request);
+  Future<Result<List<CustomerEntity>, ErrorEntity>> getAll();
+  Future<Result<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer);
+  Future<Result<CustomerEntity, ErrorEntity>> create(CreateCustomerRequest request);
+  Future<Result<CustomerEntity, ErrorEntity>> update(CreateCustomerRequest request);
 }

@@ -11,7 +11,7 @@ class GetTypesDocumentUseCase {
     required this.repository
   });
 
-  Future<ResultType<List<TypeDocumentEntity>, ErrorEntity>> execute(){
+  Future<Result<List<TypeDocumentEntity>, ErrorEntity>> execute(){
     return repository.getTypesDocument();
   }
 

@@ -10,7 +10,7 @@ class GetNextRenewalUseCase {
   GetNextRenewalUseCase(this.repository);
 
 
-  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> execute() {
+  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> execute() {
     return repository.getNextRenewal();
   }
 }

@@ -9,12 +9,14 @@ class SummaryOfDashboardResponse {
     String amounts;
     String ganancy;
     String renovar;
+    double injection;
 
     SummaryOfDashboardResponse({
         required this.loans,
         required this.amounts,
         required this.ganancy,
         required this.renovar,
+        required this.injection,
     });
 
     factory SummaryOfDashboardResponse.fromJson(Map<String, dynamic> json) => SummaryOfDashboardResponse(
@@ -22,6 +24,7 @@ class SummaryOfDashboardResponse {
         amounts: json["amounts"],
         ganancy: json["ganancy"],
         renovar: json["renovar"],
+        injection: (json["injection"] as num).toDouble(),
     );
 
     Map<String, dynamic> toJson() => {
@@ -29,5 +32,6 @@ class SummaryOfDashboardResponse {
         "amounts": amounts,
         'ganancy': ganancy,
         'renovar': renovar,
+        'injection': injection,
     };
 }

@@ -10,7 +10,7 @@ class CreateSpecialLoanUseCase {
     required this.repository,
   });
 
-  Future<ResultType<LoanEntity, ErrorEntity>> execute(
+  Future<Result<LoanEntity, ErrorEntity>> execute(
       AddSpecialLoanRequest addSpecialLoanRequest) {
     return repository.createSpecial(addSpecialLoanRequest);
   }

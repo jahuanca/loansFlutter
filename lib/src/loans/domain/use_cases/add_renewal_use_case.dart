@@ -12,7 +12,7 @@ class AddRenewalUseCase {
     required this.repository,
   });
 
-  Future<ResultType<RenewalEntity, ErrorEntity>> execute(AddRenewalRequest request) {
+  Future<Result<RenewalEntity, ErrorEntity>> execute(AddRenewalRequest request) {
     return repository.add(request);
   }
 

@@ -9,16 +9,16 @@ import 'package:utils/utils.dart';
 class CustomerOnlineDatastore extends CustomerDatastore {
 
   @override
-  Future<ResultType<CustomerEntity, ErrorEntity>> create(
+  Future<Result<CustomerEntity, ErrorEntity>> create(
       CreateCustomerRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.post(
         url: '/customer/create', body: request.toJson());
     if (response.isSuccessful) {
-      return Success(data: CustomerEntity.fromJson(jsonDecode(response.body)));
+      return Success( CustomerEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -26,16 +26,16 @@ class CustomerOnlineDatastore extends CustomerDatastore {
   }
 
   @override
-  Future<ResultType<List<CustomerEntity>, ErrorEntity>> getAll() async {
+  Future<Result<List<CustomerEntity>, ErrorEntity>> getAll() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
       url: '/customer',
     );
     if (response.isSuccessful) {
-      return Success(data: customerEntityFromJson(response.body));
+      return Success( customerEntityFromJson(response.body));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -43,16 +43,16 @@ class CustomerOnlineDatastore extends CustomerDatastore {
   }
 
   @override
-  Future<ResultType<CustomerEntity, ErrorEntity>> update(
+  Future<Result<CustomerEntity, ErrorEntity>> update(
       CreateCustomerRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.put(
         url: '/customer/update', body: request.toJson());
     if (response.isSuccessful) {
-      return Success(data: CustomerEntity.fromJson(jsonDecode(response.body)));
+      return Success( CustomerEntity.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));
@@ -60,7 +60,7 @@ class CustomerOnlineDatastore extends CustomerDatastore {
   }
   
   @override
-  Future<ResultType<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer) async {
+  Future<Result<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.get(
       url: '/customer/analytics', query: {
@@ -68,10 +68,10 @@ class CustomerOnlineDatastore extends CustomerDatastore {
       }
     );
     if (response.isSuccessful) {
-      return Success(data: CustomerAnalyticsResponse.fromJson(jsonDecode(response.body)));
+      return Success( CustomerAnalyticsResponse.fromJson(jsonDecode(response.body)));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));

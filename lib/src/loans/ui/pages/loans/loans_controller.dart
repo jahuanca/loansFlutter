@@ -47,12 +47,16 @@ class LoansController extends GetxController {
 
   Future<void> getLoans() async {
     showLoading();
-    ResultType<List<LoanEntity>, ErrorEntity> resultType =
+    Result<List<LoanEntity>, ErrorEntity> resultType =
         await getLoansUseCase.execute(request);
-    if (resultType is Success) {
-      loans = resultType.data as List<LoanEntity>;
+    switch (resultType) {
+      case Success():
+      loans = resultType.value;
       loansToShow.clear();
       loansToShow.addAll(loans);
+        break;
+      case Error(): 
+        break;
     }
     hideLoading();
     update([pageIdGet]);

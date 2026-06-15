@@ -12,7 +12,7 @@ class PayQuotaUseCase {
     required this.repository,
   });
 
-  Future<ResultType<QuotaEntity, ErrorEntity>> execute(PayQuotaRequest payQuotaRequest) {
+  Future<Result<QuotaEntity, ErrorEntity>> execute(PayQuotaRequest payQuotaRequest) {
     return repository.payQuota(payQuotaRequest);
   }
 }

@@ -10,7 +10,7 @@ class PayAndRenewalUseCase {
 
   PayAndRenewalUseCase(this.repository);
 
-  Future<ResultType<PayAndRenewalResponse, ErrorEntity>> execute(PayAndRenewalRequest request) {
+  Future<Result<PayAndRenewalResponse, ErrorEntity>> execute(PayAndRenewalRequest request) {
     return repository.payAndRenewal(request);
   }
 

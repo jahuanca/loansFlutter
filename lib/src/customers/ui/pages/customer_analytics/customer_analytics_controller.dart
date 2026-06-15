@@ -32,7 +32,8 @@ class CustomerAnalyticsController extends GetxController {
   }
 
   void handleArguments() async {
-    List<CustomerEntity>? customersOfArgument  = Get.setArgument(customersArgument);
+    List<CustomerEntity>? customersOfArgument =
+        Get.setArgument(customersArgument);
     if (customersOfArgument == null) {
       await getCustomers();
     } else {
@@ -47,14 +48,18 @@ class CustomerAnalyticsController extends GetxController {
 
   Future<void> getCustomers() async {
     showLoading();
-    ResultType<List<CustomerEntity>, ErrorEntity> resultType = 
-    await getCustomersUseCase.execute();
+    Result<List<CustomerEntity>, ErrorEntity> resultType =
+        await getCustomersUseCase.execute();
     hideLoading();
-    if (resultType is Success) {
-      customers = resultType.data;
-      update([pageIdGet]);
-    } else {
-      showError(context: Get.context!, errorEntity: resultType.error);
+    switch (resultType) {
+      case Success():
+        customers = resultType.value;
+        update([pageIdGet]);
+        break;
+      case Error():
+        showError(
+            context: Get.context!, errorEntity: resultType.error);
+        break;
     }
   }
 
@@ -67,21 +72,27 @@ class CustomerAnalyticsController extends GetxController {
 
   void getAnalytics(int idOfCustomer) async {
     showLoading();
-    ResultType<CustomerAnalyticsResponse, ErrorEntity> resultType =
+    Result<CustomerAnalyticsResponse, ErrorEntity> resultType =
         await getCustomerAnalyticsUseCase.execute(idOfCustomer);
     hideLoading();
-    if (resultType is Success) {
-      response = resultType.data;
-      update([pageIdGet]);
+    switch (resultType) {
+      case Success():
+        response = resultType.value;
+        update([pageIdGet]);
+        break;
+      case Error():
+        break;
     }
   }
 
   void goAllLoans() {
-    Get.to(()=> LoansPage(tag: 'loans_${customerSelected?.id}'), binding: LoansBinding(), arguments: {
-      getLoansRequestArgument: GetLoansRequest(
-        idCustomer: customerSelected?.id,
-      ),
-      titleOfAppBarArgument: customerSelected?.aliasOrFullName,
-    });
+    Get.to(() => LoansPage(tag: 'loans_${customerSelected?.id}'),
+        binding: LoansBinding(),
+        arguments: {
+          getLoansRequestArgument: GetLoansRequest(
+            idCustomer: customerSelected?.id,
+          ),
+          titleOfAppBarArgument: customerSelected?.aliasOrFullName,
+        });
   }
 }

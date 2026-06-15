@@ -7,11 +7,11 @@ import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:utils/utils.dart';
 
 abstract class LoanDatastore {
-  Future<ResultType<bool, ErrorEntity>> validate(ValidateLoanRequest validateLoanRequest);
-  Future<ResultType<LoanEntity, ErrorEntity>> create(
+  Future<Result<bool, ErrorEntity>> validate(ValidateLoanRequest validateLoanRequest);
+  Future<Result<LoanEntity, ErrorEntity>> create(
       AddLoanRequest addLoanRequest);
-  Future<ResultType<LoanEntity, ErrorEntity>> createSpecial(
+  Future<Result<LoanEntity, ErrorEntity>> createSpecial(
       AddSpecialLoanRequest addSpecialLoanRequest);
-  Future<ResultType<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request);
-  Future<ResultType<LoanEntity,ErrorEntity>> get(GetLoanRequest request);
+  Future<Result<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request);
+  Future<Result<LoanEntity,ErrorEntity>> get(GetLoanRequest request);
 }

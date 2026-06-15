@@ -8,19 +8,19 @@ import 'package:utils/utils.dart';
 
 class LoginOnlineDatastore extends LoginDatastore {
   @override
-  Future<ResultType<LoginEntity, ErrorEntity>> login(LoginRequest request) async {
+  Future<Result<LoginEntity, ErrorEntity>> login(LoginRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final AppResponseHttp response = await appHttpManager.post(
       url: '/auth/login',
       body: request.toJson(),
     );
     if (response.isSuccessful) {
-      return Success(data: LoginEntity.fromJson(
+      return Success( LoginEntity.fromJson(
         jsonDecode(response.body)
       ));
     } else {
       return Error(
-          error: ErrorEntity(
+          ErrorEntity(
               statusCode: response.statusCode,
               title: response.title,
               errorMessage: response.body));

@@ -1,6 +1,7 @@
 
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/home/data/responses/injection_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_calendar_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
@@ -20,32 +21,37 @@ class SummaryRepositoryImplementation extends SummaryRepository {
   });
 
   @override
-  Future<ResultType<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() {
+  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() {
     return datastore.getSummaryOfDashboard();
   }
 
   @override
-  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(GetQuotasByDateRequest request) {
+  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(GetQuotasByDateRequest request) {
     return datastore.getQuotasByDate(request);
   }
 
   @override
-  Future<ResultType<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
+  Future<Result<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
     return datastore.payQuota(payQuotaRequest);
   }
   
   @override
-  Future<ResultType<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() {
+  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() {
     return datastore.getSummaryMonths();
   }
 
   @override
-  Future<ResultType<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() {
+  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() {
     return datastore.getSummaryOfCalendar();
   }
 
   @override
-  Future<ResultType<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() {
+  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() {
     return datastore.getNextRenewal();
+  }
+
+  @override
+  Future<Result<List<InjectionResponse>, ErrorEntity>> getInjections() {
+    return datastore.getInjections();
   }
 }

@@ -4,6 +4,6 @@ import 'package:utils/utils.dart';
 
 abstract class TypeCustomerRepository {
 
-  Future<ResultType<List<TypeCustomerEntity>, ErrorEntity>> getAll();
+  Future<Result<List<TypeCustomerEntity>, ErrorEntity>> getAll();
 
 }

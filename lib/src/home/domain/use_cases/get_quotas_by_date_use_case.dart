@@ -12,7 +12,7 @@ class GetQuotasByDateUseCase {
     required this.repository,
   });
 
-    Future<ResultType<List<DashboardQuotaResponse>,ErrorEntity>> execute(GetQuotasByDateRequest request) {
+    Future<Result<List<DashboardQuotaResponse>,ErrorEntity>> execute(GetQuotasByDateRequest request) {
       return repository.getQuotasByDate(request);
     }
 }

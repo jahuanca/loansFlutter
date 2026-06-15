@@ -12,7 +12,7 @@ class GetAllQuotasUseCase {
     required this.repository,
   });
 
-    Future<ResultType<List<QuotaEntity>,ErrorEntity>> execute(GetAllQuotasRequest request){
+    Future<Result<List<QuotaEntity>,ErrorEntity>> execute(GetAllQuotasRequest request){
       return repository.getAll(request);
     }
 
