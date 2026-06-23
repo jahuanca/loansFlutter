@@ -17,6 +17,7 @@ dependencies:
   utils:
     git: https://github.com/jahuanca/utilsFlutter
   syncfusion_flutter_charts: ^32.1.20
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
