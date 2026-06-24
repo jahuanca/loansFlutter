@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customers/customers_controller.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/paddings.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
@@ -120,6 +121,27 @@ class CustomersPage extends StatelessWidget {
       subtitle: customer.address,
       detail: customer.alias,
       alignmentOfActions: MainAxisAlignment.spaceEvenly,
+      actions: actionsOfCustomer(customer),
     );
+  }
+
+  List<Widget> actionsOfCustomer(CustomerEntity customer){
+    String? phone = customer.phone;
+    if (phone == null) return [];
+
+    List<Widget> actions = [
+      IconButtonWidget(
+        onPressed: () => calling(phone), 
+        backgroundColor: infoColor(),
+        iconData: Icons.call,
+      ),
+      IconButtonWidget(
+        onPressed: () => sendingSMS(phone), 
+        backgroundColor: Colors.white,
+        iconColor: Colors.black54,
+        iconData: Icons.sms,
+      ),
+    ];
+    return actions;
   }
 }

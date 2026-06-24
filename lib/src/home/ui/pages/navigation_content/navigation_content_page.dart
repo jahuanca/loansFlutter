@@ -5,7 +5,7 @@ import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/home_calendar_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_controller.dart';
 import 'package:loands_flutter/src/loans/ui/pages/loans/loans_page.dart';
-import 'package:loands_flutter/src/settings/ui/home_settings/home_settings_page.dart';
+import 'package:loands_flutter/src/settings/ui/pages/home_settings/home_settings_page.dart';
 import 'package:utils/utils.dart';
 
 class NavigationContentPage extends StatelessWidget {

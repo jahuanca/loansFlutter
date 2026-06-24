@@ -29,3 +29,5 @@ const String payString = "Pagar";
 const String pickPayDateString = 'Seleccione la fecha de pago';
 const String areSureToEditCustomer = '¿Está seguro de editar el cliente?';
 const String areSureToAddCustomer = '¿Está seguro de agregar el cliente?';
+const String addCustomerString = 'Agregar cliente';
+const String editCustomerString = 'Editar cliente';

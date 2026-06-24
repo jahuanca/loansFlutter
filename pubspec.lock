@@ -535,7 +535,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8d0808c0adb6570ea1a1b9d4a6ebbf9190d8c3c4"
+      resolved-ref: "59490128dbb9437347052eb516a59176ea200d71"
       url: "https://github.com/jahuanca/utilsFlutter"
     source: git
     version: "1.0.0"

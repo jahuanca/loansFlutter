@@ -12,6 +12,7 @@ class CustomerEntity {
     String address;
     String? latitude;
     String? longitude;
+    String? phone;
     int idTypeDocument;
     int idTypeCustomer;
     String document;
@@ -28,6 +29,7 @@ class CustomerEntity {
         required this.document,
         required this.createdAt,
         required this.updatedAt,
+        this.phone,
         this.alias,
         this.latitude,
         this.longitude,
@@ -49,6 +51,7 @@ class CustomerEntity {
         name: json["name"],
         lastName: json["lastName"],
         address: json["address"],
+        phone: json["phone"],
         latitude: json["latitude"],
         longitude: json["longitude"],
         idTypeCustomer: json["id_type_customer"],
@@ -69,6 +72,7 @@ class CustomerEntity {
         "name": name,
         "lastName": lastName,
         "address": address,
+        "phone": phone,
         "latitude": latitude,
         "longitude": longitude,
         "id_type_customer": idTypeCustomer,

@@ -24,12 +24,15 @@ class AddCustomerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String titleAppbar = controller.isEditing ? editCustomerString : addCustomerString;
+
     return GetBuilder<AddCustomerController>(
       init: controller,
       id: pageIdGet,
       builder: (controller) => Scaffold(
         appBar: appBarWidget(
-          text: controller.isEditing ? 'Editar cliente' : 'Agregar cliente',
+          text: titleAppbar,
           hasArrowBack: true,
         ),
         bottomNavigationBar: ButtonWidget(

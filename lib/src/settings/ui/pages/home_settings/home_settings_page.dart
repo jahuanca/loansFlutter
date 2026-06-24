@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/settings/ui/home_settings/home_settings_controller.dart';
+import 'package:loands_flutter/src/settings/ui/pages/home_settings/home_settings_controller.dart';
 import 'package:utils/utils.dart';
 
 class HomeSettingsPage extends StatelessWidget {
@@ -18,9 +18,10 @@ class HomeSettingsPage extends StatelessWidget {
               leading: Icon(Icons.email_outlined),
               title: Text('Cambiar correo'),
             ),
-            const ListTile(  
-              leading: Icon(Icons.password),
-              title: Text('Cambiar contraseña'),
+            ListTile(  
+              onTap: controller.goToUpdatePassword,
+              leading: const Icon(Icons.password),
+              title: const Text('Cambiar contraseña'),
             ),
             ListTile(
               onTap: controller.goLogout,
