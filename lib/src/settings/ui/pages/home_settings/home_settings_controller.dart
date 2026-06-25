@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/login/ui/pages/login/login_page.dart';
 import 'package:loands_flutter/src/settings/di/settings_binding.dart';
 import 'package:loands_flutter/src/settings/ui/pages/settings_option_enum.dart';
 import 'package:loands_flutter/src/settings/ui/pages/update_password/update_password_page.dart';
+import 'package:loands_flutter/src/utils/ui/pages/video_player/video_page.dart';
 import 'package:utils/utils.dart';
 
 class HomeSettingsController extends GetxController {
@@ -28,5 +29,9 @@ class HomeSettingsController extends GetxController {
         typeSnackbar: TypeSnackbar.success, 
         message: result.messageSuccess);
     }
+  }
+
+   void goVideo() async {
+    Get.to(()=> const VideoPage());
   }
 }

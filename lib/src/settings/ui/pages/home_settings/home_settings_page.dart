@@ -24,6 +24,11 @@ class HomeSettingsPage extends StatelessWidget {
               title: const Text('Cambiar contraseña'),
             ),
             ListTile(
+              onTap: controller.goVideo,
+              leading: const Icon(Icons.video_camera_front_outlined),
+              title: const Text('Ver tutorial'),
+            ),
+            ListTile(
               onTap: controller.goLogout,
               leading: const Icon(Icons.logout),
               title: const Text('Cerrar sesión'),

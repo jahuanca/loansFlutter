@@ -3,6 +3,8 @@
     <application
         android:label="Mis pagos"
         android:name="${applicationName}"
+        android:enableOnBackInvokedCallback="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
