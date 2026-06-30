@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_controller.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:utils/utils.dart';
 
 class LoginPage extends StatelessWidget {
@@ -55,7 +56,7 @@ class LoginPage extends StatelessWidget {
 
   Widget _formContent() {
     return Expanded(
-      flex: 3,
+      flex: 4,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 25,
@@ -83,11 +84,16 @@ class LoginPage extends StatelessWidget {
               hintText: 'Ingrese su contraseña',
               label: 'Contraseña',
             ),
+            GetBuilder<LoginController>(
+              id: keepSesionIdGet,
+              builder: (controller) => CheckBoxWidget(
+                title: 'Mantener sesión',
+                isChecked: controller.loginUi.keepSesion?.value,
+                onChanged: controller.onChangeKeepSesion,
+              ),
+            ),
             ButtonWidget(
                 onTap: controller.goToHome, fontSize: 16, text: 'Ingresar'),
-            const SizedBox(
-              height: 25,
-            ),
             Text(
               '¿Olvidaste tu contraseña? Presione aquí.',
               style: _detailStyle,

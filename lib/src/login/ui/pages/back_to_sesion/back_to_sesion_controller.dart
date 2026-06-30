@@ -1,35 +1,36 @@
+
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/di/navigation_content_binding.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_page.dart';
-import 'package:loands_flutter/src/login/ui/pages/login/login_ui.dart';
-import 'package:loands_flutter/src/utils/core/helpers.dart';
-import 'package:loands_flutter/src/utils/core/ids_get.dart';
-import 'package:loands_flutter/src/utils/core/local_preferences.dart';
-import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
 import 'package:loands_flutter/src/login/domain/use_cases/login_use_case.dart';
+import 'package:loands_flutter/src/login/ui/pages/login/login_ui.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
+import 'package:loands_flutter/src/utils/core/local_preferences.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
-class LoginController extends GetxController {
+class BackToSesionController extends GetxController {
+
   LoginUseCase loginUseCase;
   LoginUi loginUi = LoginUi();
-  String? androidId;
 
-  LoginController({
+  BackToSesionController({
     required this.loginUseCase,
   });
 
-  void onChangeUsername(String value) {
-    loginUi.username = validateText(text: value, label: 'Nombre de usuario');
+    @override
+  void onInit() {
+    loginUi = LoginUi(
+      username: ValidateResult(value: 'huancaancajima@gmail.com', hasError: false),
+      keepSesion: ValidateResult(value: true, hasError: false),
+    );
+
+    super.onInit();
   }
 
   void onChangePassword(String value) {
     loginUi.password = validateText(text: value, label: 'Contraseña');
-  }
-
-  void onChangeKeepSesion(dynamic value) {
-    loginUi.keepSesion = validateText(text: value, label: 'Mantener sesión');
-    update([keepSesionIdGet]);
   }
 
   void goToHome() async {
@@ -46,7 +47,7 @@ class LoginController extends GetxController {
         await loginUseCase.execute(loginUi.value);
     switch (resultType) {
       case Success():
-      androidId = await getAndroidId();
+      String? androidId = await getAndroidId();
       LoginEntity loginEntity = resultType.value;
       await LocalPreferences().setKeepSesion(loginUi.keepSesion?.value);
       await UserPreferences().setToken(loginEntity.token);
