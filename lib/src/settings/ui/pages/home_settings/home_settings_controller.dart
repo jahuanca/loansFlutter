@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/chats/ui/pages/home_chat/home_chat_page.dart';
 import 'package:loands_flutter/src/login/di/login_binding.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_page.dart';
 import 'package:loands_flutter/src/settings/di/settings_binding.dart';
@@ -31,7 +32,11 @@ class HomeSettingsController extends GetxController {
     }
   }
 
-   void goVideo() async {
-    Get.to(()=> const VideoPage());
+  void goVideo() async {
+    Get.to(() => const VideoPage());
+  }
+
+  void goChats() {
+    Get.to(() => HomeChatPage());
   }
 }

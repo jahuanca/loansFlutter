@@ -217,6 +217,7 @@ class QuotaGroupPage extends StatelessWidget {
     return QuotaOfCalendarWidget(
       idStateQuota: quota.idStateQuota,
       amount: quota.amount,
+      ganancy: quota.ganancy,
       subtitle: quota.aliasOrName,
       detail: quota.dateToPay.formatDMMYYY().orEmpty(),
       idLoan: quota.idLoan.orZero(),

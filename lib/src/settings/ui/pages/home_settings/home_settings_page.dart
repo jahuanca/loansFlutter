@@ -29,6 +29,11 @@ class HomeSettingsPage extends StatelessWidget {
               title: const Text('Ver tutorial'),
             ),
             ListTile(
+              onTap: controller.goChats,
+              leading: const Icon(Icons.chat_outlined),
+              title: const Text('Chat'),
+            ),
+            ListTile(
               onTap: controller.goLogout,
               leading: const Icon(Icons.logout),
               title: const Text('Cerrar sesión'),

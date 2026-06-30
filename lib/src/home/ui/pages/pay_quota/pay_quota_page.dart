@@ -57,6 +57,7 @@ class PayQuotaPage extends StatelessWidget {
                 condition: (controller.quota != null),
                 child: QuotaOfCalendarWidget(
                   amount: quota.amount,
+                  ganancy: quota.ganancy,
                   subtitle: quota.customerName,
                   idLoan: quota.idLoan.orZero(),
                   title: quota.name,

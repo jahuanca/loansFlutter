@@ -43,10 +43,12 @@ String shareInformation({
 String getInformationOfQuota(DashboardQuotaResponse quota) {
     String message = emptyString;
     String nameOfDate = quota.paidDate.format(formatDate: 'EEEE').orEmpty();
+    double toCapital = quota.amount - (quota.ganancy / 2);
     message += 'Préstamo #${quota.idLoan}:';
     message += ' ${quota.aliasOrName},';
     message += ' cuota ${quota.name}';
-    message += ' monto de S/ ${quota.amount.formatDecimals()},';
+    message += ' monto de S/ ${quota.amount.formatDecimals()}.';
+    message += ' Directo a caja S/ ${toCapital.formatDecimals()},';
     message += ' pagado el $nameOfDate ${quota.paidDate.formatDMMYYY()}.';
     return message;
   }

@@ -11,6 +11,7 @@ class QuotaOfCalendarWidget extends StatelessWidget {
   final String subtitle;
   final String? detail;
   final double amount;
+  final double? ganancy;
   final int? idStateQuota;
   final bool isSelected;
   final bool isLast;
@@ -29,6 +30,7 @@ class QuotaOfCalendarWidget extends StatelessWidget {
     this.isSelected = false,
     this.detail,
     this.stateWidget,
+    this.ganancy,
   });
 
   @override
@@ -71,6 +73,9 @@ class QuotaOfCalendarWidget extends StatelessWidget {
 
   Widget _amountWidget() {
     String amountValue = amount.formatDecimals();
+    double myAmount = (amount - (ganancy.orZero() / 2));
+    String myAmountValue = '\n S/${myAmount.formatDecimals()}';
+
     return Expanded(
         flex: 2,
         child: RichText(
@@ -79,6 +84,8 @@ class QuotaOfCalendarWidget extends StatelessWidget {
             style: const TextStyle(color: Colors.black),
             children: <TextSpan>[
               TextSpan(text: amountValue, style: const TextStyle(fontSize: 24)),
+              if (ganancy != null)
+              TextSpan(text: myAmountValue, style: const TextStyle(fontSize: 12)),
             ],
           ),
         ));
