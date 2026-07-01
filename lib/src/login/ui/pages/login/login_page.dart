@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_controller.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class LoginPage extends StatelessWidget {
@@ -83,6 +84,7 @@ class LoginPage extends StatelessWidget {
               onChanged: controller.onChangePassword,
               hintText: 'Ingrese su contraseña',
               label: 'Contraseña',
+              textInputType: textInputPassword,
             ),
             GetBuilder<LoginController>(
               id: keepSesionIdGet,

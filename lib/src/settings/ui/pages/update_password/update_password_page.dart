@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/settings/ui/pages/update_password/update_password_controller.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/bottom_buttons_widget.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class UpdatePasswordPage extends StatelessWidget {
-
   final UpdatePasswordController controller = UpdatePasswordController(
     updatePasswordUseCase: Get.find(),
   );
@@ -22,7 +22,7 @@ class UpdatePasswordPage extends StatelessWidget {
         body: _body(),
         bottomNavigationBar: BottomButtonsWidget(items: [
           ItemBottomButtonWidget(
-            title: 'Guardar', 
+            title: 'Guardar',
             onTap: controller.goToUpdatePassword,
           )
         ]),
@@ -38,18 +38,19 @@ class UpdatePasswordPage extends StatelessWidget {
             label: 'Contraseña actual',
             hintText: 'Ingrese su contraseña',
             onChanged: controller.onChangedCurrentPassword,
+            textInputType: textInputPassword,
           ),
-
           PasswordInputWidget(
             label: 'Contraseña nueva',
             hintText: 'Ingrese su nueva contraseña',
             onChanged: controller.onChangedNewPassword,
+            textInputType: textInputPassword,
           ),
-
           PasswordInputWidget(
             label: 'Repita contraseña',
             hintText: 'Repita la contraseña',
             onChanged: controller.onChangedRepeatPassword,
+            textInputType: textInputPassword,
           ),
         ],
       ),

@@ -19,6 +19,12 @@ class LoginController extends GetxController {
     required this.loginUseCase,
   });
 
+  @override
+  void onInit() {
+    loginUi.keepSesion = ValidateResult(value: false);
+    super.onInit();
+  }
+
   void onChangeUsername(String value) {
     loginUi.username = validateText(text: value, label: 'Nombre de usuario');
   }
@@ -46,14 +52,15 @@ class LoginController extends GetxController {
         await loginUseCase.execute(loginUi.value);
     switch (resultType) {
       case Success():
-      androidId = await getAndroidId();
-      LoginEntity loginEntity = resultType.value;
-      await LocalPreferences().setKeepSesion(loginUi.keepSesion?.value);
-      await UserPreferences().setToken(loginEntity.token);
-      Get.off(() => NavigationContentPage(),
-          binding: NavigationContentBinding());
+        androidId = await getAndroidId();
+        LoginEntity loginEntity = resultType.value;
+        await LocalPreferences().setKeepSesion(loginUi.keepSesion?.value);
+        await LocalPreferences().setEmail(loginUi.username?.value);
+        await UserPreferences().setToken(loginEntity.token);
+        Get.off(() => NavigationContentPage(),
+            binding: NavigationContentBinding());
         break;
-      case Error(): 
+      case Error():
         break;
     }
     hideLoading();
