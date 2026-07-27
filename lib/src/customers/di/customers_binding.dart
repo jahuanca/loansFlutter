@@ -1,8 +1,8 @@
 
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/customers/data/datastores/customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer/customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
-import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 

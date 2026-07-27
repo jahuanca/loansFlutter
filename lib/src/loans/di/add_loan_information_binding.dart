@@ -1,16 +1,16 @@
 
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/customers/data/datastores/customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer/customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
-import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
-import 'package:loands_flutter/src/loans/data/datastores/loan_online_datastore.dart';
-import 'package:loands_flutter/src/loans/data/datastores/renewal_online_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/loan/loan_online_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/renewal/renewal_online_datastore.dart';
 import 'package:loands_flutter/src/loans/data/repositories/loan_repository_implementation.dart';
 import 'package:loands_flutter/src/loans/data/repositories/renewal_repository_implementation.dart';
-import 'package:loands_flutter/src/loans/domain/datastores/loan_datastore.dart';
-import 'package:loands_flutter/src/loans/domain/datastores/renewal_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/loan/loan_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/renewal/renewal_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/loan_repository.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/renewal_repository.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loan_use_case.dart';
@@ -18,7 +18,7 @@ import 'package:loands_flutter/src/loans/domain/use_cases/get_metadata_renewal_u
 import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
-import 'package:loands_flutter/src/utils/domain/datastore/utils_datastore.dart';
+import 'package:loands_flutter/src/utils/data/datastore/utils_datastore.dart';
 import 'package:loands_flutter/src/utils/domain/repositories/utils_repository.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencies_use_case.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_methods_use_case.dart';

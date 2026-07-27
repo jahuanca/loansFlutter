@@ -1,7 +1,7 @@
 
 
 
- import 'package:loands_flutter/src/utils/domain/datastore/utils_datastore.dart';
+ import 'package:loands_flutter/src/utils/data/datastore/utils_datastore.dart';
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';

@@ -1,5 +1,5 @@
 import 'package:loands_flutter/src/loans/data/requests/get_all_quotas_request.dart';
-import 'package:loands_flutter/src/loans/domain/datastores/quota_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/quota/quota_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/quota_repository.dart';
 import 'package:utils/utils.dart';

@@ -4,7 +4,7 @@ import 'package:loands_flutter/src/loans/data/requests/add_special_loan_request.
 import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
-import 'package:loands_flutter/src/loans/domain/datastores/loan_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/loan/loan_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/loan_repository.dart';
 import 'package:utils/utils.dart';

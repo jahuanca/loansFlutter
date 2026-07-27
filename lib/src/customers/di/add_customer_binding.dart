@@ -1,11 +1,11 @@
 
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/customers/data/datastores/customer_online_datastore.dart';
-import 'package:loands_flutter/src/customers/data/datastores/type_customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer/customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/type_customer/type_customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
 import 'package:loands_flutter/src/customers/data/repositories/type_customer_repository_implementation.dart';
-import 'package:loands_flutter/src/customers/domain/datastores/customer_datastore.dart';
-import 'package:loands_flutter/src/customers/domain/datastores/type_customer_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/type_customer/type_customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/type_customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
@@ -13,7 +13,7 @@ import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_cu
 import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
-import 'package:loands_flutter/src/utils/domain/datastore/utils_datastore.dart';
+import 'package:loands_flutter/src/utils/data/datastore/utils_datastore.dart';
 import 'package:loands_flutter/src/utils/domain/repositories/utils_repository.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_types_document_use_case.dart';
 

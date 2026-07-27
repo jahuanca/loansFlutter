@@ -6,7 +6,7 @@ import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.d
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_special_request.dart';
 import 'package:loands_flutter/src/loans/data/responses/get_metadata_renewal_response.dart';
 import 'package:loands_flutter/src/loans/data/responses/pay_and_renewal_response.dart';
-import 'package:loands_flutter/src/loans/domain/datastores/renewal_datastore.dart';
+import 'package:loands_flutter/src/loans/data/datastores/renewal/renewal_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/renewal_entity.dart';
 import 'package:utils/utils.dart';
 

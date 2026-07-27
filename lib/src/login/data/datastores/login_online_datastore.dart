@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:loands_flutter/src/login/data/request/login_request.dart';
-import 'package:loands_flutter/src/login/domain/datastores/login_datastore.dart';
+import 'package:loands_flutter/src/login/data/datastores/login_datastore.dart';
 import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
 import 'package:utils/utils.dart';
 
