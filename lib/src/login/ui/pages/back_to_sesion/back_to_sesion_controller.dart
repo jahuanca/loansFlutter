@@ -3,9 +3,11 @@ import 'package:loands_flutter/src/home/di/navigation_content_binding.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_page.dart';
 import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
 import 'package:loands_flutter/src/login/domain/use_cases/login_use_case.dart';
+import 'package:loands_flutter/src/login/ui/pages/back_to_sesion/direct_access_enum.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_page.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_ui.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/local_preferences.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:local_auth/local_auth.dart';
@@ -15,6 +17,7 @@ class BackToSesionController extends GetxController {
   LoginUseCase loginUseCase;
   late String username = '';
   LoginUi loginUi = LoginUi();
+  DirectAccessEnum? directAccessSelected;
 
   BackToSesionController({
     required this.loginUseCase,
@@ -24,8 +27,7 @@ class BackToSesionController extends GetxController {
   void onInit() {
     username = LocalPreferences().email().orEmpty();
     loginUi = LoginUi(
-      username:
-          ValidateResult(value: username, hasError: false),
+      username: ValidateResult(value: username, hasError: false),
       keepSesion: ValidateResult(value: true, hasError: false),
     );
 
@@ -89,5 +91,14 @@ class BackToSesionController extends GetxController {
     } else {
       showDialogWidget(context: Get.context!, message: 'No esta habilidado');
     }
+  }
+
+  void onChangedDirectAccess(DirectAccessEnum value) {
+    if (directAccessSelected == value) {
+      directAccessSelected = null;
+    } else {
+      directAccessSelected = value;
+    }
+    update([directAccessIdGet]);
   }
 }

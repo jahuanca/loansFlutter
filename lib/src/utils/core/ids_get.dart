@@ -17,3 +17,4 @@ const String frequenciesIdGet = 'frequenciesIdGet';
 const String keepSesionIdGet = 'keepSesionIdGet';
 const String numberOfInstallmentsIdGet = 'numberOfInstallmentsIdGet';
 const String daysBetweenInstallmentsIdGet = 'daysBetweenInstallmentsIdGet';
+const String directAccessIdGet = 'directAccessIdGet';

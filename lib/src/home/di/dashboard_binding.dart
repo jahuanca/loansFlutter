@@ -20,7 +20,7 @@ class DashboardBinding extends Bindings {
     Get.lazyPut<UtilsDatastore>(() => UtilsOnlineDatastore());
 
     Get.lazyPut<SummaryRepository>(
-        () => SummaryRepositoryImplementation(datastore: Get.find()));    
+        () => SummaryRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut<UtilsRepository>(
         () => UtilsRepositoryImplementation(datastore: Get.find()));
 

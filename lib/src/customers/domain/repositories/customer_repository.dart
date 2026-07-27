@@ -6,6 +6,7 @@ import 'package:utils/utils.dart';
 
 abstract class CustomerRepository {
   Future<Result<List<CustomerEntity>, ErrorEntity>> getAll();
+  Future<Result<List<CustomerEntity>, ErrorEntity>> getWithoutLoan();
   Future<Result<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer);
   Future<Result<CustomerEntity, ErrorEntity>> create(CreateCustomerRequest request);
   Future<Result<CustomerEntity, ErrorEntity>> update(CreateCustomerRequest request);

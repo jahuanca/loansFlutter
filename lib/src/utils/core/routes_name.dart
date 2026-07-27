@@ -1,6 +1,8 @@
 
 enum RoutesName {
-  initial(route: '/');
+  bottomNavigationContent(route: '/NavigationContentPage'),
+  quotaGroup(route: '/QuotaGroupPage')
+  ;
 
   final String route;
 

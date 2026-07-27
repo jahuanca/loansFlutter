@@ -77,4 +77,19 @@ class CustomerOnlineDatastore extends CustomerDatastore {
               errorMessage: response.body));
     }
   }
+  
+  @override
+  Future<Result<List<CustomerEntity>, ErrorEntity>> getWithoutLoan() async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final AppResponseHttp response = await appHttpManager.get(url: '/utils/customer-without-loan');
+    if (response.isSuccessful) {
+      return Success( customerEntityFromJson(response.body));
+    } else {
+      return Error(
+          ErrorEntity(
+              statusCode: response.statusCode,
+              title: response.title,
+              errorMessage: response.body));
+    }
+  }
 }

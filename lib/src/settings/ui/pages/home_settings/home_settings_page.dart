@@ -1,46 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/settings/ui/pages/home_settings/home_settings_controller.dart';
+import 'package:loands_flutter/src/settings/ui/pages/home_settings/home_settings_enum.dart';
 import 'package:utils/utils.dart';
 
 class HomeSettingsPage extends StatelessWidget {
-  const HomeSettingsPage({super.key});
+
+  final HomeSettingsController controller = HomeSettingsController();
+  
+  HomeSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeSettingsController>(
-      init: HomeSettingsController(),
+      id: pageIdGet,
+      init: controller,
       builder: (controller) => Scaffold(
         appBar: appBarWidget(text: 'Ajustes'),
-        body: Column(
-          children: [
-            const ListTile(  
-              leading: Icon(Icons.email_outlined),
-              title: Text('Cambiar correo'),
-            ),
-            ListTile(  
-              onTap: controller.goToUpdatePassword,
-              leading: const Icon(Icons.password),
-              title: const Text('Cambiar contraseña'),
-            ),
-            ListTile(
-              onTap: controller.goVideo,
-              leading: const Icon(Icons.video_camera_front_outlined),
-              title: const Text('Ver tutorial'),
-            ),
-            ListTile(
-              onTap: controller.goChats,
-              leading: const Icon(Icons.chat_outlined),
-              title: const Text('Chat'),
-            ),
-            ListTile(
-              onTap: controller.goLogout,
-              leading: const Icon(Icons.logout),
-              title: const Text('Cerrar sesión'),
-            ),
-          ],
-        ),
+        body: _body()
       ),
     );
+  }
+
+  Widget _body() {
+
+    final items = HomeSettingsEnum.values.map(
+      (e) => ListTile(
+        leading: Icon(e.icon),
+        title: Text(e.title),
+        onTap: () => controller.goToEventEnum(e),
+      ),
+    ).toList();
+
+    return Column(children: items);
   }
 }

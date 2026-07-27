@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
@@ -8,6 +10,7 @@ import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_reques
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
+import 'package:loands_flutter/src/utils/ui/pages/routes_app.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -25,6 +28,7 @@ class QuotaGroupController extends GetxController {
   DateTimeRange? dateTimeRange;
   bool isGroup = false;
   bool isSearching = false;
+  OriginsRoute? originsRoute;
 
   List<DashboardQuotaResponse> quotasSelected = [];
 
@@ -36,6 +40,7 @@ class QuotaGroupController extends GetxController {
 
   @override
   void onInit() {
+    originsRoute = Get.setArgument(originArgument);
     getQuotasByDateRequest = Get.setArgument(getAllQuotasRequestArgument);
     title = Get.setArgument(titleArgument);
     isGroup = Get.setArgument(isGroupArgument);
@@ -50,8 +55,17 @@ class QuotaGroupController extends GetxController {
 
   @override
   void onReady() {
+    log('Quota group route: ${Get.currentRoute}');
     getQuotas();
     super.onReady();
+  }
+
+  void onBackPressed() {
+    if (originsRoute != null) {
+      RoutesApp.goToNavigationContent(type: TypeMovementRoute.offAll);
+    } else {
+      Get.back();
+    }
   }
 
   double get amountOfCapital {

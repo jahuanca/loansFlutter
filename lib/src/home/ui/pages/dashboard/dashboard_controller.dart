@@ -1,17 +1,21 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
+import 'package:loands_flutter/src/home/di/customers_withou_loan_binding.dart';
 import 'package:loands_flutter/src/home/di/injections_binding.dart';
 import 'package:loands_flutter/src/home/di/next_renewal_binding.dart';
 import 'package:loands_flutter/src/home/di/payment_summary_binding.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_summary_of_dasboard_use_case.dart';
+import 'package:loands_flutter/src/home/ui/pages/customers_without_loan/customers_without_loan_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/injections/injections_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/next_renewal/next_renewal_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/error/error_service.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -36,6 +40,7 @@ class DashboardController extends GetxController {
 
   @override
   void onReady() {
+    log('Dashboard route: ${Get.currentRoute}');
     getAll();
     super.onReady();
   }
@@ -45,35 +50,24 @@ class DashboardController extends GetxController {
     await Future.wait([
       getLogs(),
       getSummary(),
-    ]).then((_) {}).catchError(setException);
-    hideLoading();
-    update([pageIdGet]);
-  }
-
-  FutureOr<Null> setException(dynamic err) async {
-    hideLoading();
-    if (err is TimeoutException) {
-      String message = '${err.message} ¿Desea volver a intentar?';
-      bool result = await showDialogWidget(
-        context: Get.context!,
-        message: message,
-        okText: 'Volver a intentar',
-      );
-      if (result) {
+    ]).then((_) {}).catchError((err) async {
+      if (await setAllException(err)) {
         getAll();
       }
-    }
+    });
+    hideLoading();
+    update([pageIdGet]);
   }
 
   Future<void> getLogs() async {
     Result<List<ActivityLogEntity>, ErrorEntity> resultType =
         await getLogsUseCase.execute();
     switch (resultType) {
-      case Success(): 
+      case Success():
         logs = resultType.value;
         break;
       case Error():
-      showError(context: Get.context!, errorEntity: resultType.error);
+        showError(context: Get.context!, errorEntity: resultType.error);
         break;
     }
   }
@@ -82,11 +76,11 @@ class DashboardController extends GetxController {
     Result<SummaryOfDashboardResponse, ErrorEntity> resultType =
         await getSummaryDasboardUseCase.execute();
     switch (resultType) {
-      case Success(): 
+      case Success():
         summaryOfDashboardResponse = resultType.value;
         break;
       case Error():
-      showError(context: Get.context!, errorEntity: resultType.error);
+        showError(context: Get.context!, errorEntity: resultType.error);
         break;
     }
 
@@ -102,12 +96,12 @@ class DashboardController extends GetxController {
     Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
         await getQuotasByDateUseCase.execute(request);
     switch (resultType) {
-      case Success(): 
+      case Success():
         quotasByDate = resultType.value;
         update([quotasIdGet]);
         break;
       case Error():
-      showError(context: Get.context!, errorEntity: resultType.error);
+        showError(context: Get.context!, errorEntity: resultType.error);
         break;
     }
     hideLoading();
@@ -123,6 +117,10 @@ class DashboardController extends GetxController {
 
   void goToInjections() {
     Get.to(() => InjectionsPage(), binding: InjectionsBinding());
+  }
+
+  void goToCustomersWithoutLoan() {
+    Get.to(() => CustomersWithoutLoanPage(), binding: CustomersWithouLoanBinding());
   }
 
   void changeDatePicker(DateTime? dateTime) {

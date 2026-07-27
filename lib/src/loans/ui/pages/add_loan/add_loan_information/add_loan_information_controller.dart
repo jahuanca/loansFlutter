@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
-import 'package:loands_flutter/src/customers/di/customer_analytics_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
-import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
@@ -27,6 +25,7 @@ import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entit
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_frequencies_use_case.dart';
 import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_methods_use_case.dart';
+import 'package:loands_flutter/src/utils/ui/pages/routes_app.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
@@ -349,13 +348,8 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> goCustomerAnalytics() async {
-    await Get.to(
-      () => CustomerAnalyticsPage(), 
-      binding: CustomerAnalyticsBinding(),
-      arguments: {
-        customerArgument: customerSelected
-      }
-    );
+    if (customerSelected == null) return;
+    await RoutesApp.goCustomerAnalytics(customerSelected: customerSelected!);
     getCustomers();
   }
 

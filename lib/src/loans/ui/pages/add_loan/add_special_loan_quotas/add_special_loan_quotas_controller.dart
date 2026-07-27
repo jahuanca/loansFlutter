@@ -119,7 +119,7 @@ class AddSpecialLoanQuotasController extends GetxController {
       case Success():
       LoanEntity newLoan = resultType.value;
       _successCreate(newLoan);
-      Get.until((route) => route.settings.name == RoutesName.initial.route);
+      Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
         break;
       case Error(): 
       showSnackbarWidget(
@@ -141,7 +141,7 @@ class AddSpecialLoanQuotasController extends GetxController {
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
         message: 'Información copiada');
-    Get.until((route) => route.settings.name == RoutesName.initial.route);
+    Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
   }
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {
@@ -166,7 +166,7 @@ class AddSpecialLoanQuotasController extends GetxController {
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
-        message: 'Información copiada');
-    Get.until((route) => route.settings.name == RoutesName.initial.route);
+        message: 'Información copiada.');
+    Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
   }
 }

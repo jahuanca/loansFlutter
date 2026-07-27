@@ -137,7 +137,7 @@ class AddLoanQuotasController extends GetxController {
   void _successCreate(LoanEntity newLoan) async {
     addLoanRequest.id = newLoan.id;
     goShareInformation();
-    Get.until((route) => route.settings.name == RoutesName.initial.route);
+    Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
   }
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {
@@ -160,7 +160,8 @@ class AddLoanQuotasController extends GetxController {
     showSnackbarWidget(
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
-        message: 'Información copiada');
-    Get.until((route) => route.settings.name == RoutesName.initial.route);
+        message: 'Información copiada',
+    );
+    Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
   }
 }

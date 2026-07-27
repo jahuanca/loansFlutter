@@ -101,8 +101,8 @@ class DashboardPage extends StatelessWidget {
               ItemActionWidget(
                 size: size,
                 title: 'Cesaron',
-                value: response?.renovar,
-                onTap: controller.goToNextRenewal,
+                value: response?.cesaron.toString(),
+                onTap: controller.goToCustomersWithoutLoan,
               ),
             ],
           ),

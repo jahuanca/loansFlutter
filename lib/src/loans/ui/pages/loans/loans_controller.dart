@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
@@ -41,6 +43,7 @@ class LoansController extends GetxController {
 
   @override
   void onReady() {
+    log('Loans route: ${Get.currentRoute}');
     getLoans();
     super.onReady();
   }

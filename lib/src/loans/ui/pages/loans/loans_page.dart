@@ -105,6 +105,7 @@ class LoansPage extends StatelessWidget {
       loanName: loan.formatTitle, 
       customerName: subtitle.orEmpty(),
       isCompleted: loan.isCompleted, 
+      ganancy: loan.ganancy.formatDecimals(),
       date: loan.startDate.formatDMMYYY(),
     );
 

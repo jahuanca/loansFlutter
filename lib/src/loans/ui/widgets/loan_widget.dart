@@ -9,6 +9,7 @@ class LoanWidget extends StatelessWidget {
   final String loanName;
   final String customerName;
   final String? date;
+  final String? ganancy;
   final bool isCompleted;
   
 
@@ -18,6 +19,7 @@ class LoanWidget extends StatelessWidget {
     required this.loanName,
     required this.customerName,
     required this.date,
+    required this.ganancy,
     this.isCompleted = false,
   });
 
@@ -28,7 +30,13 @@ class LoanWidget extends StatelessWidget {
       leading: Text('$id'),
       title: _titleItem(),
       subtitle: Text(customerName),
-      trailing: Text(date.orEmpty()),
+      trailing: Column(
+        children: [
+          Text(date.orEmpty()),
+          Text('+ ${ganancy.orEmpty()}', 
+          style: const TextStyle(fontWeight: FontWeight.bold),),
+        ],
+      ),
     );
   }
 

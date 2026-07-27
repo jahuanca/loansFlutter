@@ -38,7 +38,7 @@ class LoginController extends GetxController {
     update([keepSesionIdGet]);
   }
 
-  void goToHome() async {
+  Future<void> goToHome() async {
     final resultValidate = loginUi.validate();
     if (resultValidate != null) {
       showSnackbarWidget(

@@ -33,4 +33,9 @@ class CustomerRepositoryImplementation extends CustomerRepository {
   Future<Result<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer) {
     return datastore.getAnalytics(idOfCustomer);
   }
+  
+  @override
+  Future<Result<List<CustomerEntity>, ErrorEntity>> getWithoutLoan() {
+    return datastore.getWithoutLoan();
+  }
 }

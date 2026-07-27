@@ -104,6 +104,9 @@ class QuotaWidget extends StatelessWidget {
                 title: paymentDateString,
                 value: '${expirationDate.formatDMMYYY()}'),
             _childItem(
+                title: 'A caja',
+                value: 'S/ ${((ganancy / 2) + amortization).formatDecimals()}'),
+            _childItem(
                 title: 'Amortización',
                 value: 's/ ${amortization.formatDecimals()}'),
             _childItem(

@@ -27,7 +27,7 @@ class NavigationContentPage extends StatelessWidget {
     HomeCalendarPage(),
     LoansPage(tag: 'allLoans',),
     CustomersPage(),
-    const HomeSettingsPage(),
+    HomeSettingsPage(),
   ];
 
   NavigationContentPage({super.key});

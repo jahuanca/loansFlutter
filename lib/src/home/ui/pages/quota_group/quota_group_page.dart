@@ -27,12 +27,19 @@ class QuotaGroupPage extends StatelessWidget {
     return GetBuilder<QuotaGroupController>(
       init: controller,
       id: pageIdGet,
-      builder: (controller) => RefreshIndicator(
-        onRefresh: controller.getQuotas,
-        child: Scaffold(
-          appBar: _appBar(),
-          body: _body(size),
-          bottomNavigationBar: _bottomNavigation(),
+      builder: (controller) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+        if (didPop) { return;}
+        controller.onBackPressed();
+      },
+        child: RefreshIndicator(
+          onRefresh: controller.getQuotas,
+          child: Scaffold(
+            appBar: _appBar(),
+            body: _body(size),
+            bottomNavigationBar: _bottomNavigation(),
+          ),
         ),
       ),
     );

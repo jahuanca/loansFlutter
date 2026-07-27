@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:loands_flutter/src/login/ui/pages/back_to_sesion/back_to_sesion_controller.dart';
+import 'package:loands_flutter/src/login/ui/pages/back_to_sesion/direct_access_enum.dart';
+import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
@@ -36,13 +38,12 @@ class BackToSesionPage extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: Colors.white.withAlpha(250),
-            
           ),
           child: Column(
             children: [
               _welcomeMessage(),
               _form(),
-              _shortCuts(),
+              _shortCuts(size),
             ],
           ),
         ),
@@ -54,22 +55,43 @@ class BackToSesionPage extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Center(
-          child: RichTextWidget(
-        mainText: '\nBienvenido \n',
-        mainStyle: const TextStyle(
-          color: Colors.black,
-        ),
-        align: TextAlign.center,
-        items: [
-          RichTextItem(
-              text: controller.username,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              )),
-          RichTextItem(
-              text: '\n \nDigite su contraseña para iniciar sesión!',
-              style: const TextStyle()),
+          child: Column(
+        children: [
+          RichTextWidget(
+            mainText: '\nBienvenido \n',
+            mainStyle: const TextStyle(
+              color: Colors.black,
+            ),
+            align: TextAlign.center,
+            items: [
+              RichTextItem(
+                  text: controller.username,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  )),
+              RichTextItem(
+                  text: '\n \nDigite su contraseña para iniciar sesión!',
+                  style: const TextStyle()),
+            ],
+          ),
+          GetBuilder<BackToSesionController>(
+              id: directAccessIdGet,
+              builder: (controller) => (controller.directAccessSelected != null)
+                  ? RichTextWidget(
+                      mainText: '\n \nDirigirme a:  ',
+                      mainStyle: const TextStyle(
+                        color: Colors.black
+                      ),
+                      items: [
+                        RichTextItem(
+                            text: controller.directAccessSelected?.title ?? emptyString,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ],
+                    )
+                  : Container()),
         ],
       )),
     );
@@ -99,47 +121,56 @@ class BackToSesionPage extends StatelessWidget {
     );
   }
 
-  Widget _shortCuts() {
-    return Expanded(
-      flex: 2,
-      child: Column(
-        children: [
-          const Text(
-            '-Accesos directos-',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+  Widget _shortCuts(Size size) {
+    return GetBuilder<BackToSesionController>(
+      id: directAccessIdGet,
+      builder: (controller) => Expanded(
+        flex: 2,
+        child: Column(
+          children: [
+            const Text(
+              '-Accesos directos-',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(children: [
-            _itemShortCut(icon: Icons.analytics_outlined, title: 'Analíticas'),
-            _itemShortCut(
-                icon: Icons.calendar_month_outlined, title: 'Semana actual'),
-            _itemShortCut(
-                icon: Icons.post_add_outlined, title: 'Nuevo préstamo'),
-          ]),
-          const SizedBox(height: 32),
-          Row(children: [
-            _itemShortCut(
-                icon: Icons.summarize_outlined, title: 'Resumen pagos'),
-            _itemShortCut(
-                icon: Icons.calendar_month_outlined, title: 'Vencidos'),
-            _itemShortCut(
-                icon: Icons.person_add_alt_1_outlined, title: 'Nuevo cliente'),
-          ]),
-        ],
+            const SizedBox(
+              height: 8,
+            ),
+            GridView.builder(
+              shrinkWrap: true,
+              itemCount: DirectAccessEnum.values.length,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 0,
+                mainAxisSpacing: 0,
+                childAspectRatio: 2,
+              ),
+              itemBuilder: (context, index) =>
+                  _itemShortCut(DirectAccessEnum.values[index]),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _itemShortCut({
-    required IconData icon,
-    required String title,
-  }) {
-    return Expanded(
+  Widget _itemShortCut(DirectAccessEnum directAccess) {
+    return Container(
+      color: (controller.directAccessSelected == directAccess)
+          ? infoColor()
+          : Colors.transparent,
+      child: GestureDetector(
+        onTap: () => controller.onChangedDirectAccess(directAccess),
         child: Column(
-      children: [IconWidget(iconData: icon), Text(title)],
-    ));
+          children: [
+            IconWidget(iconData: directAccess.icon),
+            Text(directAccess.title)
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buttonsLogin() {
