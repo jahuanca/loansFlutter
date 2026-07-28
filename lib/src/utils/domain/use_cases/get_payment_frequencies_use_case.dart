@@ -11,7 +11,7 @@ class GetPaymentFrequenciesUseCase {
     required this.repository
   });
 
-  Future<Result<List<PaymentFrequencyEntity>, ErrorEntity>> execute(){
+  Future<Result<List<PaymentFrequencyEntity>>> execute(){
     return repository.getPaymentFrecuencies();
   }
 

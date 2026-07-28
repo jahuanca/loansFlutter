@@ -11,7 +11,7 @@ class GetSummaryMonthsUseCase {
     required this.repository
   });
 
-  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> execute() async {
+  Future<Result<List<SummaryMonthResponse>>> execute() async {
     return repository.getSummaryMonths();
   }
 

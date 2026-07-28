@@ -3,7 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
 part 'summary_of_dashboard_response.g.dart';
 
-SummaryOfDashboardResponse summaryOfDashboardResponseFromJson(String str) => SummaryOfDashboardResponse.fromJson(json.decode(str));
 
 String dashboardSummaryResponseToJson(SummaryOfDashboardResponse data) => json.encode(data.toJson());
 

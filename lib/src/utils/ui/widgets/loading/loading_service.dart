@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_overlay.dart';
 
 class LoadingService extends GetxService {
@@ -31,3 +31,5 @@ class LoadingService extends GetxService {
 void showLoading() => Get.find<LoadingService>().show();
 void hideLoading() => Get.find<LoadingService>().hide();
 bool isLoading() => Get.find<LoadingService>().isShowing;
+
+Future<bool> get isConnected => InternetConnection().hasInternetAccess;

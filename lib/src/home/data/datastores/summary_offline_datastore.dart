@@ -14,43 +14,44 @@ import 'package:utils/utils.dart';
 
 class SummaryOfflineDatastore extends SummaryDatastore {
   @override
-  Future<Result<List<InjectionResponse>, ErrorEntity>> getInjections() {
+  Future<Result<List<InjectionResponse>>> getInjections() {
     // TODO: implement getInjections
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() {
+  Future<Result<List<DashboardQuotaResponse>>> getNextRenewal() {
     // TODO: implement getNextRenewal
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(GetQuotasByDateRequest request) {
+  Future<Result<List<DashboardQuotaResponse>>> getQuotasByDate(GetQuotasByDateRequest request) {
     // TODO: implement getQuotasByDate
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() {
+  Future<Result<List<SummaryMonthResponse>>> getSummaryMonths() {
     // TODO: implement getSummaryMonths
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() {
+  Future<Result<SummaryOfCalendarResponse>> getSummaryOfCalendar() {
     // TODO: implement getSummaryOfCalendar
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() {
-    final box = Hive.box<SummaryOfCalendarResponse>(HiveDbAdapters.summaryOfDashboard.source);
-    throw UnimplementedError();
+  Future<Result<SummaryOfDashboardResponse>> getSummaryOfDashboard() async {
+    final box = Hive.box<SummaryOfDashboardResponse>(HiveDbAdapters.summaryOfDashboard.source);
+    final values = box.values.toList();
+    return Result.success(values.first);
   }
 
   @override
-  Future<Result<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
+  Future<Result<QuotaEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
     // TODO: implement payQuota
     throw UnimplementedError();
   }

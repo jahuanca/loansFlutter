@@ -54,7 +54,7 @@ class UpdatePasswordController extends GetxController {
 
   Future<void> _updatePassword() async {
     showLoading();
-    Result<void, ErrorEntity> result = 
+    Result<void> result = 
       await updatePasswordUseCase.execute(
         updatePasswordUi.currentPassword?.value, 
         updatePasswordUi.newPassword?.value, 

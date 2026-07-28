@@ -23,7 +23,7 @@ class ListUsersController extends GetxController {
 
   Future<void> getUsers() async {
     showLoading();
-    Result<List<UserEntity>, ErrorEntity> result = await getUsersUseCase.execute();
+    Result<List<UserEntity>> result = await getUsersUseCase.execute();
     hideLoading();
 
     switch (result) {

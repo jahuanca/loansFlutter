@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_resp
 import 'package:loands_flutter/src/home/ui/pages/dashboard/dashboard_controller.dart';
 import 'package:loands_flutter/src/home/ui/widgets/item_action_widget.dart';
 import 'package:loands_flutter/src/home/ui/widgets/item_activity_widget.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -130,15 +131,25 @@ class DashboardPage extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: size.height * 0.45,
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: controller.logs.length,
-            itemBuilder: (context, index) =>
-                ItemActivityWidget(log: controller.logs[index]),
-          ),
-        ),
+            height: size.height * 0.45,
+            child: FutureBuilder(
+              future: isConnected,
+              builder: (context, snapshot) => ChildOrElseWidget(
+                condition: snapshot.data == true,
+                elseWidget: const Center(child: Text('No disponible offline')),
+                child: _listActivities(),
+              ),
+            )),
       ],
+    );
+  }
+
+  Widget _listActivities() {
+    return ListView.separated(
+      separatorBuilder: (context, index) => const Divider(),
+      itemCount: controller.logs.length,
+      itemBuilder: (context, index) =>
+          ItemActivityWidget(log: controller.logs[index]),
     );
   }
 }

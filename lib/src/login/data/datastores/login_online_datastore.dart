@@ -1,29 +1,19 @@
-
-import 'dart:convert';
-
 import 'package:loands_flutter/src/login/data/request/login_request.dart';
 import 'package:loands_flutter/src/login/data/datastores/login_datastore.dart';
 import 'package:loands_flutter/src/login/domain/entities/login_entity.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:utils/utils.dart';
 
 class LoginOnlineDatastore extends LoginDatastore {
   @override
-  Future<Result<LoginEntity, ErrorEntity>> login(LoginRequest request) async {
+  Future<Result<LoginEntity>> login(LoginRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.post(
+    final Result<AppResponseHttp> response = await appHttpManager.post(
       url: '/auth/login',
       body: request.toJson(),
     );
-    if (response.isSuccessful) {
-      return Success( LoginEntity.fromJson(
-        jsonDecode(response.body)
-      ));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: response.title,
-              errorMessage: response.body));
-    }
+
+     return executeResponseObject<LoginEntity>(
+        response: response, convert: LoginEntity.fromJson);
   }
 }

@@ -2,7 +2,7 @@
 import 'package:utils/utils.dart';
 
 abstract class SettingsRepository {
-  Future<Result<void, ErrorEntity>> updatePassword(
+  Future<Result<void>> updatePassword(
     String lastPassword, String newPassword,
   );
 }

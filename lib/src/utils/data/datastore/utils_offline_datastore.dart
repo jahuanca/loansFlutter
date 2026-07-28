@@ -8,24 +8,24 @@ import 'package:utils/utils.dart';
 
 class UtilsOfflineDatastore extends UtilsDatastore  {
   @override
-  Future<Result<List<ActivityLogEntity>, ErrorEntity>> getLastsLog() {
+  Future<Result<List<ActivityLogEntity>>> getLastsLog() {
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<List<PaymentMethodEntity>, ErrorEntity>> getMethodsPayment() {
+  Future<Result<List<PaymentMethodEntity>>> getMethodsPayment() {
     // TODO: implement getMethodsPayment
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<List<PaymentFrequencyEntity>, ErrorEntity>> getPaymentFrecuencies() {
+  Future<Result<List<PaymentFrequencyEntity>>> getPaymentFrecuencies() {
     // TODO: implement getPaymentFrecuencies
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<List<TypeDocumentEntity>, ErrorEntity>> getTypesDocument() {
+  Future<Result<List<TypeDocumentEntity>>> getTypesDocument() {
     // TODO: implement getTypesDocument
     throw UnimplementedError();
   }

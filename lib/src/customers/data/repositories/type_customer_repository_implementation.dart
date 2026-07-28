@@ -13,7 +13,7 @@ class TypeCustomerRepositoryImplementation extends TypeCustomerRepository {
   });
 
   @override
-  Future<Result<List<TypeCustomerEntity>, ErrorEntity>> getAll() {
+  Future<Result<List<TypeCustomerEntity>>> getAll() {
     return datastore.getAll();
   }
 }

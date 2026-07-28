@@ -87,7 +87,7 @@ class PayQuotaController extends GetxController {
         'Se registrara la cuota como pagada, ¿desea continuar?');
     if (goAction) {
       showLoading();
-      Result<QuotaEntity, ErrorEntity> resultType =
+      Result<QuotaEntity> resultType =
           await payQuotaUseCase.execute(payQuotaRequest);
       hideLoading();
       switch (resultType) {

@@ -28,7 +28,7 @@ class CustomersController extends GetxController {
   Future<void> getCustomers() async {
     customersToShow.clear();
     showLoading();
-    Result<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>> resultType =
         await getCustomersUseCase.execute();
     switch (resultType) {
       case Success():

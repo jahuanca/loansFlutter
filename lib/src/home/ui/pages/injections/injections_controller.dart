@@ -22,7 +22,7 @@ class InjectionsController extends GetxController {
 
   Future<void> getInjections() async {
     showLoading();
-    Result<List<InjectionResponse>, ErrorEntity> result = await getInjectionsUseCase.execute();
+    Result<List<InjectionResponse>> result = await getInjectionsUseCase.execute();
     hideLoading();
     switch (result) {
       case Success():

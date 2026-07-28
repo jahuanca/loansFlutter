@@ -37,7 +37,7 @@ class HomeCalendarController extends GetxController {
 
   Future<void> getSummaryOfCalendar() async {
     showLoading();
-    Result<SummaryOfCalendarResponse, ErrorEntity> resultType =
+    Result<SummaryOfCalendarResponse> resultType =
         await getSummaryOfCalendarUseCase.execute();
 
     switch (resultType) {
@@ -62,7 +62,7 @@ class HomeCalendarController extends GetxController {
       fromDate: dateTime,
       untilDate: dateTime
     );
-    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>> resultType =
         await getQuotasByDateUseCase.execute(request);
     switch (resultType) {
       case Success():

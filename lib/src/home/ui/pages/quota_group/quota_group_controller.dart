@@ -104,7 +104,7 @@ class QuotaGroupController extends GetxController {
 
   Future<void> getQuotas() async {
     showLoading();
-    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>> resultType =
         await getQuotasByDateUseCase.execute(getQuotasByDateRequest);
     hideLoading();
     switch (resultType) {

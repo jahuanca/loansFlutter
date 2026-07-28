@@ -1,95 +1,58 @@
-import 'dart:convert';
-
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
 import 'package:loands_flutter/src/customers/data/responses/customer_analytics_response.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:utils/utils.dart';
 
 class CustomerOnlineDatastore extends CustomerDatastore {
-
   @override
-  Future<Result<CustomerEntity, ErrorEntity>> create(
-      CreateCustomerRequest request) async {
+  Future<Result<CustomerEntity>> create(CreateCustomerRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.post(
+    final Result<AppResponseHttp> response = await appHttpManager.post(
         url: '/customer/create', body: request.toJson());
-    if (response.isSuccessful) {
-      return Success( CustomerEntity.fromJson(jsonDecode(response.body)));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: response.title,
-              errorMessage: response.body));
-    }
+    return executeResponseObject<CustomerEntity>(
+        response: response, convert: CustomerEntity.fromJson);
   }
 
   @override
-  Future<Result<List<CustomerEntity>, ErrorEntity>> getAll() async {
+  Future<Result<List<CustomerEntity>>> getAll() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
+    final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/customer',
     );
-    if (response.isSuccessful) {
-      return Success( customerEntityFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: response.title,
-              errorMessage: response.body));
-    }
+    return executeResponseList<List<CustomerEntity>>(
+        response: response, convert: customerEntityFromJson);
   }
 
   @override
-  Future<Result<CustomerEntity, ErrorEntity>> update(
-      CreateCustomerRequest request) async {
+  Future<Result<CustomerEntity>> update(CreateCustomerRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.put(
+    final Result<AppResponseHttp> response = await appHttpManager.put(
         url: '/customer/update', body: request.toJson());
-    if (response.isSuccessful) {
-      return Success( CustomerEntity.fromJson(jsonDecode(response.body)));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: response.title,
-              errorMessage: response.body));
-    }
+    return executeResponseObject(
+        response: response, convert: CustomerEntity.fromJson);
   }
-  
+
   @override
-  Future<Result<CustomerAnalyticsResponse, ErrorEntity>> getAnalytics(int idOfCustomer) async {
+  Future<Result<CustomerAnalyticsResponse>> getAnalytics(
+      int idOfCustomer) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
-      url: '/customer/analytics', query: {
-        'id_customer': idOfCustomer,
-      }
-    );
-    if (response.isSuccessful) {
-      return Success( CustomerAnalyticsResponse.fromJson(jsonDecode(response.body)));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: response.title,
-              errorMessage: response.body));
-    }
+    final Result<AppResponseHttp> response =
+        await appHttpManager.get(url: '/customer/analytics', query: {
+      'id_customer': idOfCustomer,
+    });
+
+    return executeResponseObject<CustomerAnalyticsResponse>(
+        response: response, convert: CustomerAnalyticsResponse.fromJson);
   }
-  
+
   @override
-  Future<Result<List<CustomerEntity>, ErrorEntity>> getWithoutLoan() async {
+  Future<Result<List<CustomerEntity>>> getWithoutLoan() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(url: '/utils/customer-without-loan');
-    if (response.isSuccessful) {
-      return Success( customerEntityFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: response.title,
-              errorMessage: response.body));
-    }
+    final Result<AppResponseHttp> response =
+        await appHttpManager.get(url: '/utils/customer-without-loan');
+    return executeResponseList(
+        response: response, convert: customerEntityFromJson);
   }
 }

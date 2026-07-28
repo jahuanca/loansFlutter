@@ -1,41 +1,27 @@
-import 'dart:convert';
 
 import 'package:loands_flutter/src/loans/data/requests/get_all_quotas_request.dart';
 import 'package:loands_flutter/src/loans/data/datastores/quota/quota_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:utils/utils.dart';
 
 class QuotaOnlineDatastore extends QuotaDatastore {
   @override
-  Future<Result<List<QuotaEntity>, ErrorEntity>> getAll(
+  Future<Result<List<QuotaEntity>>> getAll(
       GetAllQuotasRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response =
+    final Result<AppResponseHttp> response =
         await appHttpManager.get(url: '/quota', query: request.toJson());
-    if (response.isSuccessful) {
-      return Success( quotaEntityFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: '',
-              errorMessage: response.body));
-    }
+    return executeResponseList<List<QuotaEntity>>(
+        response: response, convert: quotaEntityFromJson);
   }
 
   @override
-  Future<Result<QuotaEntity, ErrorEntity>> getQuota(int idOfQuota) async {
+  Future<Result<QuotaEntity>> getQuota(int idOfQuota) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response =
+    final Result<AppResponseHttp> response =
         await appHttpManager.get(url: '/quota/$idOfQuota');
-    if (response.isSuccessful) {
-      return Success( QuotaEntity.fromJson(jsonDecode(response.body)));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: 'Error',
-              errorMessage: response.body));
-    }
+     return executeResponseObject<QuotaEntity>(
+        response: response, convert: QuotaEntity.fromJson);
   }
 }

@@ -7,7 +7,7 @@ class UpdatePasswordUseCase {
 
   UpdatePasswordUseCase(this.repository);
 
-  Future<Result<void, ErrorEntity>> execute(
+  Future<Result<void>> execute(
     String lastPassword, String newPassword,
   ) {
     return repository.updatePassword(lastPassword, newPassword);

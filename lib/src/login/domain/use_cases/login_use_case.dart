@@ -12,7 +12,7 @@ class LoginUseCase {
     required this.repository
   });
 
-  Future<Result<LoginEntity, ErrorEntity>> execute(LoginRequest request) {
+  Future<Result<LoginEntity>> execute(LoginRequest request) {
     return repository.login(request);
   }
 

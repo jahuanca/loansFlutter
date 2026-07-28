@@ -48,7 +48,7 @@ class CustomerAnalyticsController extends GetxController {
 
   Future<void> getCustomers() async {
     showLoading();
-    Result<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>> resultType =
         await getCustomersUseCase.execute();
     hideLoading();
     switch (resultType) {
@@ -72,7 +72,7 @@ class CustomerAnalyticsController extends GetxController {
 
   void getAnalytics(int idOfCustomer) async {
     showLoading();
-    Result<CustomerAnalyticsResponse, ErrorEntity> resultType =
+    Result<CustomerAnalyticsResponse> resultType =
         await getCustomerAnalyticsUseCase.execute(idOfCustomer);
     hideLoading();
     switch (resultType) {

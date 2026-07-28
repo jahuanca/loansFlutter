@@ -48,7 +48,7 @@ class LoginController extends GetxController {
       return;
     }
     showLoading();
-    Result<LoginEntity, ErrorEntity> resultType =
+    Result<LoginEntity> resultType =
         await loginUseCase.execute(loginUi.value);
     switch (resultType) {
       case Success():

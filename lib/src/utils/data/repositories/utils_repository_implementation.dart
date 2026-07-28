@@ -18,22 +18,22 @@ class UtilsRepositoryImplementation extends UtilsRepository {
   });
 
   @override
-  Future<Result<List<TypeDocumentEntity>, ErrorEntity>> getTypesDocument() {
+  Future<Result<List<TypeDocumentEntity>>> getTypesDocument() {
     return datastore.getTypesDocument();
   }
 
   @override
-  Future<Result<List<PaymentMethodEntity>, ErrorEntity>> getMethodsPayment() {
+  Future<Result<List<PaymentMethodEntity>>> getMethodsPayment() {
     return datastore.getMethodsPayment();
   }
 
   @override
-  Future<Result<List<PaymentFrequencyEntity>, ErrorEntity>> getPaymentFrecuencies() {
+  Future<Result<List<PaymentFrequencyEntity>>> getPaymentFrecuencies() {
     return datastore.getPaymentFrecuencies();
   }
 
   @override
-  Future<Result<List<ActivityLogEntity>, ErrorEntity>> getLastsLog() {
+  Future<Result<List<ActivityLogEntity>>> getLastsLog() {
     return datastore.getLastsLog();
   }
 }

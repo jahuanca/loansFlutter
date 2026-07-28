@@ -14,7 +14,7 @@ class LoginRepositoryImplementation extends LoginRepository {
   });
 
   @override
-  Future<Result<LoginEntity, ErrorEntity>> login(LoginRequest request) {
+  Future<Result<LoginEntity>> login(LoginRequest request) {
     return datastore.login(request);
   }
 }

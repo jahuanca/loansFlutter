@@ -9,7 +9,7 @@ class GetCustomerWithoutLoanUseCase {
 
   GetCustomerWithoutLoanUseCase(this.repository);
 
-  Future<Result<List<CustomerEntity>, ErrorEntity>> execute() async {
+  Future<Result<List<CustomerEntity>>> execute() async {
     return repository.getWithoutLoan();
   }
 

@@ -60,7 +60,7 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getLogs() async {
-    Result<List<ActivityLogEntity>, ErrorEntity> resultType =
+    Result<List<ActivityLogEntity>> resultType =
         await getLogsUseCase.execute();
     switch (resultType) {
       case Success():
@@ -73,7 +73,7 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getSummary([bool updateDateSelected = true]) async {
-    Result<SummaryOfDashboardResponse, ErrorEntity> resultType =
+    Result<SummaryOfDashboardResponse> resultType =
         await getSummaryDasboardUseCase.execute();
     switch (resultType) {
       case Success():
@@ -93,7 +93,7 @@ class DashboardController extends GetxController {
     showLoading();
     GetQuotasByDateRequest request =
         GetQuotasByDateRequest(fromDate: dateTime, untilDate: dateTime);
-    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>> resultType =
         await getQuotasByDateUseCase.execute(request);
     switch (resultType) {
       case Success():

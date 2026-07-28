@@ -94,7 +94,7 @@ class AddSpecialLoanQuotasController extends GetxController {
     createRenewalSpecialRequest?.numberOfInstallments = addLoanSpecialRequest.numberOfInstallments;
     createRenewalSpecialRequest?.daysBetweenInstallments = addLoanSpecialRequest.daysBetweenInstallments;
 
-    Result<PayAndRenewalResponse, ErrorEntity> resultType =
+    Result<PayAndRenewalResponse> resultType =
           await payAndRenewalSpecialUseCase.execute(createRenewalSpecialRequest!);
       switch (resultType) {
       case Success():
@@ -113,7 +113,7 @@ class AddSpecialLoanQuotasController extends GetxController {
   }
 
   Future<void> _createLoan() async {
-    Result<LoanEntity, ErrorEntity> resultType =
+    Result<LoanEntity> resultType =
         await createSpecialLoanUseCase.execute(addLoanSpecialRequest);
     switch (resultType) {
       case Success():

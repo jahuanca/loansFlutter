@@ -18,27 +18,27 @@ class LoanRepositoryImplementation extends LoanRepository {
   });
 
   @override
-  Future<Result<LoanEntity, ErrorEntity>> create(AddLoanRequest addLoanRequest) {
+  Future<Result<LoanEntity>> create(AddLoanRequest addLoanRequest) {
     return datastore.create(addLoanRequest);
   }
   
   @override
-  Future<Result<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request) {
+  Future<Result<List<LoanEntity>>> getAll(GetLoansRequest request) {
     return datastore.getAll(request);
   }
 
   @override
-  Future<Result<LoanEntity, ErrorEntity>> createSpecial(AddSpecialLoanRequest addSpecialLoanRequest) {
+  Future<Result<LoanEntity>> createSpecial(AddSpecialLoanRequest addSpecialLoanRequest) {
     return datastore.createSpecial(addSpecialLoanRequest);
   }
   
   @override
-  Future<Result<bool, ErrorEntity>> validate(ValidateLoanRequest validateLoanRequest) {
+  Future<Result<bool>> validate(ValidateLoanRequest validateLoanRequest) {
     return datastore.validate(validateLoanRequest);
   }
   
   @override
-  Future<Result<LoanEntity, ErrorEntity>> get(GetLoanRequest request) {
+  Future<Result<LoanEntity>> get(GetLoanRequest request) {
     return datastore.get(request);
   }
 }

@@ -11,7 +11,7 @@ class UserRepositoryImplementation extends UserRepository {
   UserRepositoryImplementation(this.datastore);
 
   @override
-  Future<Result<List<UserEntity>, ErrorEntity>> getUsers() {
+  Future<Result<List<UserEntity>>> getUsers() {
     return datastore.getUsers();
   }
 }

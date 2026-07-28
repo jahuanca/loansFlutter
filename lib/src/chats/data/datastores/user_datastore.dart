@@ -4,6 +4,6 @@ import 'package:utils/utils.dart';
 
 abstract class UserDatastore {
   
-  Future<Result<List<UserEntity>, ErrorEntity>> getUsers();
+  Future<Result<List<UserEntity>>> getUsers();
 
 }

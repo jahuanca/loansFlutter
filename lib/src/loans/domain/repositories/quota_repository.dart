@@ -4,7 +4,7 @@ import 'package:utils/utils.dart';
 
 abstract class QuotaRepository {
   
-  Future<Result<List<QuotaEntity>,ErrorEntity>> getAll(GetAllQuotasRequest request);
+  Future<Result<List<QuotaEntity>>> getAll(GetAllQuotasRequest request);
   
-  Future<Result<QuotaEntity,ErrorEntity>> getQuota(int idOfQuota);
+  Future<Result<QuotaEntity>> getQuota(int idOfQuota);
 }

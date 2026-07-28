@@ -8,9 +8,9 @@ import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:utils/utils.dart';
 
 abstract class LoanRepository {
-  Future<Result<bool,ErrorEntity>> validate(ValidateLoanRequest validateLoanRequest);
-  Future<Result<LoanEntity,ErrorEntity>> create(AddLoanRequest addLoanRequest);
-  Future<Result<LoanEntity,ErrorEntity>> createSpecial(AddSpecialLoanRequest addSpecialLoanRequest);
-  Future<Result<List<LoanEntity>,ErrorEntity>> getAll(GetLoansRequest request);
-  Future<Result<LoanEntity,ErrorEntity>> get(GetLoanRequest request);
+  Future<Result<bool>> validate(ValidateLoanRequest validateLoanRequest);
+  Future<Result<LoanEntity>> create(AddLoanRequest addLoanRequest);
+  Future<Result<LoanEntity>> createSpecial(AddSpecialLoanRequest addSpecialLoanRequest);
+  Future<Result<List<LoanEntity>>> getAll(GetLoansRequest request);
+  Future<Result<LoanEntity>> get(GetLoanRequest request);
 }

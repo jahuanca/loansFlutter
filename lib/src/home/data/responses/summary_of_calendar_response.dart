@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-SummaryOfCalendarResponse summaryOfCalendarResponseFromJson(String str) => SummaryOfCalendarResponse.fromJson(json.decode(str));
-
 String summaryOfCalendarResponseToJson(SummaryOfCalendarResponse data) => json.encode(data.toJson());
 
 class SummaryOfCalendarResponse {

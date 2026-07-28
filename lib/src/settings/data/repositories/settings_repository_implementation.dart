@@ -10,7 +10,7 @@ class SettingsRepositoryImplementation extends SettingsRepository {
   SettingsRepositoryImplementation(this.datastore);
 
   @override
-  Future<Result<void, ErrorEntity>> updatePassword(String currentPassword, String newPassword) {
+  Future<Result<void>> updatePassword(String currentPassword, String newPassword) {
     return datastore.updatePassword(currentPassword, newPassword);
   }
 }

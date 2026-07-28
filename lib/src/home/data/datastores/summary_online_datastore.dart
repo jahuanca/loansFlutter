@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:loands_flutter/src/home/data/request/pay_quota_request.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/injection_response.dart';
@@ -9,123 +7,82 @@ import 'package:loands_flutter/src/home/data/responses/summary_month_response.da
 import 'package:loands_flutter/src/home/data/datastores/summary_datastore.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:utils/utils.dart';
 
 class SummaryOnlineDatastore extends SummaryDatastore {
 
   @override
-  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() async {
+  Future<Result<SummaryOfDashboardResponse>> getSummaryOfDashboard() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
+    final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/utils/summary-of-dashboard',
     );
-    if (response.isSuccessful) {
-      return Success( summaryOfDashboardResponseFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: '',
-              errorMessage: response.body));
-    }
+    return executeResponseObject<SummaryOfDashboardResponse>(
+        response: response, convert: SummaryOfDashboardResponse.fromJson);
   }
 
   @override
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(
+  Future<Result<List<DashboardQuotaResponse>>> getQuotasByDate(
       GetQuotasByDateRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
+    final Result<AppResponseHttp> response = await appHttpManager.get(
         url: '/utils/quotasOfDate',
         query: request.toJson());
-    if (response.isSuccessful) {
-      return Success( dashboardQuotasResponseFromJson(response.body));
-    }
-    return Error(
-        ErrorEntity(
-            statusCode: response.statusCode,
-            title: '',
-            errorMessage: response.body));
+    return executeResponseList<List<DashboardQuotaResponse>>(
+        response: response, convert: dashboardQuotasResponseFromJson);
   }
 
   @override
-  Future<Result<QuotaEntity, ErrorEntity>> payQuota(
+  Future<Result<QuotaEntity>> payQuota(
       PayQuotaRequest payQuotaRequest) async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response =
+    final Result<AppResponseHttp> response =
         await appHttpManager.post(url: '/quota/pay', body: payQuotaRequest.toJson());
-    if (response.isSuccessful) {
-      return Success( QuotaEntity.fromJson(jsonDecode(response.body)));
-    }
-    return Error(
-        ErrorEntity(
-            statusCode: response.statusCode,
-            title: response.title,
-            errorMessage: response.body));
+    
+    return executeResponseObject<QuotaEntity>(
+        response: response, convert: QuotaEntity.fromJson);
   }
   
   @override
-  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() async {
+  Future<Result<List<SummaryMonthResponse>>> getSummaryMonths() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response =
+    final Result<AppResponseHttp> response =
         await appHttpManager.get(url: '/utils/summary-months');
-    if (response.isSuccessful) {
-      return Success( summaryMonthFromJson(response.body));
-    }
-    return Error(
-        ErrorEntity(
-            statusCode: response.statusCode,
-            title: response.title,
-            errorMessage: response.body));
+    
+    return executeResponseList<List<SummaryMonthResponse>>(
+        response: response, convert: summaryMonthFromJson);
   }
   
   @override
-  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() async {
+  Future<Result<SummaryOfCalendarResponse>> getSummaryOfCalendar() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
+    final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/utils/summary-of-calendar',
     );
-    if (response.isSuccessful) {
-      return Success( summaryOfCalendarResponseFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: '',
-              errorMessage: response.body));
-    }
+
+    return executeResponseObject<SummaryOfCalendarResponse>(
+        response: response, convert: SummaryOfCalendarResponse.fromJson);
   }
 
   @override
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() async {
+  Future<Result<List<DashboardQuotaResponse>>> getNextRenewal() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
+    final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/utils/next-renewal',
     );
-    if (response.isSuccessful) {
-      return Success( dashboardQuotasResponseFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: '',
-              errorMessage: response.body));
-    }
+    return executeResponseList<List<DashboardQuotaResponse>>(
+        response: response, convert: dashboardQuotasResponseFromJson);
   }
 
   @override
-  Future<Result<List<InjectionResponse>, ErrorEntity>> getInjections() async {
+  Future<Result<List<InjectionResponse>>> getInjections() async {
     final AppHttpManager appHttpManager = AppHttpManager();
-    final AppResponseHttp response = await appHttpManager.get(
+    final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/utils/injections',
     );
-    if (response.isSuccessful) {
-      return Success( injectionResponseFromJson(response.body));
-    } else {
-      return Error(
-          ErrorEntity(
-              statusCode: response.statusCode,
-              title: '',
-              errorMessage: response.body));
-    }
+
+    return executeResponseList<List<InjectionResponse>>(
+        response: response, convert: injectionResponseFromJson);
   }
 }

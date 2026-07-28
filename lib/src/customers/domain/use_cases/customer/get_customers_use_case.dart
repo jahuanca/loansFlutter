@@ -9,7 +9,7 @@ class GetCustomersUseCase {
 
   GetCustomersUseCase(this.repository);
 
-  Future<Result<List<CustomerEntity>, ErrorEntity>> execute(){
+  Future<Result<List<CustomerEntity>>> execute(){
     return repository.getAll();
   }
 

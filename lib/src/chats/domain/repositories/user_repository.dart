@@ -4,5 +4,5 @@ import 'package:utils/utils.dart';
 
 abstract class UserRepository {
 
-  Future<Result<List<UserEntity>, ErrorEntity>> getUsers();
+  Future<Result<List<UserEntity>>> getUsers();
 }

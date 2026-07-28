@@ -53,7 +53,7 @@ class AddRenewalController extends GetxController {
 
   void getCustomers() async {
     showLoading();
-    Result<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>> resultType =
         await getCustomersUseCase.execute();
     hideLoading();
     switch (resultType) {
@@ -68,7 +68,7 @@ class AddRenewalController extends GetxController {
 
   void getLoans(int idCustomer) async {
     showLoading();
-    Result<GetMetadataRenewalResponse, ErrorEntity> resultType =
+    Result<GetMetadataRenewalResponse> resultType =
         await getMetadataRenewalUseCase.execute(idCustomer);
     hideLoading();
     switch (resultType) {
@@ -163,7 +163,7 @@ class AddRenewalController extends GetxController {
 
   void _goCreate() async {
     showLoading();
-    Result<RenewalEntity, ErrorEntity> resultType =
+    Result<RenewalEntity> resultType =
         await addRenewalUseCase.execute(addRenewalRequest);
     hideLoading();
     switch (resultType) {

@@ -108,7 +108,7 @@ class AddLoanInformationController extends GetxController {
     loansPrevious.clear();
     addLoanRequest.idLoanToRenew = null;
     showLoading();
-    Result<GetMetadataRenewalResponse, ErrorEntity> resultType =
+    Result<GetMetadataRenewalResponse> resultType =
         await getMetadataRenewalUseCase.execute(idCustomer);
     hideLoading();
     switch (resultType) {
@@ -123,7 +123,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> getCustomers() async {
-    Result<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>> resultType =
         await getCustomersUseCase.execute();
     switch (resultType) {
       case Success():
@@ -136,7 +136,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> getPaymentFrecuencies() async {
-    Result<List<PaymentFrequencyEntity>, ErrorEntity> resultType =
+    Result<List<PaymentFrequencyEntity>> resultType =
         await getPaymentFrequenciesUseCase.execute();
     switch (resultType) {
       case Success():
@@ -150,7 +150,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> getMethodsPayment() async {
-    Result<List<PaymentMethodEntity>, ErrorEntity> resultType =
+    Result<List<PaymentMethodEntity>> resultType =
         await getPaymentMethodsUseCase.execute();
     switch (resultType) {
       case Success():      methods = resultType.value;
@@ -163,7 +163,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> getLoanToRenew() async {
-    Result<LoanEntity, ErrorEntity> resultType = await getLoanUseCase
+    Result<LoanEntity> resultType = await getLoanUseCase
         .execute(GetLoanRequest(id: createRenewalRequest?.idLoanToRenew));
     switch (resultType) {
       case Success():
@@ -405,7 +405,7 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<bool?> goValidate() async {
-    Result<bool, ErrorEntity> resultType =
+    Result<bool> resultType =
         await validateLoanUseCase.execute(ValidateLoanRequest(
             idCustomer: addLoanRequest.idCustomer!,
             idPaymentFrequency: addLoanRequest.idPaymentFrequency!,

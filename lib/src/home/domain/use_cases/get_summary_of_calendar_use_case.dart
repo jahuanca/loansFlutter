@@ -11,7 +11,7 @@ class GetSummaryOfCalendarUseCase {
     required this.repository
   });
 
-  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> execute() async {
+  Future<Result<SummaryOfCalendarResponse>> execute() async {
     return repository.getSummaryOfCalendar();
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:android_id/android_id.dart';
@@ -60,4 +61,48 @@ FutureOr<bool> setAllException(dynamic err) async {
     return result;
   }
   return false;
+}
+
+Result<T> executeResponseObject<T>({
+  required Result<AppResponseHttp> response,
+  required T Function(Map<String, dynamic>) convert,
+}) {
+  switch (response) {
+    case Success():
+      final value = response.value;
+      if (response.value.isSuccessful) {
+        return Result.success(convert(jsonDecode(value.body)));
+      } else {
+        final error = ErrorEntity(
+          title: value.title,
+          statusCode: value.statusCode,
+          errorMessage: value.detail,
+        );
+        return Result.error(error);
+      }
+    case Error():
+      return Result.error(response.error);
+  }
+}
+
+Result<T> executeResponseList<T>({
+  required Result<AppResponseHttp> response,
+  required T Function(String) convert,
+}) {
+  switch (response) {
+    case Success():
+      final value = response.value;
+      if (response.value.isSuccessful) {
+        return Result.success(convert(value.body));
+      } else {
+        final error = ErrorEntity(
+          title: value.title,
+          statusCode: value.statusCode,
+          errorMessage: value.detail,
+        );
+        return Result.error(error);
+      }
+    case Error():
+      return Result.error(response.error);
+  }
 }

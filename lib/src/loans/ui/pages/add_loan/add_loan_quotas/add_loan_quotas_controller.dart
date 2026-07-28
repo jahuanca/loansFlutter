@@ -88,7 +88,7 @@ class AddLoanQuotasController extends GetxController {
     createRenewalRequest?.idPaymentMethod = addLoanRequest.idPaymentMethod;
     createRenewalRequest?.ganancy = addLoanRequest.ganancy;
 
-    Result<PayAndRenewalResponse, ErrorEntity> resultType =
+    Result<PayAndRenewalResponse> resultType =
         await createRenewalUseCase.execute(createRenewalRequest!);
     switch (resultType) {
       case Success():
@@ -106,7 +106,7 @@ class AddLoanQuotasController extends GetxController {
   }
 
   void _createLoan() async {
-    Result<LoanEntity, ErrorEntity> resultType =
+    Result<LoanEntity> resultType =
         await createLoanUseCase.execute(addLoanRequest);
     switch (resultType) {
       case Success():

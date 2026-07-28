@@ -50,7 +50,7 @@ class LoansController extends GetxController {
 
   Future<void> getLoans() async {
     showLoading();
-    Result<List<LoanEntity>, ErrorEntity> resultType =
+    Result<List<LoanEntity>> resultType =
         await getLoansUseCase.execute(request);
     switch (resultType) {
       case Success():

@@ -9,7 +9,7 @@ class ValidateLoanUseCase {
     required this.repository,
   });
 
-  Future<Result<bool, ErrorEntity>> execute(
+  Future<Result<bool>> execute(
       ValidateLoanRequest validateLoanRequest) {
     return repository.validate(validateLoanRequest);
   }

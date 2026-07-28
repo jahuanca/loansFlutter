@@ -72,7 +72,7 @@ class AddCustomerController extends GetxController {
 
   void getTypesDocument() async {
     showLoading();
-    Result<List<TypeDocumentEntity>, ErrorEntity> resultType =
+    Result<List<TypeDocumentEntity>> resultType =
         await getTypesDocumentUseCase.execute();
     switch (resultType) {
       case Success():
@@ -95,7 +95,7 @@ class AddCustomerController extends GetxController {
 
   void getTypesCustomer({int? initialValue}) async {
     showLoading();
-    Result<List<TypeCustomerEntity>, ErrorEntity> resultType =
+    Result<List<TypeCustomerEntity>> resultType =
         await getTypesCustomerUseCase.execute();
 
     switch (resultType) {
@@ -230,7 +230,7 @@ class AddCustomerController extends GetxController {
   }
 
   void _execute() async {
-    late Result<CustomerEntity, ErrorEntity> resultType;
+    late Result<CustomerEntity> resultType;
 
     showLoading();
     if (isEditing) {

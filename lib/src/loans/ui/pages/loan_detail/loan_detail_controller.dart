@@ -42,7 +42,7 @@ class LoanDetailController extends GetxController {
       idLoan: loanSelected?.id,
     );
 
-    Result<List<QuotaEntity>, ErrorEntity> resultType =
+    Result<List<QuotaEntity>> resultType =
         await getAllQuotasUseCase.execute(request);
 
     switch (resultType) {

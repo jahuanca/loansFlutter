@@ -9,7 +9,7 @@ class GetInjectionsUseCase {
 
   GetInjectionsUseCase(this.repository);
 
-  Future<Result<List<InjectionResponse>, ErrorEntity>> execute() async {
+  Future<Result<List<InjectionResponse>>> execute() async {
     return repository.getInjections();
   }
 

@@ -23,7 +23,7 @@ class CustomersWithoutLoanController extends GetxController {
 
   Future<void> getCustomers() async {
     showLoading();
-    Result<List<CustomerEntity>, ErrorEntity> result = 
+    Result<List<CustomerEntity>> result = 
     await getCustomerWithoutLoanUseCase.execute();
     hideLoading();
 

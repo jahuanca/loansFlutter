@@ -10,7 +10,7 @@ class GetLogsUseCase {
     required this.repository,
   });
 
-  Future<Result<List<ActivityLogEntity>, ErrorEntity>> execute() {
+  Future<Result<List<ActivityLogEntity>>> execute() {
     return repository.getLastsLog();
   }
 

@@ -21,37 +21,37 @@ class SummaryRepositoryImplementation extends SummaryRepository {
   });
 
   @override
-  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard() {
+  Future<Result<SummaryOfDashboardResponse>> getSummaryOfDashboard() {
     return datastore.getSummaryOfDashboard();
   }
 
   @override
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(GetQuotasByDateRequest request) {
+  Future<Result<List<DashboardQuotaResponse>>> getQuotasByDate(GetQuotasByDateRequest request) {
     return datastore.getQuotasByDate(request);
   }
 
   @override
-  Future<Result<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
+  Future<Result<QuotaEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
     return datastore.payQuota(payQuotaRequest);
   }
   
   @override
-  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths() {
+  Future<Result<List<SummaryMonthResponse>>> getSummaryMonths() {
     return datastore.getSummaryMonths();
   }
 
   @override
-  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar() {
+  Future<Result<SummaryOfCalendarResponse>> getSummaryOfCalendar() {
     return datastore.getSummaryOfCalendar();
   }
 
   @override
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal() {
+  Future<Result<List<DashboardQuotaResponse>>> getNextRenewal() {
     return datastore.getNextRenewal();
   }
 
   @override
-  Future<Result<List<InjectionResponse>, ErrorEntity>> getInjections() {
+  Future<Result<List<InjectionResponse>>> getInjections() {
     return datastore.getInjections();
   }
 }

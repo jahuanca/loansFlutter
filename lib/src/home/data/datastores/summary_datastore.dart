@@ -10,11 +10,11 @@ import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:utils/utils.dart';
 
 abstract class SummaryDatastore {
-  Future<Result<SummaryOfDashboardResponse, ErrorEntity>> getSummaryOfDashboard();
-  Future<Result<SummaryOfCalendarResponse, ErrorEntity>> getSummaryOfCalendar();
-  Future<Result<List<SummaryMonthResponse>, ErrorEntity>> getSummaryMonths();
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getQuotasByDate(GetQuotasByDateRequest request);
-  Future<Result<QuotaEntity, ErrorEntity>> payQuota(PayQuotaRequest payQuotaRequest);
-  Future<Result<List<DashboardQuotaResponse>, ErrorEntity>> getNextRenewal();
-  Future<Result<List<InjectionResponse>, ErrorEntity>> getInjections();
+  Future<Result<SummaryOfDashboardResponse>> getSummaryOfDashboard();
+  Future<Result<SummaryOfCalendarResponse>> getSummaryOfCalendar();
+  Future<Result<List<SummaryMonthResponse>>> getSummaryMonths();
+  Future<Result<List<DashboardQuotaResponse>>> getQuotasByDate(GetQuotasByDateRequest request);
+  Future<Result<QuotaEntity>> payQuota(PayQuotaRequest payQuotaRequest);
+  Future<Result<List<DashboardQuotaResponse>>> getNextRenewal();
+  Future<Result<List<InjectionResponse>>> getInjections();
 }

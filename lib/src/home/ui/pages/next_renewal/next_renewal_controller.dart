@@ -26,7 +26,7 @@ class NextRenewalController extends GetxController {
 
   Future<void> getRenewals() async {
     showLoading();
-    Result<List<DashboardQuotaResponse>, ErrorEntity> resultType =
+    Result<List<DashboardQuotaResponse>> resultType =
         await getNextRenewalUseCase.execute();
     hideLoading();
     switch (resultType) {

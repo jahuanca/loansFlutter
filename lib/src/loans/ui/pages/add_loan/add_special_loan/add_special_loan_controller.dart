@@ -101,7 +101,7 @@ class AddSpecialLoanController extends GetxController {
   }
 
   Future<void> getCustomers() async {
-    Result<List<CustomerEntity>, ErrorEntity> resultType =
+    Result<List<CustomerEntity>> resultType =
         await getCustomersUseCase.execute();
     switch (resultType) {
       case Success():
@@ -114,7 +114,7 @@ class AddSpecialLoanController extends GetxController {
   }
 
   Future<void> getPaymentFrecuencies() async {
-    Result<List<PaymentFrequencyEntity>, ErrorEntity> resultType =
+    Result<List<PaymentFrequencyEntity>> resultType =
         await getPaymentFrequenciesUseCase.execute();
     switch (resultType) {
       case Success():
@@ -127,7 +127,7 @@ class AddSpecialLoanController extends GetxController {
   }
 
   Future<void> getMethodsPayment() async {
-    Result<List<PaymentMethodEntity>, ErrorEntity> resultType =
+    Result<List<PaymentMethodEntity>> resultType =
         await getPaymentMethodsUseCase.execute();
     switch (resultType) {
       case Success():
@@ -144,7 +144,7 @@ class AddSpecialLoanController extends GetxController {
 
     final request = GetLoanRequest(id: createRenewalSpecialRequest?.idLoanToRenew);
 
-    Result<LoanEntity, ErrorEntity> resultType = await getLoanUseCase.execute(request);
+    Result<LoanEntity> resultType = await getLoanUseCase.execute(request);
     switch (resultType) {
       case Success():
       setLoanToRenew(resultType.value);
@@ -351,7 +351,7 @@ class AddSpecialLoanController extends GetxController {
             amount: addSpecialLoanRequest.amount!,
             startDate: addSpecialLoanRequest.startDate!);
 
-    Result<bool, ErrorEntity> resultType =
+    Result<bool> resultType =
         await validateLoanUseCase.execute(request);
     switch (resultType) {
       case Success():
