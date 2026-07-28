@@ -1,15 +1,26 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
+import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
+part 'summary_of_dashboard_response.g.dart';
 
 SummaryOfDashboardResponse summaryOfDashboardResponseFromJson(String str) => SummaryOfDashboardResponse.fromJson(json.decode(str));
 
 String dashboardSummaryResponseToJson(SummaryOfDashboardResponse data) => json.encode(data.toJson());
 
-class SummaryOfDashboardResponse {
+@HiveType(typeId: summaryOfDashboardIdAdapter)
+class SummaryOfDashboardResponse extends HiveObject{
+
+    @HiveField(0)
     String loans;
+    @HiveField(1)
     String amounts;
+    @HiveField(2)
     String ganancy;
+    @HiveField(3)
     String renovar;
+    @HiveField(4)
     double injection;
+    @HiveField(5)
     int cesaron;
 
     SummaryOfDashboardResponse({

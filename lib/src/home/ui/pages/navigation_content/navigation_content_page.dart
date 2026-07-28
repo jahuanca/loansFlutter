@@ -10,7 +10,6 @@ import 'package:utils/utils.dart';
 
 class NavigationContentPage extends StatelessWidget {
   final NavigationContentController controller = NavigationContentController();
-
   final PageController pageController = PageController();
 
   final List<BottomNavigationItemWidget> _iconsOfBottom = [
@@ -25,7 +24,9 @@ class NavigationContentPage extends StatelessWidget {
   final List<Widget> _pages = [
     DashboardPage(),
     HomeCalendarPage(),
-    LoansPage(tag: 'allLoans',),
+    LoansPage(
+      tag: 'allLoans',
+    ),
     CustomersPage(),
     HomeSettingsPage(),
   ];
@@ -39,6 +40,7 @@ class NavigationContentPage extends StatelessWidget {
       id: pageIdGet,
       builder: (controller) => Scaffold(
         body: _body(),
+        
         bottomNavigationBar: _bottomNavigation(),
       ),
     );
@@ -51,8 +53,8 @@ class NavigationContentPage extends StatelessWidget {
       );
 
   Widget _bottomNavigation() => GetBuilder<NavigationContentController>(
-    id: pageIdGet,
-    builder: (controller)=> BottomNavigationBarWidget(
+        id: pageIdGet,
+        builder: (controller) => BottomNavigationBarWidget(
           icons: _iconsOfBottom,
           onTapItem: (index) {
             pageController.jumpToPage(index);
@@ -60,5 +62,5 @@ class NavigationContentPage extends StatelessWidget {
           },
           indexSelectedItem: controller.indexPage,
         ),
-  );
+      );
 }

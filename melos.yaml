@@ -1,0 +1,13 @@
+name: loands_flutter
+
+packages:
+  - .
+
+scripts:
+  u_packages:
+    run: flutter packages upgrade
+    description: Updating packages
+
+  create_adapter:
+    run: dart run build_runner build --delete-conflicting-outputs
+    description: Create hiveDB adapters

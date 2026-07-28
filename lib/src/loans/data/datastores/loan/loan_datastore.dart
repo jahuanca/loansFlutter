@@ -8,10 +8,8 @@ import 'package:utils/utils.dart';
 
 abstract class LoanDatastore {
   Future<Result<bool, ErrorEntity>> validate(ValidateLoanRequest validateLoanRequest);
-  Future<Result<LoanEntity, ErrorEntity>> create(
-      AddLoanRequest addLoanRequest);
-  Future<Result<LoanEntity, ErrorEntity>> createSpecial(
-      AddSpecialLoanRequest addSpecialLoanRequest);
+  Future<Result<LoanEntity, ErrorEntity>> create(AddLoanRequest addLoanRequest);
+  Future<Result<LoanEntity, ErrorEntity>> createSpecial(AddSpecialLoanRequest addSpecialLoanRequest);
   Future<Result<List<LoanEntity>, ErrorEntity>> getAll(GetLoansRequest request);
-  Future<Result<LoanEntity,ErrorEntity>> get(GetLoanRequest request);
+  Future<Result<LoanEntity, ErrorEntity>> get(GetLoanRequest request);
 }

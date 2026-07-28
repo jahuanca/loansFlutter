@@ -1,20 +1,13 @@
 FEATS:
-    * Necesito un listado de los que estan en la ultima cuota.
-    * Necesito editar usuario.
-    * Cuando se pague una cuota anticipada que la fecha de pago se la fecha actual y no la fecha de pago de la cuota.
     * Necesito saber cuantos creditos nuevos se activaron 
-        y cuantos se renovaron con aumento.
-    * Necesito agregar el boton de analiticas en crear prestamo para obtener la informacion del cliente en un solo lado.
-    
-    me quede 85
+        y cuantos se renovaron con aumento.    
     NECESITO UNA VISTA:
-    QUE ME DIGA LO QUE ESTOY INJECTANDO POR MES, MONTO E HISTORIAL
     QUE ME DIGA LOS QUE NO HAN RENOVADO, NUMERO  Y LISTADO
     
     QUE ME MUESTRE EL HISTORIAL DE RENOVACIONES.
 
     LISTAR USUARIOS PARA DARLE CLICK Y COMENZAR A CHATEAR
-    CREAR EN BACKEND UNA LISTA DE DEVICESAVAIBLES,
+    CREAR EN BACKEND UNA LISTA DE DEVICES_AVAIBLES,
     RELACION CON USUARIO, DATOS DEL TELEFONO Y QUE SEA CONSULTADO CON LA HUELLA
     Y CADA LOGIN NO? seria lo correcto...
     AGREGAR FEATURE FLAGS
@@ -23,4 +16,7 @@ FEATS:
         O AGREGAR UN PRESTAMO O CLIENTE
     VER EN FUTURO EL USO DE ANALITICAS Y PARA QUE? XD simplemente saberlas xd
 
-    FIX: AL PAGAR CUOTA PERO CREANDO UN PRESTAMO REGRESAMOS Y PANTALLA NEGRA
+    OFFLINE:
+        Clientes
+        Cuotas de la semana.
+        Atrasados.

@@ -44,9 +44,7 @@ class AddCustomerController extends GetxController {
     super.onInit();
   }
 
-
   void setInitialValues() {
-
     CustomerEntity? customerEntity = Get.setArgument(customerArgument);
     if (customerEntity != null) {
       isEditing = true;
@@ -59,7 +57,7 @@ class AddCustomerController extends GetxController {
       createCustomerRequest.lastName = customerEntity.lastName;
       createCustomerRequest.document = customerEntity.document;
       createCustomerRequest.address = customerEntity.address;
-      
+
       onChangedTypeDocument(createCustomerRequest.idTypeDocument);
       onChangedTypeCustomer(createCustomerRequest.idTypeCustomer);
     }
@@ -78,44 +76,42 @@ class AddCustomerController extends GetxController {
         await getTypesDocumentUseCase.execute();
     switch (resultType) {
       case Success():
-      typesDocument = resultType.value;
-      if (typesDocument.isNotEmpty) {
-        onChangedTypeDocument(typesDocument.first.id);
-      }
+        typesDocument = resultType.value;
+        if (typesDocument.isNotEmpty) {
+          onChangedTypeDocument(typesDocument.first.id);
+        }
         break;
-      case Error(): 
-      ErrorEntity errorEntity = resultType.error;
-      showSnackbarWidget(
+      case Error():
+        ErrorEntity errorEntity = resultType.error;
+        showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.title,
-      );
+        );
         break;
     }
     hideLoading();
   }
 
-  void getTypesCustomer({
-    int? initialValue
-    }) async {
+  void getTypesCustomer({int? initialValue}) async {
     showLoading();
     Result<List<TypeCustomerEntity>, ErrorEntity> resultType =
         await getTypesCustomerUseCase.execute();
 
     switch (resultType) {
       case Success():
-      typesCustomer = resultType.value;
-      if (typesCustomer.isNotEmpty) {
-        onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
-      }
+        typesCustomer = resultType.value;
+        if (typesCustomer.isNotEmpty) {
+          onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
+        }
         break;
-      case Error(): 
-      ErrorEntity errorEntity = resultType.error;
-      showSnackbarWidget(
+      case Error():
+        ErrorEntity errorEntity = resultType.error;
+        showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
           message: errorEntity.title,
-      );
+        );
         break;
     }
     hideLoading();
@@ -145,9 +141,9 @@ class AddCustomerController extends GetxController {
 
   void onChangedDocument(String value) {
     validateDocument = validateText(
-        rules: {RuleValidator.isRequired: true},
-        text: value,
-        label: documentString,
+      rules: {RuleValidator.isRequired: true},
+      text: value,
+      label: documentString,
     );
     if (validateDocument!.hasError.not()) {
       createCustomerRequest.document = validateDocument?.value;
@@ -157,9 +153,9 @@ class AddCustomerController extends GetxController {
 
   void onChangedName(String value) {
     validateName = validateText(
-        rules: {RuleValidator.isRequired: true},
-        text: value,
-        label: nameString,
+      rules: {RuleValidator.isRequired: true},
+      text: value,
+      label: nameString,
     );
 
     if (validateName!.hasError) {
@@ -175,9 +171,9 @@ class AddCustomerController extends GetxController {
 
   void onChangedLastname(String value) {
     validateLastname = validateText(
-        rules: {RuleValidator.isRequired: true},
-        text: value,
-        label: lastNameString,
+      rules: {RuleValidator.isRequired: true},
+      text: value,
+      label: lastNameString,
     );
 
     if (validateLastname?.hasError ?? false) {
@@ -189,9 +185,9 @@ class AddCustomerController extends GetxController {
 
   void onChangedAddress(String value) {
     validateAddress = validateText(
-        rules: {RuleValidator.isRequired: true},
-        text: value,
-        label: addressString,
+      rules: {RuleValidator.isRequired: true},
+      text: value,
+      label: addressString,
     );
 
     if (validateAddress!.hasError) {
@@ -246,20 +242,19 @@ class AddCustomerController extends GetxController {
 
     switch (resultType) {
       case Success():
-      CustomerEntity customer = resultType.value;
-      showSnackbarWidget(
-          context: Get.context!,
-          typeSnackbar: TypeSnackbar.success,
-          message: 'Exito');
-      Get.back(result: customer);
+        CustomerEntity customer = resultType.value;
+        showSnackbarWidget(
+            context: Get.context!,
+            typeSnackbar: TypeSnackbar.success,
+            message: 'Exito');
+        Get.back(result: customer);
         break;
-      case Error(): 
-      showSnackbarWidget(
-          context: Get.context!,
-          typeSnackbar: TypeSnackbar.error,
-          message: 'Ocurrio un error');
+      case Error():
+        showSnackbarWidget(
+            context: Get.context!,
+            typeSnackbar: TypeSnackbar.error,
+            message: 'Ocurrio un error');
         break;
     }
-
   }
 }
