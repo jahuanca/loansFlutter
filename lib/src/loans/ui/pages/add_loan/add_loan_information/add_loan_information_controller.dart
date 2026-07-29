@@ -4,16 +4,15 @@ import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
-import 'package:loands_flutter/src/loans/data/requests/add_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/pay_and_renewal_request.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loan_request.dart';
-import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dart';
 import 'package:loands_flutter/src/loans/data/responses/get_metadata_renewal_response.dart';
 import 'package:loands_flutter/src/loans/di/add_loan_quotas_binding.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_metadata_renewal_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/validate_loan_use_case.dart';
+import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/add_loan_information_ui.dart';
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -46,23 +45,12 @@ class AddLoanInformationController extends GetxController {
   List<PaymentMethodEntity> methods = [];
   List<LoanEntity> loansPrevious = [];
 
-  CustomerEntity? customerSelected;
-  PaymentFrequencyEntity? frequencySelected;
-  PaymentMethodEntity? methodSelected;
-  LoanEntity? previousLoanSelected;
-
-  AddLoanRequest addLoanRequest = AddLoanRequest();
   TextEditingController percentageTextController = TextEditingController();
   TextEditingController ganancyTextController = TextEditingController();
   TextEditingController startDateTextController = TextEditingController();
   TextEditingController amountTextController = TextEditingController();
 
-  ValidateResult? startDateValidationResult,
-      idCustomerValidationResult,
-      idFrequencyValidationResult,
-      percentageValidationResult,
-      amountValidationResult,
-      idMethodValidationResult;
+  AddLoanInformationUi ui = AddLoanInformationUi();
 
   AddLoanInformationController({
     required this.getCustomersUseCase,
@@ -79,7 +67,8 @@ class AddLoanInformationController extends GetxController {
         Get.setArgument(sourceToLoanArgument) ?? SourceToLoanEnum.normal;
     createRenewalRequest = Get.setArgument(createRenewalRequestArgument);
     if (createRenewalRequest?.paidDate != null) {
-      startDateTextController.text = createRenewalRequest?.paidDate.formatDMMYYY() ?? emptyString;
+      startDateTextController.text =
+          createRenewalRequest?.paidDate.formatDMMYYY() ?? emptyString;
       onChangedStartDate(createRenewalRequest?.paidDate);
     }
     super.onInit();
@@ -106,18 +95,19 @@ class AddLoanInformationController extends GetxController {
 
   void getLoans(int idCustomer) async {
     loansPrevious.clear();
-    addLoanRequest.idLoanToRenew = null;
+    ui.addLoanRequest.idLoanToRenew = null;
     showLoading();
     Result<GetMetadataRenewalResponse> resultType =
         await getMetadataRenewalUseCase.execute(idCustomer);
     hideLoading();
     switch (resultType) {
       case Success():
-    GetMetadataRenewalResponse? getMetadataRenewalResponse = resultType.value;
-    loansPrevious.addAll(getMetadataRenewalResponse.previousLoans);
-    update([pageIdGet]);
+        GetMetadataRenewalResponse? getMetadataRenewalResponse =
+            resultType.value;
+        loansPrevious.addAll(getMetadataRenewalResponse.previousLoans);
+        update([pageIdGet]);
         break;
-      case Error(): 
+      case Error():
         break;
     }
   }
@@ -127,9 +117,9 @@ class AddLoanInformationController extends GetxController {
         await getCustomersUseCase.execute();
     switch (resultType) {
       case Success():
-      customers = resultType.value;
+        customers = resultType.value;
         break;
-      case Error(): 
+      case Error():
         break;
     }
     update([customersIdGet]);
@@ -140,10 +130,10 @@ class AddLoanInformationController extends GetxController {
         await getPaymentFrequenciesUseCase.execute();
     switch (resultType) {
       case Success():
-      frequencies = resultType.value;
-      frequencies.removeWhere((e) => e.id == idOfSpecialFrequency);
+        frequencies = resultType.value;
+        frequencies.removeWhere((e) => e.id == idOfSpecialFrequency);
         break;
-      case Error(): 
+      case Error():
         break;
     }
     update([frequenciesIdGet]);
@@ -153,10 +143,11 @@ class AddLoanInformationController extends GetxController {
     Result<List<PaymentMethodEntity>> resultType =
         await getPaymentMethodsUseCase.execute();
     switch (resultType) {
-      case Success():      methods = resultType.value;
-      onChangedMethodsPayment(idOfMethodPaymentDefault);
+      case Success():
+        methods = resultType.value;
+        onChangedMethodsPayment(idOfMethodPaymentDefault);
         break;
-      case Error(): 
+      case Error():
         break;
     }
     update([methodsIdGet]);
@@ -167,9 +158,9 @@ class AddLoanInformationController extends GetxController {
         .execute(GetLoanRequest(id: createRenewalRequest?.idLoanToRenew));
     switch (resultType) {
       case Success():
-      setLoanToRenew(resultType.value);
+        setLoanToRenew(resultType.value);
         break;
-      case Error(): 
+      case Error():
         break;
     }
   }
@@ -187,11 +178,10 @@ class AddLoanInformationController extends GetxController {
   }
 
   void onChangedCustomer({
-    required dynamic value, 
+    required dynamic value,
     bool isForChange = true,
-    }) {
-    idCustomerValidationResult =
-        validateText(text: value, label: customerString, rules: {
+  }) {
+    ui.idCustomer = validateText(text: value, label: customerString, rules: {
       RuleValidator.isRequired: true,
     });
 
@@ -199,17 +189,14 @@ class AddLoanInformationController extends GetxController {
       (e) => e.id == value,
     );
     if (index != notFoundPosition) {
-      addLoanRequest.idCustomer = idCustomerValidationResult?.value;
-      customerSelected = customers[index];
-      addLoanRequest.customerEntity = customerSelected;
-
+      ui.customerSelected = customers[index];
       frequenciesOfCustomer.clear();
       frequenciesOfCustomer = frequencies
           .where(
-            (e) => e.idTypeCustomer == customerSelected?.idTypeCustomer,
+            (e) => e.idTypeCustomer == ui.customerSelected?.idTypeCustomer,
           )
           .toList();
-      if (isForChange) getLoans(customerSelected!.id);
+      if (isForChange) getLoans(ui.customerSelected!.id);
       update([frequenciesIdGet, customerIdGet]);
     }
   }
@@ -217,13 +204,13 @@ class AddLoanInformationController extends GetxController {
   void onChangedPreviousLoan(dynamic value) {
     int index = loansPrevious.indexWhere((e) => e.id == value);
     if (index != notFoundPosition) {
-      previousLoanSelected = loansPrevious[index];
+      ui.previousLoanSelected = loansPrevious[index];
     }
     update(['loans_previous']);
   }
 
   void onChangedFrequency(dynamic value, [bool setPercentage = true]) {
-    idFrequencyValidationResult =
+    ui.idPaymentFrequency =
         validateText(text: value, label: 'Frecuencia de pago', rules: {
       RuleValidator.isRequired: true,
     });
@@ -232,15 +219,14 @@ class AddLoanInformationController extends GetxController {
       (e) => e.id == value,
     );
     if (index != notFoundPosition) {
-      frequencySelected = frequenciesOfCustomer[index];
-      addLoanRequest.paymentFrequencyEntity = frequencySelected;
-      addLoanRequest.idPaymentFrequency = frequencySelected?.id;
+      ui.frequencySelected = frequenciesOfCustomer[index];
+      ui.idPaymentFrequency = ValidateResult.toInit(ui.frequencySelected?.id);
       if (setPercentage) changePercentage();
     }
   }
 
   void onChangedMethodsPayment(dynamic value) {
-    idMethodValidationResult =
+    ui.idPaymentMethod =
         validateText(text: value, label: paymentMethodString, rules: {
       RuleValidator.isRequired: true,
     });
@@ -248,21 +234,20 @@ class AddLoanInformationController extends GetxController {
       (e) => e.id == value,
     );
     if (index != notFoundPosition) {
-      methodSelected = methods[index];
-      addLoanRequest.paymentMethodEntity = methodSelected;
-      addLoanRequest.idPaymentMethod = idMethodValidationResult?.value;
+      ui.methodSelected = methods[index];
     }
   }
 
   void changePercentage() {
     percentageTextController.text =
-        '${frequencySelected?.recommendedPercentage.formatDecimals()}';
-    addLoanRequest.percentage = frequencySelected?.recommendedPercentage;
+        '${ui.frequencySelected?.recommendedPercentage.formatDecimals()}';
+    ui.percentage =
+        ValidateResult.toInit(ui.frequencySelected?.recommendedPercentage);
     update([percentageIdGet]);
   }
 
   void onChangeAmount(String value) {
-    amountValidationResult = validateText(
+    ui.amount = validateText(
       text: value,
       label: amountString,
       rules: {
@@ -271,36 +256,29 @@ class AddLoanInformationController extends GetxController {
       },
       toConvert: ToConverter.toDouble,
     );
-    if (amountValidationResult!.hasError.not()) {
-      addLoanRequest.amount = amountValidationResult!.value;
-    }
     update([amountIdGet]);
     calculateGanacy();
   }
 
   void calculateGanacy() {
-    addLoanRequest.ganancy = (addLoanRequest.amount.orZero()) *
-        (addLoanRequest.percentage.orZero() / 100);
-    ganancyTextController.text = '${addLoanRequest.ganancy?.formatDecimals()}';
+    ganancyTextController.text = ui.ganancy.formatDecimals();
     update([ganancyIdGet]);
   }
 
   void onChangedStartDate(DateTime? date) {
-    startDateValidationResult =
-        validateText(text: date, label: startDateString, rules: {
+    ui.startDate = validateText(text: date, label: startDateString, rules: {
       RuleValidator.isRequired: true,
       RuleValidator.isDatetime: true,
     });
-    if (startDateValidationResult!.hasError) {
+    if (ui.startDate!.hasError) {
     } else {
-      addLoanRequest.startDate = startDateValidationResult?.value;
       startDateTextController.text = date.formatDMMYYY().orEmpty();
     }
     update([startDayIdGet]);
   }
 
   void onChangedPercentage(String value) {
-    percentageValidationResult = validateText(
+    ui.percentage = validateText(
       text: value,
       label: percentageString,
       rules: {
@@ -309,37 +287,35 @@ class AddLoanInformationController extends GetxController {
       },
       toConvert: ToConverter.toDouble,
     );
-    if (percentageValidationResult!.hasError.not()) {
-      addLoanRequest.percentage = percentageValidationResult?.value;
-      if (addLoanRequest.amount != null) {
-        onChangeAmount(addLoanRequest.amount.toString());
+    if (ui.percentage!.hasError.not()) {
+      if (ui.amount?.value != null) {
+        onChangeAmount(ui.amount!.value.toString());
       }
     }
     update([percentageIdGet]);
   }
 
-  ValidateResult validate() {
-    onChangedStartDate(addLoanRequest.startDate);
-    onChangedCustomer(value: addLoanRequest.idCustomer, isForChange: false);
-    onChangedFrequency(addLoanRequest.idPaymentFrequency, false);
-    onChangedPercentage(addLoanRequest.percentage.toString());
-    onChangeAmount(addLoanRequest.amount.toString());
-    onChangedMethodsPayment(addLoanRequest.idPaymentMethod);
+  ValidateResult? validate() {
+    onChangedStartDate(ui.startDate?.value);
+    onChangedCustomer(value: ui.idCustomer, isForChange: false);
+    onChangedFrequency(ui.idPaymentFrequency, false);
+    onChangedPercentage(ui.percentage.toString());
+    onChangeAmount(ui.amount.toString());
+    onChangedMethodsPayment(ui.idPaymentMethod);
 
-    if (startDateValidationResult!.hasError) return startDateValidationResult!;
-    if (idCustomerValidationResult!.hasError) {
-      return idCustomerValidationResult!;
+    /*if (ui.startDate!.hasError) return ui.startDate!;
+    if (ui.idCustomer!.hasError) {
+      return ui.idCustomer!;
     }
-    if (idFrequencyValidationResult!.hasError) {
-      return idFrequencyValidationResult!;
+    if (ui.idPaymentFrequency!.hasError) {
+      return ui.idPaymentFrequency!;
     }
-    if (percentageValidationResult!.hasError) {
-      return percentageValidationResult!;
+    if (ui.percentage!.hasError) {
+      return ui.percentage!;
     }
-    if (amountValidationResult!.hasError) return amountValidationResult!;
-    if (idMethodValidationResult!.hasError) return idMethodValidationResult!;
-
-    return ValidateResult(error: null, hasError: false, value: addLoanRequest);
+    if (ui.amount!.hasError) return ui.amount!;
+    if (ui.idPaymentMethod!.hasError) return ui.idPaymentMethod!;*/
+    return ui.validate();
   }
 
   Future<void> goAddCustomer() async {
@@ -348,28 +324,27 @@ class AddLoanInformationController extends GetxController {
   }
 
   Future<void> goCustomerAnalytics() async {
-    if (customerSelected == null) return;
-    await RoutesApp.goCustomerAnalytics(customerSelected: customerSelected!);
+    if (ui.customerSelected == null) return;
+    await RoutesApp.goCustomerAnalytics(customerSelected: ui.customerSelected!);
     getCustomers();
   }
 
   void goNext() async {
-    ValidateResult resultInformation = validate();
-    if (resultInformation.hasError) {
+    ValidateResult? resultInformation = validate();
+    if (resultInformation?.hasError ?? false) {
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.error,
-          message: resultInformation.error ?? emptyString);
+          message: resultInformation?.error ?? emptyString);
       return;
     }
 
-    if (loansPrevious.isNotEmpty && previousLoanSelected == null) {
+    if (loansPrevious.isNotEmpty && ui.previousLoanSelected == null) {
       bool isOkay = await showDialogWidget(
-        context: Get.context!,
-        message: 'Este prestamo será marcado sin renovación, ¿está seguro?');
+          context: Get.context!,
+          message: 'Este prestamo será marcado sin renovación, ¿está seguro?');
       if (isOkay.not()) return;
     }
-    addLoanRequest = resultInformation.value as AddLoanRequest;
     bool? isValidate = await goValidate();
     if (isValidate == null) return;
     if (isValidate) {
@@ -383,9 +358,8 @@ class AddLoanInformationController extends GetxController {
   }
 
   void goQuotas() {
-
-    if (previousLoanSelected != null) {
-      addLoanRequest.idLoanToRenew = previousLoanSelected?.id;
+    if (ui.previousLoanSelected != null) {
+      ui.idLoanToRenew = ui.previousLoanSelected?.id;
     }
 
     Get.to(() => AddLoanQuotasPage(),
@@ -393,7 +367,7 @@ class AddLoanInformationController extends GetxController {
         opaque: false,
         binding: AddLoanQuotasBinding(),
         arguments: {
-          addLoanRequestArgument: addLoanRequest,
+          addLoanRequestArgument: ui.addLoanRequest,
           createRenewalRequestArgument: createRenewalRequest,
         });
   }
@@ -406,17 +380,12 @@ class AddLoanInformationController extends GetxController {
 
   Future<bool?> goValidate() async {
     Result<bool> resultType =
-        await validateLoanUseCase.execute(ValidateLoanRequest(
-            idCustomer: addLoanRequest.idCustomer!,
-            idPaymentFrequency: addLoanRequest.idPaymentFrequency!,
-            percentage: addLoanRequest.percentage!,
-            amount: addLoanRequest.amount!,
-            startDate: addLoanRequest.startDate!));
+        await validateLoanUseCase.execute(ui.validateRequest);
     switch (resultType) {
       case Success():
         return resultType.value;
-      case Error(): 
-      return null;
+      case Error():
+        return null;
     }
   }
 }

@@ -48,7 +48,7 @@ class AddLoanInformationPage extends StatelessWidget {
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
                                 initialValue:
-                                    controller.addLoanRequest.idCustomer,
+                                    controller.ui.idCustomer?.value,
                                 focusNode: focusNodeCustomer,
                                 hintText: selectTheCustomer,
                                 label: customerString,
@@ -68,7 +68,7 @@ class AddLoanInformationPage extends StatelessWidget {
                         GetBuilder<AddLoanInformationController>(
                           id: customerIdGet,
                           builder: (controller) => ChildOrElseWidget(
-                            condition: controller.customerSelected != null,
+                            condition: controller.ui.customerSelected != null,
                             child: IconButtonWidget(
                                 onPressed: controller.goCustomerAnalytics,
                                 backgroundColor: infoColor(),
@@ -84,7 +84,7 @@ class AddLoanInformationPage extends StatelessWidget {
                   builder: (controller) => InputWidget(
                     onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
-                          currentDate: controller.addLoanRequest.startDate,
+                          currentDate: controller.ui.startDate?.value,
                           context: context,
                           firstDate: defaultDate.subtract(halfYearDuration),
                           lastDate: defaultDate.add(maxDaysByLoan));
@@ -103,7 +103,7 @@ class AddLoanInformationPage extends StatelessWidget {
                       child: GetBuilder<AddLoanInformationController>(
                         id: frequenciesIdGet,
                         builder: (controller) => DropdownWidget(
-                          value: controller.addLoanRequest.idPaymentFrequency,
+                          value: controller.ui.idPaymentFrequency?.value,
                           hintText: 'Seleccione la frecuencia',
                           label: 'Frecuencia de pago',
                           items: controller.frequenciesOfCustomer,
@@ -153,7 +153,7 @@ class AddLoanInformationPage extends StatelessWidget {
                     hintText: 'Seleccione el método de pago',
                     label: paymentMethodString,
                     items: controller.methods,
-                    value: controller.addLoanRequest.idPaymentMethod,
+                    value: controller.ui.idPaymentMethod?.value,
                     onChanged: controller.onChangedMethodsPayment,
                   ),
                 ),
@@ -161,7 +161,7 @@ class AddLoanInformationPage extends StatelessWidget {
                   GetBuilder<AddLoanInformationController>(
                     id: 'loans_previous',
                     builder: (controller) => DropdownMenuWidget(
-                      initialValue: controller.previousLoanSelected?.id,
+                      initialValue: controller.ui.previousLoanSelected?.id,
                       items: controller.loansPrevious
                           .map((e) => e.toJson())
                           .toList(),

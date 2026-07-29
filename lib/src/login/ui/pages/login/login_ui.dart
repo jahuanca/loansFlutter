@@ -3,9 +3,8 @@ import 'package:loands_flutter/src/login/data/request/login_request.dart';
 import 'package:utils/utils.dart';
 
 class LoginUi {
-  ValidateResult? username;
-  ValidateResult? password;
-  ValidateResult? keepSesion = ValidateResult(value: false);
+  ValidateResult<String>? username, password;
+  ValidateResult<bool>? keepSesion = ValidateResult(value: false);
 
   LoginUi({
     this.username,
@@ -17,5 +16,5 @@ class LoginUi {
     return findErrorInValidations([username, password]);
   }
 
-  LoginRequest get value => LoginRequest(email: username?.value, password: password?.value);
+  LoginRequest get value => LoginRequest(email: username!.value.orEmpty(), password: password!.value.orEmpty());
 }

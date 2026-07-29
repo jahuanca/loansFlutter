@@ -39,7 +39,6 @@ class LoanOfflineDatastore extends LoanDatastore {
 
   @override
   Future<Result<bool>> validate(ValidateLoanRequest validateLoanRequest) {
-    // TODO: implement validate
     throw UnimplementedError();
   }
 

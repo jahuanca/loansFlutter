@@ -58,7 +58,7 @@ class BackToSesionController extends GetxController {
       case Success():
         String? androidId = await getAndroidId();
         LoginEntity loginEntity = resultType.value;
-        await LocalPreferences().setKeepSesion(loginUi.keepSesion?.value);
+        await LocalPreferences().setKeepSesion(loginUi.keepSesion!.value.orFalse());
         await UserPreferences().setToken(loginEntity.token);
         Get.off(() => NavigationContentPage(),
             binding: NavigationContentBinding());

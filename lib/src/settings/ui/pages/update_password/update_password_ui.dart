@@ -2,9 +2,9 @@
 import 'package:utils/utils.dart';
 
 class UpdatePasswordUi {
-  ValidateResult? currentPassword;
-  ValidateResult? newPassword;
-  ValidateResult? repeatPassword;
+  ValidateResult<String>? currentPassword,
+    newPassword,
+    repeatPassword;
 
   UpdatePasswordUi({
     this.currentPassword,
@@ -12,23 +12,15 @@ class UpdatePasswordUi {
     this.repeatPassword,
   });
 
-  String? validate() {
-    if (currentPassword?.hasError ?? true) {
-      return currentPassword?.error;
-    }
-
-    if (newPassword?.hasError ?? true) {
-      return newPassword?.error;
-    }
-
-    if (repeatPassword?.hasError ?? true) {
-      return repeatPassword?.error;
+  ValidateResult? validate() {
+    final error = findErrorInValidations([currentPassword, newPassword, repeatPassword]);
+    if(error != null) {
+      return error;
     }
 
     if (newPassword?.value != repeatPassword?.value) {
-      return 'Contraseñas no coinciden';
+      return ValidateResult(value: repeatPassword!.value, error: 'Contraseñas no coinciden', hasError: true);
     }
-
     return null;
   }
 }

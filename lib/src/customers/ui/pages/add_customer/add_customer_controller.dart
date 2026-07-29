@@ -116,8 +116,6 @@ class AddCustomerController extends GetxController {
       text: value,
       label: documentString,
     );
-
-    update();
   }
 
   void onChangedName(String value) {

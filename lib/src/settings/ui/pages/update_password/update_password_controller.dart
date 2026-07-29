@@ -3,24 +3,25 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/settings/domain/use_cases/update_password_use_case.dart';
 import 'package:loands_flutter/src/settings/ui/pages/settings_option_enum.dart';
 import 'package:loands_flutter/src/settings/ui/pages/update_password/update_password_ui.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
 class UpdatePasswordController extends GetxController {
 
   UpdatePasswordUseCase updatePasswordUseCase;
-  UpdatePasswordUi updatePasswordUi = UpdatePasswordUi();
+  UpdatePasswordUi ui = UpdatePasswordUi();
 
   UpdatePasswordController({
     required this.updatePasswordUseCase,
   });
 
   void onChangedCurrentPassword(dynamic value) {
-    updatePasswordUi.currentPassword = validateText(text: value, label: 'Actual');
+    ui.currentPassword = validateText(text: value, label: 'Actual');
   }
 
   void onChangedNewPassword(dynamic value) {
-    updatePasswordUi.newPassword = validateText(
+    ui.newPassword = validateText(
       text: value,
       label: 'Nueva',
       rules: {
@@ -30,16 +31,16 @@ class UpdatePasswordController extends GetxController {
   }
 
   void onChangedRepeatPassword(dynamic value) {
-    updatePasswordUi.repeatPassword = validateText(text: value, label: 'Repetida');
+    ui.repeatPassword = validateText(text: value, label: 'Repetida');
   }
 
   Future<void> goToUpdatePassword() async {
-    String? message = updatePasswordUi.validate();
+    final message = ui.validate();
     if (message != null) {
       showSnackbarWidget(
         context: Get.context!, 
         typeSnackbar: TypeSnackbar.error, 
-        message: message,
+        message: message.error.orEmpty(),
       );
       return;
     }
@@ -54,18 +55,15 @@ class UpdatePasswordController extends GetxController {
 
   Future<void> _updatePassword() async {
     showLoading();
-    Result<void> result = 
+    Result<void> resultType = 
       await updatePasswordUseCase.execute(
-        updatePasswordUi.currentPassword?.value, 
-        updatePasswordUi.newPassword?.value, 
+        ui.currentPassword!.value.orEmpty(), 
+        ui.newPassword!.value.orEmpty(), 
       );
     hideLoading();
-    switch (result) {
-      case Success():
-        Get.back(result: SettingsOptionEnum.changePassword);
-        break;
-      case Error():
-        break;
+    final data = await executeResultUI<dynamic>(resultType);
+    if (data != null) {
+      Get.back(result: SettingsOptionEnum.changePassword);
     }
   }
 

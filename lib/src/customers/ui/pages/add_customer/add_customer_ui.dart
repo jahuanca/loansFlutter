@@ -46,14 +46,14 @@ class AddCustomerUi {
   }
 
   void setValuesOfCustomer(CustomerEntity customer) {
-    id = ValidateResult(value: customer.id, hasError: false);
-    idTypeDocument = ValidateResult(value: customer.idTypeDocument, hasError: false);
-    idTypeCustomer = ValidateResult(value: customer.idTypeCustomer, hasError: false);
-    alias = ValidateResult(value: customer.alias, hasError: false);
-    name = ValidateResult(value: customer.name, hasError: false);
-    lastName = ValidateResult(value: customer.lastName, hasError: false);
-    document = ValidateResult(value: customer.document, hasError: false);
-    address = ValidateResult(value: customer.address, hasError: false);
+    id = ValidateResult.toInit(customer.id);
+    idTypeDocument = ValidateResult.toInit(customer.idTypeDocument);
+    idTypeCustomer = ValidateResult.toInit(customer.idTypeCustomer);
+    alias = ValidateResult.toInit(customer.alias);
+    name = ValidateResult.toInit(customer.name);
+    lastName = ValidateResult.toInit(customer.lastName);
+    document = ValidateResult.toInit(customer.document);
+    address = ValidateResult.toInit(customer.address);
   }
 
 }

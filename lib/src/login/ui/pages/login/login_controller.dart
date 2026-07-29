@@ -54,8 +54,8 @@ class LoginController extends GetxController {
       case Success():
         androidId = await getAndroidId();
         LoginEntity loginEntity = resultType.value;
-        await LocalPreferences().setKeepSesion(loginUi.keepSesion?.value);
-        await LocalPreferences().setEmail(loginUi.username?.value);
+        await LocalPreferences().setKeepSesion(loginUi.keepSesion!.value.orFalse());
+        await LocalPreferences().setEmail(loginUi.username!.value.orEmpty());
         await UserPreferences().setToken(loginEntity.token);
         Get.off(() => NavigationContentPage(),
             binding: NavigationContentBinding());
