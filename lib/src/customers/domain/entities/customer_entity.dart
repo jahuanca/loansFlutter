@@ -1,22 +1,39 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
+import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
+part 'customer_entity.g.dart';
 
 List<CustomerEntity> customerEntityFromJson(String str) => List<CustomerEntity>.from(json.decode(str).map((x) => CustomerEntity.fromJson(x)));
 
 String customerEntityToJson(List<CustomerEntity> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@HiveType(typeId: customerIdAdapter)
 class CustomerEntity {
+    @HiveField(0)
     int id;
+    @HiveField(1)
     String name;
+    @HiveField(2)
     String? alias;
+    @HiveField(3)
     String lastName;
+    @HiveField(4)
     String address;
+    @HiveField(5)
     String? latitude;
+    @HiveField(6)
     String? longitude;
+    @HiveField(7)
     String? phone;
+    @HiveField(8)
     int idTypeDocument;
+    @HiveField(9)
     int idTypeCustomer;
+    @HiveField(10)
     String document;
+    @HiveField(11)
     DateTime createdAt;
+    @HiveField(12)
     DateTime updatedAt;
 
     CustomerEntity({

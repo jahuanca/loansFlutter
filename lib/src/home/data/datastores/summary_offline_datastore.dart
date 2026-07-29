@@ -45,8 +45,9 @@ class SummaryOfflineDatastore extends SummaryDatastore {
 
   @override
   Future<Result<SummaryOfDashboardResponse>> getSummaryOfDashboard() async {
-    final box = Hive.box<SummaryOfDashboardResponse>(HiveDbAdapters.summaryOfDashboard.source);
+    final box = await Hive.openBox<SummaryOfDashboardResponse>(HiveDbAdapters.summaryOfDashboard.source);
     final values = box.values.toList();
+    await box.close();
     return Result.success(values.first);
   }
 

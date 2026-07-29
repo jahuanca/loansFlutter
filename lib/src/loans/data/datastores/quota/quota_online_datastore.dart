@@ -12,7 +12,7 @@ class QuotaOnlineDatastore extends QuotaDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response =
         await appHttpManager.get(url: '/quota', query: request.toJson());
-    return executeResponseList<List<QuotaEntity>>(
+    return executeResponseList<QuotaEntity>(
         response: response, convert: quotaEntityFromJson);
   }
 

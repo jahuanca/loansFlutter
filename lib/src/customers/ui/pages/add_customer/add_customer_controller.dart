@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/entities/type_customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_ui.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -24,11 +25,8 @@ class AddCustomerController extends GetxController {
   List<TypeCustomerEntity> typesCustomer = [];
   TypeDocumentEntity? typeDocumentSelected;
   TypeCustomerEntity? typeCustomerSelected;
-  CreateCustomerRequest createCustomerRequest = CreateCustomerRequest();
-  ValidateResult? validateDocument,
-      validateName,
-      validateLastname,
-      validateAddress;
+
+  AddCustomerUi ui = AddCustomerUi();
   bool isEditing = false;
 
   AddCustomerController({
@@ -49,24 +47,16 @@ class AddCustomerController extends GetxController {
     if (customerEntity != null) {
       isEditing = true;
 
-      createCustomerRequest.id = customerEntity.id;
-      createCustomerRequest.idTypeDocument = customerEntity.idTypeDocument;
-      createCustomerRequest.idTypeCustomer = customerEntity.idTypeCustomer;
-      createCustomerRequest.alias = customerEntity.alias;
-      createCustomerRequest.name = customerEntity.name;
-      createCustomerRequest.lastName = customerEntity.lastName;
-      createCustomerRequest.document = customerEntity.document;
-      createCustomerRequest.address = customerEntity.address;
-
-      onChangedTypeDocument(createCustomerRequest.idTypeDocument);
-      onChangedTypeCustomer(createCustomerRequest.idTypeCustomer);
+      ui.setValuesOfCustomer(customerEntity);
+      onChangedTypeDocument(ui.idTypeDocument?.value);
+      onChangedTypeCustomer(ui.idTypeCustomer?.value);
     }
   }
 
   @override
   void onReady() {
     getTypesDocument();
-    getTypesCustomer(initialValue: createCustomerRequest.idTypeCustomer);
+    getTypesCustomer(initialValue: ui.idTypeCustomer?.value);
     super.onReady();
   }
 
@@ -74,47 +64,28 @@ class AddCustomerController extends GetxController {
     showLoading();
     Result<List<TypeDocumentEntity>> resultType =
         await getTypesDocumentUseCase.execute();
-    switch (resultType) {
-      case Success():
-        typesDocument = resultType.value;
-        if (typesDocument.isNotEmpty) {
-          onChangedTypeDocument(typesDocument.first.id);
-        }
-        break;
-      case Error():
-        ErrorEntity errorEntity = resultType.error;
-        showSnackbarWidget(
-          context: Get.context!,
-          typeSnackbar: TypeSnackbar.error,
-          message: errorEntity.title,
-        );
-        break;
-    }
     hideLoading();
+    final data = executeResultUI<List<TypeDocumentEntity>>(resultType);
+    if (data != null) {
+      typesDocument = data;
+      if (typesDocument.isNotEmpty) {
+        onChangedTypeDocument(typesDocument.first.id);
+      }
+    }
   }
 
   void getTypesCustomer({int? initialValue}) async {
     showLoading();
     Result<List<TypeCustomerEntity>> resultType =
         await getTypesCustomerUseCase.execute();
-
-    switch (resultType) {
-      case Success():
-        typesCustomer = resultType.value;
-        if (typesCustomer.isNotEmpty) {
-          onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
-        }
-        break;
-      case Error():
-        ErrorEntity errorEntity = resultType.error;
-        showSnackbarWidget(
-          context: Get.context!,
-          typeSnackbar: TypeSnackbar.error,
-          message: errorEntity.title,
-        );
-        break;
-    }
     hideLoading();
+    final data = executeResultUI<List<TypeCustomerEntity>>(resultType);
+    if (data != null) {
+      typesCustomer = data;
+      if (typesCustomer.isNotEmpty) {
+        onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
+      }
+    }
   }
 
   void onChangedTypeDocument(dynamic value) {
@@ -123,7 +94,7 @@ class AddCustomerController extends GetxController {
     );
     if (index != notFoundPosition) {
       typeDocumentSelected = typesDocument[index];
-      createCustomerRequest.idTypeDocument = value;
+      ui.idTypeDocument = ValidateResult.toInit(value);
     }
     update([typesDocumentIdGet]);
   }
@@ -134,83 +105,57 @@ class AddCustomerController extends GetxController {
     );
     if (index != notFoundPosition) {
       typeCustomerSelected = typesCustomer[index];
-      createCustomerRequest.idTypeCustomer = value;
+      ui.idTypeCustomer = ValidateResult(value: value, hasError: false);
     }
     update([typesCustomerIdGet]);
   }
 
   void onChangedDocument(String value) {
-    validateDocument = validateText(
+    ui.document = validateText<String>(
       rules: {RuleValidator.isRequired: true},
       text: value,
       label: documentString,
     );
-    if (validateDocument!.hasError.not()) {
-      createCustomerRequest.document = validateDocument?.value;
-    }
+
     update();
   }
 
   void onChangedName(String value) {
-    validateName = validateText(
+    ui.name = validateText<String>(
       rules: {RuleValidator.isRequired: true},
       text: value,
       label: nameString,
     );
-
-    if (validateName!.hasError) {
-    } else {
-      createCustomerRequest.name = validateName?.value;
-    }
     update();
   }
 
   void onChangedAlias(String value) {
-    createCustomerRequest.alias = value;
+    ui.alias = ValidateResult(value: value, hasError: false);
   }
 
   void onChangedLastname(String value) {
-    validateLastname = validateText(
+    ui.lastName = validateText<String>(
       rules: {RuleValidator.isRequired: true},
       text: value,
       label: lastNameString,
     );
-
-    if (validateLastname?.hasError ?? false) {
-    } else {
-      createCustomerRequest.lastName = validateLastname?.value;
-    }
     update();
   }
 
   void onChangedAddress(String value) {
-    validateAddress = validateText(
+    ui.address = validateText<String>(
       rules: {RuleValidator.isRequired: true},
       text: value,
       label: addressString,
     );
-
-    if (validateAddress!.hasError) {
-    } else {
-      createCustomerRequest.address = validateAddress?.value;
-    }
   }
 
   String? validate() {
-    onChangedDocument(createCustomerRequest.document.orEmpty());
-    onChangedName(createCustomerRequest.name.orEmpty());
-    onChangedLastname(createCustomerRequest.lastName.orEmpty());
-    onChangedAddress(createCustomerRequest.address.orEmpty());
-    List<ValidateResult?> allRules = [
-      validateDocument,
-      validateName,
-      validateLastname,
-      validateAddress,
-    ];
-    ValidateResult? firstError = allRules.firstWhereOrNull(
-      (e) => e!.hasError.orFalse(),
-    );
-    return firstError?.error;
+    onChangedDocument(ui.document!.value.orEmpty());
+    onChangedName(ui.name!.value.orEmpty());
+    onChangedLastname(ui.lastName!.value.orEmpty());
+    onChangedAddress(ui.address!.value.orEmpty());
+    return ui.validate()?.error;
   }
 
   void goConfirm() async {
@@ -231,30 +176,20 @@ class AddCustomerController extends GetxController {
 
   void _execute() async {
     late Result<CustomerEntity> resultType;
-
     showLoading();
     if (isEditing) {
-      resultType = await updateCustomerUseCase.execute(createCustomerRequest);
+      resultType = await updateCustomerUseCase.execute(ui.toRequest());
     } else {
-      resultType = await createCustomerUseCase.execute(createCustomerRequest);
+      resultType = await createCustomerUseCase.execute(ui.toRequest());
     }
     hideLoading();
-
-    switch (resultType) {
-      case Success():
-        CustomerEntity customer = resultType.value;
-        showSnackbarWidget(
-            context: Get.context!,
-            typeSnackbar: TypeSnackbar.success,
-            message: 'Exito');
-        Get.back(result: customer);
-        break;
-      case Error():
-        showSnackbarWidget(
-            context: Get.context!,
-            typeSnackbar: TypeSnackbar.error,
-            message: 'Ocurrio un error');
-        break;
+    final data = executeResultUI<CustomerEntity>(resultType);
+    if (data != null) {
+      showSnackbarWidget(
+          context: Get.context!,
+          typeSnackbar: TypeSnackbar.success,
+          message: 'Exito');
+      Get.back(result: data);
     }
   }
 }

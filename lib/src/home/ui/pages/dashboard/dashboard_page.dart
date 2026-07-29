@@ -135,21 +135,28 @@ class DashboardPage extends StatelessWidget {
             child: FutureBuilder(
               future: isConnected,
               builder: (context, snapshot) => ChildOrElseWidget(
-                condition: snapshot.data == true,
-                elseWidget: const Center(child: Text('No disponible offline')),
-                child: _listActivities(),
+                condition: snapshot.hasData,
+                elseWidget: const LoadingWidget(
+                  show: true,
+                  color: Colors.white10,
+                ),
+                child: _listActivities(snapshot.data.orFalse()),
               ),
             )),
       ],
     );
   }
 
-  Widget _listActivities() {
-    return ListView.separated(
-      separatorBuilder: (context, index) => const Divider(),
-      itemCount: controller.logs.length,
-      itemBuilder: (context, index) =>
-          ItemActivityWidget(log: controller.logs[index]),
+  Widget _listActivities(bool isConnected) {
+    return ChildOrElseWidget(
+      condition: isConnected == true,
+      elseWidget: const Center(child: Text('No disponible offline')),
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(),
+        itemCount: controller.logs.length,
+        itemBuilder: (context, index) =>
+            ItemActivityWidget(log: controller.logs[index]),
+      ),
     );
   }
 }

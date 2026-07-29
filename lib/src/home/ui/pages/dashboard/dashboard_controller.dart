@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
@@ -40,7 +38,6 @@ class DashboardController extends GetxController {
 
   @override
   void onReady() {
-    log('Dashboard route: ${Get.currentRoute}');
     getAll();
     super.onReady();
   }

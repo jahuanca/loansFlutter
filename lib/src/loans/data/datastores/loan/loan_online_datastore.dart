@@ -6,6 +6,7 @@ import 'package:loands_flutter/src/loans/data/requests/validate_loan_request.dar
 import 'package:loands_flutter/src/loans/data/datastores/loan/loan_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
+import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
 import 'package:utils/utils.dart';
 
 class LoanOnlineDatastore extends LoanDatastore {
@@ -25,8 +26,11 @@ class LoanOnlineDatastore extends LoanDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/loan', query: request.toJson());
 
-    return executeResponseList<List<LoanEntity>>(
-        response: response, convert: loanEntityFromJson);
+    return executeResponseList<LoanEntity>(
+        response: response, 
+        convert: loanEntityFromJson, 
+        sourceHiveDb: HiveDbAdapters.loans.source,
+    );
   }
 
   @override

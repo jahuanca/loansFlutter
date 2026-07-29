@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -85,15 +86,24 @@ Result<T> executeResponseObject<T>({
   }
 }
 
-Result<T> executeResponseList<T>({
+Future<Result<List<T>>> executeResponseList<T>({
   required Result<AppResponseHttp> response,
-  required T Function(String) convert,
-}) {
+  required List<T> Function(String) convert,
+  String? sourceHiveDb,
+}) async {
   switch (response) {
     case Success():
       final value = response.value;
       if (response.value.isSuccessful) {
-        return Result.success(convert(value.body));
+        final data = convert(value.body);
+        if (sourceHiveDb != null) {
+          final box = await Hive.openBox(sourceHiveDb);
+          await box.clear();
+          await box.addAll(data.toList());
+          await box.close();
+        }
+
+        return Result.success(data);
       } else {
         final error = ErrorEntity(
           title: value.title,
@@ -104,5 +114,26 @@ Result<T> executeResponseList<T>({
       }
     case Error():
       return Result.error(response.error);
+  }
+}
+
+T? executeResultUI<T>(
+  Result resultType,
+) {
+  switch (resultType) {
+    case Success():
+      return resultType.value;
+
+    case Error():
+      final error = resultType.error;
+      if (error.statusCode == null) {
+        showDialogWidget(context: Get.context!, message: error.title);
+      } else {
+        showSnackbarWidget(
+            context: Get.context!,
+            typeSnackbar: TypeSnackbar.error,
+            message: error.errorMessage);
+      }
+      return null;
   }
 }

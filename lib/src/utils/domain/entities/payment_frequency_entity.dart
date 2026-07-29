@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
+import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
+part 'payment_frequency_entity.g.dart';
 
 List<PaymentFrequencyEntity> paymentFrequencyEntityFromJson(String str) =>
     List<PaymentFrequencyEntity>.from(
@@ -7,15 +10,25 @@ List<PaymentFrequencyEntity> paymentFrequencyEntityFromJson(String str) =>
 String paymentFrequencyEntityToJson(List<PaymentFrequencyEntity> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@HiveType(typeId: paymentFrequencyIdAdapter)
 class PaymentFrequencyEntity {
+  @HiveField(0)
   int? id;
+  @HiveField(1)
   int? idTypeCustomer;
+  @HiveField(2)
   String name;
+  @HiveField(3)
   String? description;
+  @HiveField(4)
   double recommendedPercentage;
+  @HiveField(5)
   int monthlyInstallments;
+  @HiveField(6)
   int daysInstallment;
+  @HiveField(7)
   DateTime createdAt;
+  @HiveField(8)
   DateTime updatedAt;
 
   PaymentFrequencyEntity({

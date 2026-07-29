@@ -50,13 +50,13 @@ class AddCustomerPage extends StatelessWidget {
                   label: typeDocumentString,
                   hintText: 'Seleccione el tipo de documento',
                   items: controller.typesDocument,
-                  value: controller.createCustomerRequest.idTypeDocument,
+                  value: controller.ui.idTypeDocument?.value,
                   onChanged: controller.onChangedTypeDocument,
                 ),
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
-                  initialValue: controller.createCustomerRequest.document,
+                  initialValue: controller.ui.document?.value,
                   isAlignLabel: true,
                   onChanged: controller.onChangedDocument,
                   label: documentString,
@@ -68,7 +68,7 @@ class AddCustomerPage extends StatelessWidget {
               ),
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
-                  initialValue: controller.createCustomerRequest.alias,
+                  initialValue: controller.ui.alias?.value,
                   textInputType: TextInputType.name,
                   onChanged: controller.onChangedAlias,
                   isAlignLabel: true,
@@ -81,7 +81,7 @@ class AddCustomerPage extends StatelessWidget {
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
                     focusNode: focusNodeName,
-                    initialValue: controller.createCustomerRequest.name,
+                    initialValue: controller.ui.name?.value,
                     textInputType: TextInputType.name,
                     onChanged: controller.onChangedName,
                     isAlignLabel: true,
@@ -91,7 +91,7 @@ class AddCustomerPage extends StatelessWidget {
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
                     focusNode: focusNodeLastName,
-                    initialValue: controller.createCustomerRequest.lastName,
+                    initialValue: controller.ui.lastName?.value,
                     textInputType: TextInputType.name,
                     onChanged: controller.onChangedLastname,
                     isAlignLabel: true,
@@ -101,7 +101,7 @@ class AddCustomerPage extends StatelessWidget {
               GetBuilder<AddCustomerController>(
                 builder: (controller) => InputWidget(
                     focusNode: focusNodeAddress,
-                    initialValue: controller.createCustomerRequest.address,
+                    initialValue: controller.ui.address?.value,
                     textInputType: TextInputType.streetAddress,
                     onChanged: controller.onChangedAddress,
                     maxLength: 50,
@@ -116,7 +116,7 @@ class AddCustomerPage extends StatelessWidget {
                   label: typeCustomerString,
                   hintText: 'Seleccione el tipo de cliente',
                   items: controller.typesCustomer,
-                  value: controller.createCustomerRequest.idTypeCustomer,
+                  value: controller.ui.idTypeCustomer?.value,
                   onChanged: controller.onChangedTypeCustomer,
                 ),
               ),

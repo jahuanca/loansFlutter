@@ -5,11 +5,11 @@ import 'package:loands_flutter/src/customers/data/repositories/customer_reposito
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/repositories/customer_repository.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
+import 'package:loands_flutter/src/loans/data/datastores/loan/loan_offline_datastore.dart';
 import 'package:loands_flutter/src/loans/data/datastores/loan/loan_online_datastore.dart';
 import 'package:loands_flutter/src/loans/data/datastores/renewal/renewal_online_datastore.dart';
 import 'package:loands_flutter/src/loans/data/repositories/loan_repository_implementation.dart';
 import 'package:loands_flutter/src/loans/data/repositories/renewal_repository_implementation.dart';
-import 'package:loands_flutter/src/loans/data/datastores/loan/loan_datastore.dart';
 import 'package:loands_flutter/src/loans/data/datastores/renewal/renewal_datastore.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/loan_repository.dart';
 import 'package:loands_flutter/src/loans/domain/repositories/renewal_repository.dart';
@@ -30,12 +30,16 @@ class AddLoanInformationBinding extends Bindings {
 
     Get.lazyPut<CustomerDatastore>(() => CustomerOnlineDatastore());
     Get.lazyPut<UtilsDatastore>(() => UtilsOnlineDatastore());
-    Get.lazyPut<LoanDatastore>(() => LoanOnlineDatastore());
+    Get.lazyPut<LoanOnlineDatastore>(() => LoanOnlineDatastore());
+    Get.lazyPut<LoanOfflineDatastore>(() => LoanOfflineDatastore());
     Get.lazyPut<RenewalDataStore>(() => RenewalOnlineDatastore());
 
     Get.lazyPut<CustomerRepository>(() => CustomerRepositoryImplementation(datastore: Get.find()));
     Get.lazyPut<UtilsRepository>(() => UtilsRepositoryImplementation(datastore: Get.find()));
-    Get.lazyPut<LoanRepository>(() => LoanRepositoryImplementation(datastore: Get.find()));
+    Get.lazyPut<LoanRepository>(() => LoanRepositoryImplementation(
+      onlineDatastore: Get.find(),
+      offlineDatastore: Get.find(),
+    ));
     Get.lazyPut<RenewalRepository>(() => RenewalRepositoryImplementation(datastore: Get.find()));
     
     Get.lazyPut(() => GetLoanUseCase(repository: Get.find()));

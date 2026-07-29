@@ -21,7 +21,7 @@ class CustomerOnlineDatastore extends CustomerDatastore {
     final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/customer',
     );
-    return executeResponseList<List<CustomerEntity>>(
+    return executeResponseList<CustomerEntity>(
         response: response, convert: customerEntityFromJson);
   }
 

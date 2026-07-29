@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
@@ -55,7 +53,6 @@ class QuotaGroupController extends GetxController {
 
   @override
   void onReady() {
-    log('Quota group route: ${Get.currentRoute}');
     getQuotas();
     super.onReady();
   }

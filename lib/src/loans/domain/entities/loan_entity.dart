@@ -2,32 +2,54 @@
 import 'dart:convert';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
+import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:utils/utils.dart';
+import 'package:hive/hive.dart';
+part 'loan_entity.g.dart';
 
 List<LoanEntity> loanEntityFromJson(String str) => List<LoanEntity>.from(json.decode(str).map((x) => LoanEntity.fromJson(x)));
 
 String loanEntityToJson(List<LoanEntity> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@HiveType(typeId: loanEntityIdAdapter)
 class LoanEntity {
+    @HiveField(0)
     int? id;
+    @HiveField(1)
     int idCustomer;
+    @HiveField(2)
     int idUser;
+    @HiveField(3)
     int idPaymentFrequency;
+    @HiveField(4)
     double amount;
+    @HiveField(5)
     double percentage;
+    @HiveField(6)
     DateTime startDate;
+    @HiveField(7)
     double ganancy;
+    @HiveField(8)
     int idPaymentMethod;
+    @HiveField(9)
     String? observation;
+    @HiveField(10)
     int idStateLoan;
+    @HiveField(11)
     String evidence;
+    @HiveField(12)
     DateTime createdAt;
+    @HiveField(13)
     DateTime updatedAt;
+    @HiveField(14)
     int installmentsNumber;
+    @HiveField(15)
     int daysBetweenInstallments;
 
+    @HiveField(16)
     CustomerEntity? customerEntity;
+    @HiveField(17)
     PaymentFrequencyEntity? paymentFrequencyEntity;
 
     LoanEntity({

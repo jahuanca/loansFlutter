@@ -11,7 +11,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
   Future<Result<List<TypeDocumentEntity>>> getTypesDocument() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/type-document');
-    return executeResponseList<List<TypeDocumentEntity>>(
+    return executeResponseList<TypeDocumentEntity>(
         response: response, convert: typeDocumentEntityFromJson);
   }
 
@@ -20,7 +20,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/payment-method');
 
-    return executeResponseList<List<PaymentMethodEntity>>(
+    return executeResponseList<PaymentMethodEntity>(
         response: response, convert: paymentMethodEntityFromJson);
   }
 
@@ -29,7 +29,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/payment-frequency');
 
-    return executeResponseList<List<PaymentFrequencyEntity>>(
+    return executeResponseList<PaymentFrequencyEntity>(
         response: response, convert: paymentFrequencyEntityFromJson);
   }
 
@@ -38,7 +38,7 @@ class UtilsOnlineDatastore extends UtilsDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final response = await appHttpManager.get(url: '/utils/log');
 
-    return executeResponseList<List<ActivityLogEntity>>(
+    return executeResponseList<ActivityLogEntity>(
         response: response, convert: activityLogEntityFromJson);
   }
 }

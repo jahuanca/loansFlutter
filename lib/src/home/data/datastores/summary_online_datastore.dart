@@ -29,7 +29,7 @@ class SummaryOnlineDatastore extends SummaryDatastore {
     final Result<AppResponseHttp> response = await appHttpManager.get(
         url: '/utils/quotasOfDate',
         query: request.toJson());
-    return executeResponseList<List<DashboardQuotaResponse>>(
+    return executeResponseList<DashboardQuotaResponse>(
         response: response, convert: dashboardQuotasResponseFromJson);
   }
 
@@ -50,7 +50,7 @@ class SummaryOnlineDatastore extends SummaryDatastore {
     final Result<AppResponseHttp> response =
         await appHttpManager.get(url: '/utils/summary-months');
     
-    return executeResponseList<List<SummaryMonthResponse>>(
+    return executeResponseList<SummaryMonthResponse>(
         response: response, convert: summaryMonthFromJson);
   }
   
@@ -71,7 +71,7 @@ class SummaryOnlineDatastore extends SummaryDatastore {
     final Result<AppResponseHttp> response = await appHttpManager.get(
       url: '/utils/next-renewal',
     );
-    return executeResponseList<List<DashboardQuotaResponse>>(
+    return executeResponseList<DashboardQuotaResponse>(
         response: response, convert: dashboardQuotasResponseFromJson);
   }
 
@@ -82,7 +82,7 @@ class SummaryOnlineDatastore extends SummaryDatastore {
       url: '/utils/injections',
     );
 
-    return executeResponseList<List<InjectionResponse>>(
+    return executeResponseList<InjectionResponse>(
         response: response, convert: injectionResponseFromJson);
   }
 }

@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/search_loan/search_loan_page.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/navigation_to.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
@@ -43,7 +42,6 @@ class LoansController extends GetxController {
 
   @override
   void onReady() {
-    log('Loans route: ${Get.currentRoute}');
     getLoans();
     super.onReady();
   }
@@ -52,14 +50,12 @@ class LoansController extends GetxController {
     showLoading();
     Result<List<LoanEntity>> resultType =
         await getLoansUseCase.execute(request);
-    switch (resultType) {
-      case Success():
-      loans = resultType.value;
+
+    final data = executeResultUI<List<LoanEntity>>(resultType);
+    if (data != null) {
+      loans = data;
       loansToShow.clear();
       loansToShow.addAll(loans);
-        break;
-      case Error(): 
-        break;
     }
     hideLoading();
     update([pageIdGet]);

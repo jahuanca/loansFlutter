@@ -11,7 +11,7 @@ class UserOnlineDatastore extends UserDatastore {
       url: '/user',
     );
 
-    return executeResponseList<List<UserEntity>>(
+    return executeResponseList<UserEntity>(
         response: response, convert: userEntityFromJson);
   }
 }

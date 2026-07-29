@@ -9,7 +9,7 @@ class TypeCustomerOnlineDatastore extends TypeCustomerDatastore {
   Future<Result<List<TypeCustomerEntity>>> getAll() async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response = await appHttpManager.get(url: '/type-customer');
-    return executeResponseList<List<TypeCustomerEntity>>(
+    return executeResponseList<TypeCustomerEntity>(
         response: response, convert: typeCustomerEntityFromJson);
   }
   
