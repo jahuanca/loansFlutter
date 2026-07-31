@@ -108,14 +108,6 @@ class LoansPage extends StatelessWidget {
       ganancy: loan.ganancy.formatDecimals(),
       date: loan.startDate.formatDMMYYY(),
     );
-
-    /* return ListTile(
-      onTap: () => controller.goToDetail(loan),
-      leading: Text('${loan.id}'),
-      title: _titleItem(loan),
-      subtitle: Text(subtitle.orEmpty()),
-      trailing: Text(loan.startDate.formatDMMYYY() ?? emptyString),
-    );*/
   }
 
   Widget _searchInput() {

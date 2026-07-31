@@ -4,10 +4,14 @@ packages:
   - .
 
 scripts:
-  u_packages:
+  u_package:
     run: flutter packages upgrade
     description: Updating packages
 
   create_adapter:
     run: dart run build_runner build --delete-conflicting-outputs
     description: Create hiveDB adapters
+
+  activate_analytic:
+    run: adb shell setprop debug.firebase.analytics.app com.example.loands_flutter
+    description: Activate analytics for DebugView Firebase

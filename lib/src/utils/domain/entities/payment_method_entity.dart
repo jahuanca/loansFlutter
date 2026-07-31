@@ -1,14 +1,23 @@
 import 'dart:convert';
+import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
+import 'package:hive/hive.dart';
+part 'payment_method_entity.g.dart';
 
 List<PaymentMethodEntity> paymentMethodEntityFromJson(String str) => List<PaymentMethodEntity>.from(json.decode(str).map((x) => PaymentMethodEntity.fromJson(x)));
 
 String paymentMethodEntityToJson(List<PaymentMethodEntity> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@HiveType(typeId: paymentMethodIdAdapter)
 class PaymentMethodEntity {
+    @HiveField(0)
     int? id;
+    @HiveField(1)
     String name;
+    @HiveField(2)
     String description;
+    @HiveField(3)
     DateTime createdAt;
+    @HiveField(4)
     DateTime updatedAt;
 
     PaymentMethodEntity({

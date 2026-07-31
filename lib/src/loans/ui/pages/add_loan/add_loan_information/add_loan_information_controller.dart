@@ -16,6 +16,7 @@ import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/
 import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_quotas/add_loan_quotas_page.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
@@ -115,12 +116,9 @@ class AddLoanInformationController extends GetxController {
   Future<void> getCustomers() async {
     Result<List<CustomerEntity>> resultType =
         await getCustomersUseCase.execute();
-    switch (resultType) {
-      case Success():
-        customers = resultType.value;
-        break;
-      case Error():
-        break;
+    final data = executeResultUI<List<CustomerEntity>>(resultType);
+    if (data != null) {
+      customers = data;
     }
     update([customersIdGet]);
   }
@@ -128,13 +126,10 @@ class AddLoanInformationController extends GetxController {
   Future<void> getPaymentFrecuencies() async {
     Result<List<PaymentFrequencyEntity>> resultType =
         await getPaymentFrequenciesUseCase.execute();
-    switch (resultType) {
-      case Success():
-        frequencies = resultType.value;
-        frequencies.removeWhere((e) => e.id == idOfSpecialFrequency);
-        break;
-      case Error():
-        break;
+    final data = executeResultUI<List<PaymentFrequencyEntity>>(resultType);
+    if (data != null) {
+      frequencies = data;
+      frequencies.removeWhere((e) => e.id == idOfSpecialFrequency);
     }
     update([frequenciesIdGet]);
   }
@@ -142,13 +137,10 @@ class AddLoanInformationController extends GetxController {
   Future<void> getMethodsPayment() async {
     Result<List<PaymentMethodEntity>> resultType =
         await getPaymentMethodsUseCase.execute();
-    switch (resultType) {
-      case Success():
-        methods = resultType.value;
+    final data = executeResultUI<List<PaymentMethodEntity>>(resultType);
+    if (data != null) {
+        methods = data;
         onChangedMethodsPayment(idOfMethodPaymentDefault);
-        break;
-      case Error():
-        break;
     }
     update([methodsIdGet]);
   }
@@ -156,12 +148,9 @@ class AddLoanInformationController extends GetxController {
   Future<void> getLoanToRenew() async {
     Result<LoanEntity> resultType = await getLoanUseCase
         .execute(GetLoanRequest(id: createRenewalRequest?.idLoanToRenew));
-    switch (resultType) {
-      case Success():
-        setLoanToRenew(resultType.value);
-        break;
-      case Error():
-        break;
+    final data = executeResultUI<LoanEntity>(resultType);
+    if (data != null) {
+      setLoanToRenew(data);
     }
   }
 
@@ -181,9 +170,14 @@ class AddLoanInformationController extends GetxController {
     required dynamic value,
     bool isForChange = true,
   }) {
-    ui.idCustomer = validateText(text: value, label: customerString, rules: {
-      RuleValidator.isRequired: true,
-    });
+    ui.idCustomer = validateText<int>(
+      text: value,
+      label: customerString,
+      rules: {
+        RuleValidator.isRequired: true,
+      },
+      toConvert: ToConverter.toInt,
+    );
 
     int index = customers.indexWhere(
       (e) => e.id == value,
@@ -220,7 +214,10 @@ class AddLoanInformationController extends GetxController {
     );
     if (index != notFoundPosition) {
       ui.frequencySelected = frequenciesOfCustomer[index];
-      ui.idPaymentFrequency = ValidateResult.toInit(ui.frequencySelected?.id);
+      ui.idPaymentFrequency = ValidateResult.initialize(
+        label: typeCustomerString,
+        value: ui.frequencySelected?.id,
+      );
       if (setPercentage) changePercentage();
     }
   }
@@ -241,13 +238,15 @@ class AddLoanInformationController extends GetxController {
   void changePercentage() {
     percentageTextController.text =
         '${ui.frequencySelected?.recommendedPercentage.formatDecimals()}';
-    ui.percentage =
-        ValidateResult.toInit(ui.frequencySelected?.recommendedPercentage);
+    ui.percentage = ValidateResult.initialize(
+      label: typeCustomerString,
+      value: ui.frequencySelected?.recommendedPercentage,
+    );
     update([percentageIdGet]);
   }
 
-  void onChangeAmount(String value) {
-    ui.amount = validateText(
+  void onChangeAmount(String? value) {
+    ui.amount = validateText<double>(
       text: value,
       label: amountString,
       rules: {
@@ -277,8 +276,8 @@ class AddLoanInformationController extends GetxController {
     update([startDayIdGet]);
   }
 
-  void onChangedPercentage(String value) {
-    ui.percentage = validateText(
+  void onChangedPercentage(String? value) {
+    ui.percentage = validateText<double>(
       text: value,
       label: percentageString,
       rules: {
@@ -287,9 +286,9 @@ class AddLoanInformationController extends GetxController {
       },
       toConvert: ToConverter.toDouble,
     );
-    if (ui.percentage!.hasError.not()) {
-      if (ui.amount?.value != null) {
-        onChangeAmount(ui.amount!.value.toString());
+    if (ui.percentage.hasError.not()) {
+      if (ui.amount.value != null) {
+        onChangeAmount(ui.amount.value.toString());
       }
     }
     update([percentageIdGet]);
@@ -297,24 +296,12 @@ class AddLoanInformationController extends GetxController {
 
   ValidateResult? validate() {
     onChangedStartDate(ui.startDate?.value);
-    onChangedCustomer(value: ui.idCustomer, isForChange: false);
-    onChangedFrequency(ui.idPaymentFrequency, false);
-    onChangedPercentage(ui.percentage.toString());
-    onChangeAmount(ui.amount.toString());
-    onChangedMethodsPayment(ui.idPaymentMethod);
+    onChangedCustomer(value: ui.idCustomer.value, isForChange: false);
+    onChangedFrequency(ui.idPaymentFrequency.value, false);
+    onChangedPercentage(ui.percentage.value?.formatDecimals());
+    onChangeAmount(ui.amount.value?.formatDecimals());
+    onChangedMethodsPayment(ui.idPaymentMethod.value);
 
-    /*if (ui.startDate!.hasError) return ui.startDate!;
-    if (ui.idCustomer!.hasError) {
-      return ui.idCustomer!;
-    }
-    if (ui.idPaymentFrequency!.hasError) {
-      return ui.idPaymentFrequency!;
-    }
-    if (ui.percentage!.hasError) {
-      return ui.percentage!;
-    }
-    if (ui.amount!.hasError) return ui.amount!;
-    if (ui.idPaymentMethod!.hasError) return ui.idPaymentMethod!;*/
     return ui.validate();
   }
 

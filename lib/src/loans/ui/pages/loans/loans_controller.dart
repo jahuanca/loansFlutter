@@ -3,6 +3,8 @@ import 'package:loands_flutter/src/loans/data/requests/get_loans_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/get_loans_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/pages/search_loan/search_loan_page.dart';
+import 'package:loands_flutter/src/utils/core/feature_flag/feature_flag_service.dart';
+import 'package:loands_flutter/src/utils/core/feature_flag/flags.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/navigation_to.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
@@ -41,7 +43,7 @@ class LoansController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     getLoans();
     super.onReady();
   }
@@ -62,6 +64,11 @@ class LoansController extends GetxController {
   }
 
   Future<void> goToAddLoanChooseType() async {
+    bool isEnabled = checkFeatureFlag(Flag.createLoanDashboard); 
+    if (isEnabled.not()) {
+      showAlertWidget(context: Get.context!, message: 'Este servicio no se encuentra activo, vuelva a intentar en unos minutos.');
+      return;
+    }
     await NavigationTo.goToAddLoanChooseType();
     getLoans();
   }

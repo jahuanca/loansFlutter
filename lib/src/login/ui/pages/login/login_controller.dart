@@ -12,7 +12,7 @@ import 'package:utils/utils.dart';
 
 class LoginController extends GetxController {
   LoginUseCase loginUseCase;
-  LoginUi loginUi = LoginUi();
+  LoginUi ui = LoginUi();
   String? androidId;
 
   LoginController({
@@ -21,25 +21,26 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    loginUi.keepSesion = ValidateResult(value: false);
+    ui.username = validateText<String>(text: 'sin valor', label: 'Nombre de usuario');
+    ui.keepSesion = ValidateResult.initialize(label: 'Mantener sesión', value: false);
     super.onInit();
   }
 
   void onChangeUsername(String value) {
-    loginUi.username = validateText(text: value, label: 'Nombre de usuario');
+    ui.username = validateText<String>(text: value, label: 'Nombre de usuario');
   }
 
   void onChangePassword(String value) {
-    loginUi.password = validateText(text: value, label: 'Contraseña');
+    ui.password = validateText<String>(text: value, label: 'Contraseña');
   }
 
   void onChangeKeepSesion(dynamic value) {
-    loginUi.keepSesion = validateText(text: value, label: 'Mantener sesión');
+    ui.keepSesion = validateText<bool>(text: value, label: 'Mantener sesión');
     update([keepSesionIdGet]);
   }
 
   Future<void> goToHome() async {
-    final resultValidate = loginUi.validate();
+    ValidateResult? resultValidate = ui.validate();
     if (resultValidate != null) {
       showSnackbarWidget(
           context: Get.context!,
@@ -48,20 +49,17 @@ class LoginController extends GetxController {
       return;
     }
     showLoading();
-    Result<LoginEntity> resultType =
-        await loginUseCase.execute(loginUi.value);
-    switch (resultType) {
-      case Success():
-        androidId = await getAndroidId();
-        LoginEntity loginEntity = resultType.value;
-        await LocalPreferences().setKeepSesion(loginUi.keepSesion!.value.orFalse());
-        await LocalPreferences().setEmail(loginUi.username!.value.orEmpty());
-        await UserPreferences().setToken(loginEntity.token);
-        Get.off(() => NavigationContentPage(),
-            binding: NavigationContentBinding());
-        break;
-      case Error():
-        break;
+    Result<LoginEntity> resultType = await loginUseCase.execute(ui.loginRequest());
+    final data = executeResultUI<LoginEntity>(resultType);
+    if (data != null) {
+      androidId = await getAndroidId();
+      LoginEntity loginEntity = data;
+      await LocalPreferences()
+          .setKeepSesion(ui.keepSesion!.value.orFalse());
+      await LocalPreferences().setEmail(ui.username!.value.orEmpty());
+      await UserPreferences().setToken(loginEntity.token);
+      Get.off(() => NavigationContentPage(),
+          binding: NavigationContentBinding());
     }
     hideLoading();
   }

@@ -40,7 +40,6 @@ class NavigationContentPage extends StatelessWidget {
       id: pageIdGet,
       builder: (controller) => Scaffold(
         body: _body(),
-        
         bottomNavigationBar: _bottomNavigation(),
       ),
     );

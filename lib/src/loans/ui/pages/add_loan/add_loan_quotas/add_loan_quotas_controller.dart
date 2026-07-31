@@ -8,6 +8,8 @@ import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/pay_and_renewal_use_case.dart';
 import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
+import 'package:loands_flutter/src/utils/core/analytics/analytics_service.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/core/routes_name.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
@@ -90,18 +92,11 @@ class AddLoanQuotasController extends GetxController {
 
     Result<PayAndRenewalResponse> resultType =
         await createRenewalUseCase.execute(createRenewalRequest!);
-    switch (resultType) {
-      case Success():
-      PayAndRenewalResponse response = resultType.value;
-      _successCreateRenewal(response.loan, response.quota);
-        break;
-      case Error(): 
-      ErrorEntity errorEntity = resultType.error;
-      showSnackbarWidget(
-          context: Get.context!,
-          typeSnackbar: TypeSnackbar.error,
-          message: errorEntity.errorMessage);
-        break;
+    final data = executeResultUI<PayAndRenewalResponse>(resultType);
+
+    if (data != null) {
+      trackRenewal(data.loan.amount);
+      _successCreateRenewal(data.loan, data.quota);
     }
   }
 

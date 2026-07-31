@@ -10,7 +10,7 @@ class LocalPreferences {
   Future<void> setKeepSesion(bool value) =>
       UserPreferences().setBool(keepSesionKey, value);
 
-  bool isOffLine() => UserPreferences().getBool(isOfflineKey);
+  bool isOffLine() => UserPreferences().getBool(isOfflineKey); 
 
   Future<void> setisOffline(bool value) =>
       UserPreferences().setBool(isOfflineKey, value);

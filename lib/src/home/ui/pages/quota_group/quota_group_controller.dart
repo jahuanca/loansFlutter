@@ -6,6 +6,8 @@ import 'package:loands_flutter/src/home/ui/pages/pay_quota_multiple/pay__quota_m
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
+import 'package:loands_flutter/src/utils/core/analytics/analytics_service.dart';
+import 'package:loands_flutter/src/utils/core/analytics/screen_events.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
 import 'package:loands_flutter/src/utils/ui/pages/routes_app.dart';
@@ -42,11 +44,15 @@ class QuotaGroupController extends GetxController {
     getQuotasByDateRequest = Get.setArgument(getAllQuotasRequestArgument);
     title = Get.setArgument(titleArgument);
     isGroup = Get.setArgument(isGroupArgument);
+
     if (isGroup) {
+      screenEvent(ScreenEvents.weekQuotas);
       dateTimeRange = DateTimeRange(
         start: getQuotasByDateRequest.fromDate.orNow(),
         end: getQuotasByDateRequest.untilDate.orNow(),
       );
+    } else {
+      screenEvent(ScreenEvents.expiredQuotas);
     }
     super.onInit();
   }

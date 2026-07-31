@@ -19,7 +19,7 @@ class UpdatePasswordUi {
     }
 
     if (newPassword?.value != repeatPassword?.value) {
-      return ValidateResult(value: repeatPassword!.value, error: 'Contraseñas no coinciden', hasError: true);
+      return ValidateResult(label: 'Repetir contraseña', value: repeatPassword!.value, error: 'Contraseñas no coinciden', hasError: true);
     }
     return null;
   }

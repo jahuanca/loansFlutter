@@ -7,7 +7,7 @@ import 'package:utils/utils.dart';
 
 class LoginPage extends StatelessWidget {
   
-  final LoginController controller = LoginController(loginUseCase: Get.find());
+  final LoginController controller = Get.find<LoginController>();
   final TextStyle _headerStyle = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w500,
@@ -25,7 +25,6 @@ class LoginPage extends StatelessWidget {
 
     return GetBuilder<LoginController>(
       id: pageIdGet,
-      init: controller,
       builder: (controller) => Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
@@ -90,7 +89,7 @@ class LoginPage extends StatelessWidget {
               id: keepSesionIdGet,
               builder: (controller) => CheckBoxWidget(
                 title: 'Mantener sesión',
-                isChecked: controller.loginUi.keepSesion?.value,
+                isChecked: controller.ui.keepSesion?.value,
                 onChanged: controller.onChangeKeepSesion,
               ),
             ),

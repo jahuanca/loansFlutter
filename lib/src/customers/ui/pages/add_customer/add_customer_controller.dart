@@ -5,6 +5,8 @@ import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_cu
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_ui.dart';
+import 'package:loands_flutter/src/utils/core/analytics/analytics_constants.dart';
+import 'package:loands_flutter/src/utils/core/analytics/analytics_service.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
@@ -94,7 +96,10 @@ class AddCustomerController extends GetxController {
     );
     if (index != notFoundPosition) {
       typeDocumentSelected = typesDocument[index];
-      ui.idTypeDocument = ValidateResult.toInit(value);
+      ui.idTypeDocument = ValidateResult.initialize(
+        label: typeDocumentString,
+        value: value,
+      );
     }
     update([typesDocumentIdGet]);
   }
@@ -105,7 +110,10 @@ class AddCustomerController extends GetxController {
     );
     if (index != notFoundPosition) {
       typeCustomerSelected = typesCustomer[index];
-      ui.idTypeCustomer = ValidateResult(value: value, hasError: false);
+      ui.idTypeCustomer = ValidateResult.initialize(
+        label: typeCustomerString,
+        value: value,
+      );
     }
     update([typesCustomerIdGet]);
   }
@@ -128,7 +136,10 @@ class AddCustomerController extends GetxController {
   }
 
   void onChangedAlias(String value) {
-    ui.alias = ValidateResult(value: value, hasError: false);
+    ui.alias = ValidateResult.initialize(
+      label: aliasString,
+      value: value,
+    );
   }
 
   void onChangedLastname(String value) {
@@ -183,6 +194,7 @@ class AddCustomerController extends GetxController {
     hideLoading();
     final data = executeResultUI<CustomerEntity>(resultType);
     if (data != null) {
+      trackEvent(AnalyticsConstants.createCustomerSuccess());
       showSnackbarWidget(
           context: Get.context!,
           typeSnackbar: TypeSnackbar.success,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/login/di/back_to_session_binding.dart';
+import 'package:loands_flutter/src/login/di/login_binding.dart';
 import 'package:loands_flutter/src/login/ui/pages/back_to_sesion/back_to_sesion_page.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_page.dart';
 import 'package:loands_flutter/src/utils/core/local_preferences.dart';
@@ -11,7 +13,13 @@ class App extends StatelessWidget {
 
   Widget get _home {
     bool keepSesion = LocalPreferences().keepSesion();
-    return (keepSesion) ? BackToSesionPage() : LoginPage();
+    if (keepSesion) {
+      BackToSessionBinding().dependencies();
+      return BackToSesionPage();
+    } else {
+      LoginBinding().dependencies();
+      return LoginPage();
+    }
   }
 
   @override

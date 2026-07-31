@@ -1,6 +1,7 @@
 
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
 class AddCustomerUi {
@@ -46,14 +47,14 @@ class AddCustomerUi {
   }
 
   void setValuesOfCustomer(CustomerEntity customer) {
-    id = ValidateResult.toInit(customer.id);
-    idTypeDocument = ValidateResult.toInit(customer.idTypeDocument);
-    idTypeCustomer = ValidateResult.toInit(customer.idTypeCustomer);
-    alias = ValidateResult.toInit(customer.alias);
-    name = ValidateResult.toInit(customer.name);
-    lastName = ValidateResult.toInit(customer.lastName);
-    document = ValidateResult.toInit(customer.document);
-    address = ValidateResult.toInit(customer.address);
+    id = ValidateResult.initialize(label: 'Id', value: customer.id);
+    idTypeDocument = ValidateResult.initialize(label: typeDocumentString, value: customer.idTypeDocument);
+    idTypeCustomer = ValidateResult.initialize(label: typeCustomerString, value: customer.idTypeCustomer);
+    alias = ValidateResult.initialize(label: aliasString, value: customer.alias);
+    name = ValidateResult.initialize(label: nameString, value: customer.name);
+    lastName = ValidateResult.initialize(label: lastNameString, value: customer.lastName);
+    document = ValidateResult.initialize(label: documentString, value: customer.document);
+    address = ValidateResult.initialize(label: addressString, value: customer.address);
   }
 
 }

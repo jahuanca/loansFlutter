@@ -8,8 +8,7 @@ import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class BackToSesionPage extends StatelessWidget {
-  final BackToSesionController controller =
-      BackToSesionController(loginUseCase: Get.find());
+  final BackToSesionController controller = Get.find<BackToSesionController>();
 
   BackToSesionPage({super.key});
 
@@ -19,7 +18,7 @@ class BackToSesionPage extends StatelessWidget {
     final Size size = MediaQuery.sizeOf(context);
 
     return GetBuilder<BackToSesionController>(
-      init: controller,
+      id: pageIdGet,
       builder: (controller) => Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(child: _body(size)),
@@ -65,7 +64,7 @@ class BackToSesionPage extends StatelessWidget {
             align: TextAlign.center,
             items: [
               RichTextItem(
-                  text: controller.username,
+                  text: controller.ui.username?.value ?? emptyString,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
