@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:loands_flutter/src/home/data/responses/state_quota_enum.dart';
+import 'package:utils/utils.dart';
 
 List<DashboardQuotaResponse> dashboardQuotasResponseFromJson(String str) =>
     List<DashboardQuotaResponse>.from(
@@ -79,8 +80,8 @@ class DashboardQuotaResponse {
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
         'is_special': isSpecial,
-        'date_to_pay': dateToPay.toIso8601String(),
-        'paid_date': paidDate?.toIso8601String(),
+        'date_to_pay': dateToPay.toServer(),
+        'paid_date': paidDate?.toServer(),
       };
 
   Map<String, dynamic> toJsonForRenewal() => {
@@ -95,7 +96,7 @@ class DashboardQuotaResponse {
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
         'is_special': isSpecial,
-        'date_to_pay': dateToPay.toIso8601String(),
-        'paid_date': paidDate?.toIso8601String(),
+        'date_to_pay': dateToPay.toUtc(),
+        'paid_date': paidDate?.toUtc(),
       };
 }

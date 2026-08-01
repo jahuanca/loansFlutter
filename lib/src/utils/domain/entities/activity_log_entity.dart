@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:loands_flutter/src/utils/domain/entities/description_operation_of_log.dart';
+import 'package:utils/utils.dart';
 
 List<ActivityLogEntity> activityLogEntityFromJson(String str) => List<ActivityLogEntity>.from(json.decode(str).map((x) => ActivityLogEntity.fromJson(x)));
 
@@ -48,6 +49,6 @@ class ActivityLogEntity {
     'new_registry': newRegistry,
     'old_registry': oldRegistry,
     'id_user': idUser,
-    'createdAt': createdAt.toLocal(),
+    'createdAt': createdAt.toServer(),
   };
 }

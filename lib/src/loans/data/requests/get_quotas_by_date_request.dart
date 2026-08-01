@@ -1,4 +1,6 @@
 
+import 'package:utils/utils.dart';
+
 class GetQuotasByDateRequest {
 
   int? idStateQuota;
@@ -19,8 +21,8 @@ class GetQuotasByDateRequest {
 
   Map<String, dynamic> toJson() => {
     'id_state_quota': idStateQuota,
-    'from_date': fromDate,
-    'until_date': untilDate,
+    'from_date': fromDate.toServer(),
+    'until_date': untilDate.toServer(),
   };
 
 }

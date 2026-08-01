@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:utils/utils.dart';
+
 List<InjectionResponse> injectionResponseFromJson(String str) =>
     List<InjectionResponse>.from(
         json.decode(str).map((x) => InjectionResponse.fromJson(x)));
@@ -20,7 +22,7 @@ class InjectionResponse {
 
   Map<String, dynamic> toJson() => {
     'inversion': inversion,
-    'periodo': periodo.toIso8601String(),
+    'periodo': periodo.toServer(),
   };
 
 }

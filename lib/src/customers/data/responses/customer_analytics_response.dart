@@ -1,5 +1,6 @@
 
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
+import 'package:utils/utils.dart';
 
 class CustomerAnalyticsResponse {
 
@@ -37,7 +38,7 @@ class CustomerAnalyticsResponse {
     'amount_of_loans': amountOfLoans,
     'loans_in_progress': loansInProgress,
     'amount_in_progress': amountInProgress,
-    'start_date': startDate,
+    'start_date': startDate.toServer(),
     'loans': List<dynamic>.from(loans.map((x) => x.toJson())),
   };
 }

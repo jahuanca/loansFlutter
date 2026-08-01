@@ -1,3 +1,5 @@
+import 'package:utils/utils.dart';
+
 class RenewalEntity {
 
   int idUser;
@@ -30,7 +32,7 @@ class RenewalEntity {
     'id_user': idUser,
     'id_previous_loan': idPreviousLoan,
     'id_new_loan': idNewLoan,
-    'date': date.toIso8601String(),
+    'date': date.toServer(),
     'variation_in_amount': variationInAmount,
     'id_type_renewal': idTypeRenewal,
   };

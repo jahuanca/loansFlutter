@@ -1,3 +1,5 @@
+import 'package:utils/utils.dart';
+
 class AddRenewalRequest {
 
   int? idCustomer;
@@ -31,7 +33,7 @@ class AddRenewalRequest {
     'id_customer': idCustomer,
     'id_new_loan': idNewLoan,
     'id_previous_loan': idPreviousLoan,
-    'date': date?.toIso8601String(),
+    'date': date?.toServer(),
     'variation_in_amount': variationInAmount,
     'id_type_renewal': idTypeRenewal,
     'observation': observation,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
+import 'package:utils/utils.dart';
 part 'payment_frequency_entity.g.dart';
 
 List<PaymentFrequencyEntity> paymentFrequencyEntityFromJson(String str) =>
@@ -65,8 +66,8 @@ class PaymentFrequencyEntity {
         "name": name,
         "description": description,
         "recommended_percentage": recommendedPercentage,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt.toServer(),
+        "updatedAt": updatedAt.toServer(),
         "titleItem": titleItem,
         'monthly_installments': monthlyInstallments,
         'days_installment': daysInstallment,

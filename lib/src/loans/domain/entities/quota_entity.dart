@@ -71,12 +71,12 @@ class QuotaEntity {
         "is_last": isLast,
         "amount": amount,
         "ganancy": ganancy,
-        "date_to_pay": dateToPay.toIso8601String(),
-        "paid_date": paidDate?.toIso8601String(),
+        "date_to_pay": dateToPay.toServer(),
+        "paid_date": paidDate?.toServer(),
         "amount_delinquency": amountDelinquency,
         "id_state_quota": idStateQuota,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
+        "createdAt": createdAt?.toServer(),
+        "updatedAt": updatedAt?.toServer(),
       };
 }
 

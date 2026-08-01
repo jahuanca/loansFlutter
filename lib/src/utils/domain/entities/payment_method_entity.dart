@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
 import 'package:hive/hive.dart';
+import 'package:utils/utils.dart';
 part 'payment_method_entity.g.dart';
 
 List<PaymentMethodEntity> paymentMethodEntityFromJson(String str) => List<PaymentMethodEntity>.from(json.decode(str).map((x) => PaymentMethodEntity.fromJson(x)));
@@ -40,7 +41,7 @@ class PaymentMethodEntity {
         "id": id,
         "name": name,
         "description": description,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "createdAt": createdAt.toServer(),
+        "updatedAt": updatedAt.toServer(),
     };
 }

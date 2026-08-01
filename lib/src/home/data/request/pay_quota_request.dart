@@ -1,4 +1,6 @@
 
+import 'package:utils/utils.dart';
+
 class PayQuotaRequest {
 
   int? idOfQuota;
@@ -22,6 +24,6 @@ class PayQuotaRequest {
 
   Map<String, dynamic> toJson() => {
     'id_of_quota': idOfQuota,
-    'paid_date': paidDate?.toIso8601String(),
+    'paid_date': paidDate?.toServer(),
   };
 }

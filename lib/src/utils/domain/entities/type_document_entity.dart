@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:utils/utils.dart';
+
 List<TypeDocumentEntity> typeDocumentEntityFromJson(String str) => List<TypeDocumentEntity>.from(json.decode(str).map((x) => TypeDocumentEntity.fromJson(x)));
 
 String typeDocumentEntityToJson(List<TypeDocumentEntity> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -31,7 +33,7 @@ class TypeDocumentEntity {
         "id": id,
         "name": name,
         "description": description,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
+        "createdAt": createdAt?.toServer(),
+        "updatedAt": updatedAt?.toServer(),
     };
 }

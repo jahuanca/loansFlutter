@@ -1,4 +1,6 @@
 
+import 'package:utils/utils.dart';
+
 class ValidateLoanRequest {
 
   int idCustomer;
@@ -21,6 +23,6 @@ class ValidateLoanRequest {
     'id_payment_frequency': idPaymentFrequency,
     'percentage': percentage,
     'amount': amount,
-    'start_date': startDate.toIso8601String(),
+    'start_date': startDate.toServer(),
   }; 
 }

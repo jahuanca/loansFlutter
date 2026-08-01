@@ -339,7 +339,7 @@ class AddLoanInformationController extends GetxController {
     } else {
       bool result = await showDialogWidget(
           context: Get.context!,
-          message: 'Se detecto un prestamo similar, ¿desea continuar?');
+          message: 'Se detecto un préstamo similar, ¿desea continuar?');
       if (result) goQuotas();
     }
   }

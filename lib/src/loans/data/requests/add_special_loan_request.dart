@@ -100,7 +100,7 @@ class AddSpecialLoanRequest {
     'percentage': percentage,
     'amount': amount,
     'ganancy': ganancy,
-    'start_date': startDate?.toIso8601String(),
+    'start_date': startDate?.toServer(),
     'number_of_installments': numberOfInstallments,
     'days_between_installments': daysBetweenInstallments,
     'customerEntity': customerEntity?.toJson(),

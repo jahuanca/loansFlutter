@@ -2,6 +2,7 @@
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
+import 'package:utils/utils.dart';
 
 class PayAndRenewalRequest {
 
@@ -58,9 +59,9 @@ class PayAndRenewalRequest {
     'percentage': percentage,
     'amount': amount,
     'ganancy': ganancy,
-    'start_date': startDate?.toIso8601String(),
+    'start_date': startDate?.toServer(),
     'id_loan_to_renew': idLoanToRenew,
-    'paid_date': paidDate?.toIso8601String(),
+    'paid_date': paidDate?.toServer(),
     'id_of_quota': idOfQuota,
   };
   
@@ -71,9 +72,9 @@ class PayAndRenewalRequest {
     'percentage': percentage,
     'amount': amount,
     'ganancy': ganancy,
-    'start_date': startDate?.toIso8601String(),
+    'start_date': startDate?.toServer(),
     'id_loan_to_renew': idLoanToRenew,
-    'paid_date': paidDate?.toIso8601String(),
+    'paid_date': paidDate?.toServer(),
     'id_of_quota': idOfQuota,
 
     'customerEntity': customerEntity?.toJson(),
