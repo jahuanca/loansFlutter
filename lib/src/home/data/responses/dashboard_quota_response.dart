@@ -96,7 +96,7 @@ class DashboardQuotaResponse {
         "customer_name": customerName,
         "id_state_quota": idStateQuota,
         'is_special': isSpecial,
-        'date_to_pay': dateToPay.toUtc(),
-        'paid_date': paidDate?.toUtc(),
+        'date_to_pay': dateToPay.toServer(),
+        'paid_date': paidDate?.toServer(),
       };
 }

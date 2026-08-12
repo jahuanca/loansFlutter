@@ -21,8 +21,8 @@ class GetQuotasByDateRequest {
 
   Map<String, dynamic> toJson() => {
     'id_state_quota': idStateQuota,
-    'from_date': fromDate.toServer(),
-    'until_date': untilDate.toServer(),
+    'from_date': fromDate?.toServer(),
+    'until_date': untilDate?.toServer(),
   };
 
 }

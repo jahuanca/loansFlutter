@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_loan_information/
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanInformationPage extends StatelessWidget {
@@ -84,6 +85,7 @@ class AddLoanInformationPage extends StatelessWidget {
                   builder: (controller) => InputWidget(
                     onTap: () async {
                       DateTime? dateSelected = await showDatePicker(
+                          selectableDayPredicate: disabledSundayPredicate,
                           currentDate: controller.ui.startDate?.value,
                           context: context,
                           firstDate: defaultDate.subtract(halfYearDuration),

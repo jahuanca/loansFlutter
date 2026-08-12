@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_controller.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/text/subtitle_widget.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaPage extends StatelessWidget {
@@ -96,6 +97,7 @@ class PayQuotaPage extends StatelessWidget {
           onTap: () async {
             DateTime? dateSelected = await showDatePicker(
                 context: context,
+                selectableDayPredicate: disabledSundayPredicate,
                 currentDate: controller.quota?.dateToPay,
                 firstDate: defaultDate.subtract(halfYearDuration),
                 lastDate: defaultDate.add(oneDayDuration));

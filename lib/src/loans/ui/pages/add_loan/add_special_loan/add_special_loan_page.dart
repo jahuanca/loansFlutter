@@ -4,6 +4,7 @@ import 'package:loands_flutter/src/loans/ui/pages/add_loan/add_special_loan/add_
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class AddSpecialLoanPage extends StatelessWidget {
@@ -47,7 +48,8 @@ class AddSpecialLoanPage extends StatelessWidget {
                           id: customersIdGet,
                           builder: (controller) => DropdownMenuWidget(
                                 focusNode: customerFocusNode,
-                                initialValue: controller.addSpecialLoanRequest.idCustomer,
+                                initialValue:
+                                    controller.addSpecialLoanRequest.idCustomer,
                                 hintText: selectTheCustomer,
                                 label: customerString,
                                 items: controller.customers,
@@ -69,6 +71,7 @@ class AddSpecialLoanPage extends StatelessWidget {
                           currentDate:
                               controller.addSpecialLoanRequest.startDate,
                           context: context,
+                          selectableDayPredicate: disabledSundayPredicate,
                           firstDate: defaultDate.subtract(halfYearDuration),
                           lastDate: defaultDate.add(maxDaysByLoan));
                       controller.onChangedStartDate(dateSelected);
@@ -82,7 +85,8 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: numberOfInstallmentsIdGet,
                   builder: (controller) => InputWidget(
-                    textEditingController: controller.numberOfInstallmentsTextController,
+                    textEditingController:
+                        controller.numberOfInstallmentsTextController,
                     hintText: 'Número de cuotas',
                     label: 'Cuotas',
                     icon: const Icon(Icons.numbers),
@@ -93,7 +97,8 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: daysBetweenInstallmentsIdGet,
                   builder: (controller) => InputWidget(
-                      textEditingController: controller.daysBetweenInstallmentsTextController,
+                      textEditingController:
+                          controller.daysBetweenInstallmentsTextController,
                       onChanged: controller.onChangeDaysBetweenInstallments,
                       textInputType: TextInputType.number,
                       hintText: 'Ingrese dias por cuota',
@@ -113,7 +118,8 @@ class AddSpecialLoanPage extends StatelessWidget {
                 GetBuilder<AddSpecialLoanController>(
                   id: percentageIdGet,
                   builder: (controller) => InputWidget(
-                      textEditingController: controller.percentageTextController,
+                      textEditingController:
+                          controller.percentageTextController,
                       onChanged: controller.onChangedPercentage,
                       hintText: 'Ingrese un porcentaje',
                       label: percentageString),
