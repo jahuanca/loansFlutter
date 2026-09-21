@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
+import 'package:loands_flutter/src/home/data/responses/state_quota_enum.dart';
 import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar_widget.dart';
+import 'package:loands_flutter/src/home/ui/pages/quota_group/mode_group_enum.dart';
 import 'package:loands_flutter/src/home/ui/pages/quota_group/quota_group_controller.dart';
+import 'package:loands_flutter/src/home/ui/pages/quota_group/type_group_enum.dart';
 import 'package:loands_flutter/src/loans/ui/widgets/options_menu_widget.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
@@ -30,9 +33,11 @@ class QuotaGroupPage extends StatelessWidget {
       builder: (controller) => PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
-        if (didPop) { return;}
-        controller.onBackPressed();
-      },
+          if (didPop) {
+            return;
+          }
+          controller.onBackPressed();
+        },
         child: RefreshIndicator(
           onRefresh: controller.getQuotas,
           child: Scaffold(
@@ -48,7 +53,7 @@ class QuotaGroupPage extends StatelessWidget {
   AppBar _appBar() {
     return appBarWidget(text: controller.title, actions: [
       ChildOrElseWidget(
-        condition: controller.isGroup,
+        condition: controller.typeGroup == TypeGroupEnum.week,
         child: IconWidget(
           padding: defaultPadding,
           onTap: _showDatePickerRange,
@@ -67,31 +72,40 @@ class QuotaGroupPage extends StatelessWidget {
 
   Widget _bottomNavigation() {
     return ChildOrElseWidget(
-        condition: controller.isMultiple,
+        condition: controller.modeGroup == ModeGroupEnum.multiple,
         elseWidget: _bottomNavigationSingle(),
         child: _bottomNavigationMultiple());
   }
 
   Widget _bottomNavigationMultiple() {
+    if (controller.quotasSelected.isEmpty) return const SizedBox();
+
     List<DashboardQuotaResponse> quotas = controller.quotasSelected;
     List<double> ganancys = quotas.map((e) => e.ganancy).toList();
     List<double> capitals = quotas.map((e) => (e.amount - e.ganancy)).toList();
 
-    double ganancy = (ganancys.isEmpty)
+    // TODO: mejorar la pantalla resumen
+    // todos seran marcados como pagados en la fecha que les toca 
+    // en el resumen mostrar cantidad 
+    // monto total, monto solo mio.
+    // ganancia
+    // cuantos de esos son por terminar.
+    // crear el servicio que recepcione todos y uno por uno vaya haciendo.
+    
+    /* double ganancy = (ganancys.isEmpty)
         ? defaultDouble
         : ganancys.reduce((value, element) => value + element);
     double capital = (capitals.isEmpty)
         ? defaultDouble
-        : capitals.reduce((value, element) => value + element);
+        : capitals.reduce((value, element) => value + element); */
 
     return Row(
       children: [
         Expanded(
-          flex: 2,
-          child: TotalsBottomsWidget(values: {
-            'Capital': capital.formatDecimals(),
-            'Ganancia': ganancy.formatDecimals(),
-          }),
+          flex: 1,
+          child: Text('${controller.quotasSelected.length} seleccionadas.',
+            textAlign: TextAlign.center,
+          ),
         ),
         Expanded(
             flex: 1,
@@ -117,7 +131,9 @@ class QuotaGroupPage extends StatelessWidget {
   }
 
   Widget _listOfContent(Size size) {
-    return (controller.isGroup) ? _listOfGroup() : _listOfCalendar(size);
+    return (TypeGroupEnum.week == controller.typeGroup)
+        ? _listOfGroup()
+        : _listOfCalendar(size);
   }
 
   Widget _listOfCalendar(Size size) {
@@ -170,13 +186,15 @@ class QuotaGroupPage extends StatelessWidget {
       fontWeight: FontWeight.normal,
       fontSize: 13,
     );
-    int quantityOfPendings = defaultInt;
+
     double allAmount = defaultDouble;
     double allGanancy = defaultDouble;
+
+    List<DashboardQuotaResponse> quotasPendingOfDay = [];
     List<Widget> items = group.map((e) {
       DashboardQuotaResponse quota = DashboardQuotaResponse.fromJson(e);
       if (quota.idStateQuota == idOfPendingQuota) {
-        quantityOfPendings++;
+        quotasPendingOfDay.add(quota);
       }
       allAmount += quota.amount;
       allGanancy += quota.ganancy;
@@ -200,18 +218,26 @@ class QuotaGroupPage extends StatelessWidget {
             ),
           ],
         ),
-        if (quantityOfPendings > defaultInt)
+        if (quotasPendingOfDay.length > defaultInt)
           CircleAvatar(
               backgroundColor: dangerColor(),
               radius: 12,
-              child: Text(quantityOfPendings.toString(),
+              child: Text(quotasPendingOfDay.length.toString(),
                   style: const TextStyle(fontSize: 12, color: Colors.white))),
       ],
     );
 
+    bool? lastValue = controller.getValueOfDayCheck(quotasPendingOfDay);
+
     return ExpansionTile(
+      leading: controller.modeGroup == ModeGroupEnum.single || quotasPendingOfDay.isEmpty
+          ? null
+          : Checkbox(
+              tristate: true,
+              value: lastValue,
+              onChanged: (val) { controller.checkDay(lastValue, quotasPendingOfDay); }),
       title: titleWidget,
-      initiallyExpanded: (quantityOfPendings > defaultInt),
+      initiallyExpanded: (quotasPendingOfDay.length > defaultInt),
       children: items,
     );
   }
@@ -230,23 +256,16 @@ class QuotaGroupPage extends StatelessWidget {
       idLoan: quota.idLoan.orZero(),
       title: quota.name,
       onTap: () => onTapItem(quota),
-      onLongPress: () => onLongPress(quota),
       isSelected: isSelected,
       isLast: quota.isLast,
     );
   }
 
   void onTapItem(DashboardQuotaResponse quota) {
-    if (controller.isMultiple) {
-      controller.onLongPress(quota);
+    if (controller.modeGroup == ModeGroupEnum.multiple && quota.stateQuota == StateQuotaEnum.pendingQuota) {
+      controller.selectQuota(quota);
     } else {
       controller.goToQuota(quota.id);
-    }
-  }
-
-  void onLongPress(DashboardQuotaResponse quota) {
-    if (controller.isMultiple.not()) {
-      controller.onLongPress(quota);
     }
   }
 

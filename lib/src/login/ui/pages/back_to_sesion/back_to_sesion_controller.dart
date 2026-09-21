@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/di/navigation_content_binding.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_page.dart';
@@ -55,6 +56,7 @@ class BackToSesionController extends GetxController {
       return;
     }
 
+    FocusScope.of(Get.context!).unfocus();
     bool isEnabled = checkFeatureFlag(Flag.secondLogin);
     if (isEnabled.not()) {
       showAlertWidget(

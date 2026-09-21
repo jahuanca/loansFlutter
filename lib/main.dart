@@ -30,6 +30,7 @@ void main() async {
   Get.put(ErrorService());
 
   loadConfig(appConfig);
+  UtilConfig.configure(appConfig);
   await Hive.initFlutter();
   Hive.registerAdapter(SummaryOfDashboardResponseAdapter());
   Hive.registerAdapter(LoanEntityAdapter());

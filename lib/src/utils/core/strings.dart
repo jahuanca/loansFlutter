@@ -16,6 +16,7 @@ const String lastNameString = 'Apellido';
 const String enterCustomerNameString = 'Ingrese el nombre del cliente';
 const String documentString = 'Documento';
 const String addressString = 'Dirección';
+const String phoneString = 'Celular';
 const String dateString = 'Fecha';
 const String customersString = 'Clientes';
 const String typeDocumentString = 'Tipo de documento';

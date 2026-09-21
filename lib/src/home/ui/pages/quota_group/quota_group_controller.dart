@@ -4,8 +4,11 @@ import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota_multiple/pay__quota_multiple_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
+import 'package:loands_flutter/src/home/ui/pages/quota_group/mode_group_enum.dart';
+import 'package:loands_flutter/src/home/ui/pages/quota_group/type_group_enum.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/options_enum.dart';
 import 'package:loands_flutter/src/utils/core/analytics/analytics_service.dart';
 import 'package:loands_flutter/src/utils/core/analytics/screen_events.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
@@ -26,9 +29,10 @@ class QuotaGroupController extends GetxController {
   List<DashboardQuotaResponse> quotasToShow = [];
   Map<dynamic, List<Map<String, dynamic>>> groupByDate = {};
   DateTimeRange? dateTimeRange;
-  bool isGroup = false;
+  TypeGroupEnum typeGroup = TypeGroupEnum.defeated;
   bool isSearching = false;
   OriginsRoute? originsRoute;
+  ModeGroupEnum modeGroup = ModeGroupEnum.single;
 
   List<DashboardQuotaResponse> quotasSelected = [];
 
@@ -36,23 +40,25 @@ class QuotaGroupController extends GetxController {
     required this.getQuotasByDateUseCase,
   });
 
-  bool get isMultiple => quotasSelected.isNotEmpty;
-
   @override
   void onInit() {
     originsRoute = Get.setArgument(originArgument);
     getQuotasByDateRequest = Get.setArgument(getAllQuotasRequestArgument);
     title = Get.setArgument(titleArgument);
-    isGroup = Get.setArgument(isGroupArgument);
+    typeGroup = Get.setArgument(typeGroupArgument);
 
-    if (isGroup) {
-      screenEvent(ScreenEvents.weekQuotas);
-      dateTimeRange = DateTimeRange(
-        start: getQuotasByDateRequest.fromDate.orNow(),
-        end: getQuotasByDateRequest.untilDate.orNow(),
-      );
-    } else {
-      screenEvent(ScreenEvents.expiredQuotas);
+    switch (typeGroup) {
+      case TypeGroupEnum.defeated:
+        screenEvent(ScreenEvents.expiredQuotas);
+        break;
+
+      case TypeGroupEnum.week:
+        screenEvent(ScreenEvents.weekQuotas);
+        dateTimeRange = DateTimeRange(
+          start: getQuotasByDateRequest.fromDate.orNow(),
+          end: getQuotasByDateRequest.untilDate.orNow(),
+        );
+        break;
     }
     super.onInit();
   }
@@ -97,8 +103,9 @@ class QuotaGroupController extends GetxController {
 
   double get amountOfPendingCapital {
     List<double> pendingCapital = allQuotas
-        .map((e) =>
-            (e.idStateQuota == idOfPendingQuota) ? (e.amount - e.ganancy) : defaultDouble)
+        .map((e) => (e.idStateQuota == idOfPendingQuota)
+            ? (e.amount - e.ganancy)
+            : defaultDouble)
         .toList();
     return (pendingCapital.isNotEmpty)
         ? pendingCapital.reduce((value, element) => value + element)
@@ -112,20 +119,20 @@ class QuotaGroupController extends GetxController {
     hideLoading();
     switch (resultType) {
       case Success():
-      allQuotas = resultType.value;
-      groupByDate = groupBy(
-        values: allQuotas
-            .map(
-              (e) => e.toJson(),
-            )
-            .toList(),
-        functionKey: (p0) => p0['date_to_pay'],
-      );
+        allQuotas = resultType.value;
+        groupByDate = groupBy(
+          values: allQuotas
+              .map(
+                (e) => e.toJson(),
+              )
+              .toList(),
+          functionKey: (p0) => p0['date_to_pay'],
+        );
 
-      quotasToShow = allQuotas.toList();
-      update([pageIdGet]);
+        quotasToShow = allQuotas.toList();
+        update([pageIdGet]);
         break;
-      case Error(): 
+      case Error():
         break;
     }
   }
@@ -147,7 +154,7 @@ class QuotaGroupController extends GetxController {
   }
 
   void onChangedMenuOverlay(dynamic option) async {
-    if (option.id == 2) {
+    if (option.id == OptionsEnum.copy.id) {
       String data = emptyString;
       groupByDate.forEach(
         (key, value) {
@@ -157,8 +164,9 @@ class QuotaGroupController extends GetxController {
               .orEmpty()
               .toCapitalize();
           bool hasTitle = false;
+          double totalAmount = 0;
+          double totalSendMe = 0;
           for (Map<String, dynamic> element in value) {
-            
             DashboardQuotaResponse quota =
                 DashboardQuotaResponse.fromJson(element);
             if (quota.idStateQuota != idOfPendingQuota) continue;
@@ -169,8 +177,13 @@ class QuotaGroupController extends GetxController {
             }
             double amount = quota.amount;
             double sendMe = amount - (quota.ganancy / 2);
+            totalAmount += amount;
+            totalSendMe += sendMe;
             data +=
-                'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n';
+                'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n';            
+          }
+          if (value.length > 1 && totalAmount > 0) {
+            data += "Total: ${totalAmount.formatDecimals()} \tA caja: ${totalSendMe.formatDecimals()}\n";         
           }
         },
       );
@@ -179,6 +192,18 @@ class QuotaGroupController extends GetxController {
           context: Get.context!,
           typeSnackbar: TypeSnackbar.success,
           message: 'Cuotas copiadas.');
+    }
+
+    if (option.id == OptionsEnum.check.id) {
+      switch (modeGroup) {
+        case ModeGroupEnum.single: 
+          modeGroup = ModeGroupEnum.multiple;
+          break;
+        case ModeGroupEnum.multiple: 
+          modeGroup = ModeGroupEnum.single;
+          break;
+      }
+      update([pageIdGet]);
     }
   }
 
@@ -197,12 +222,49 @@ class QuotaGroupController extends GetxController {
     title = '$startDate - $endDate';
   }
 
-  void onLongPress(DashboardQuotaResponse value) {
+  bool? getValueOfDayCheck(List<DashboardQuotaResponse> items) {
+    if (quotasSelected.isEmpty) return false;
+    if (items.every((item) => quotasSelected.indexWhere((e) => e.id == item.id,) != notFoundPosition)){
+      return true;
+    } else {
+      if (quotasSelected.any((e) => items.indexWhere((item) => item.id == e.id) != notFoundPosition)) {
+        return null;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  void checkDay(bool? lastValue, List<DashboardQuotaResponse> quotasPendingOfDay) {
+    switch (lastValue) {
+      case true:
+          for (DashboardQuotaResponse q in quotasPendingOfDay) {
+            quotasSelected.removeWhere((e) => e.id == q.id);
+          }
+        break;
+      case false:
+          for (DashboardQuotaResponse q in quotasPendingOfDay) {
+            int index = quotasSelected.indexWhere((e) => e.id == q.id);
+            quotasSelected.addIf(index == notFoundPosition, q);
+          }
+        break;
+
+      case null:
+          for (DashboardQuotaResponse q in quotasPendingOfDay) {
+            int index = quotasSelected.indexWhere((e) => e.id == q.id);
+            quotasSelected.addIf(index == notFoundPosition, q);
+          }
+        break;
+    }
+    update([pageIdGet]);
+  }
+
+  void selectQuota(DashboardQuotaResponse value) {
     int index = quotasSelected.indexWhere((e) => e.id == value.id);
     if (index == notFoundPosition) {
       quotasSelected.add(value);
     } else {
-      quotasSelected.remove(value);
+      quotasSelected.removeAt(index);
     }
     update([pageIdGet]);
   }

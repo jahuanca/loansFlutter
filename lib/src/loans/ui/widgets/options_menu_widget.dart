@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loands_flutter/src/loans/ui/widgets/options_enum.dart';
 import 'package:utils/utils.dart';
 
 class OptionsMenuWidget extends StatelessWidget {
@@ -14,11 +15,9 @@ class OptionsMenuWidget extends StatelessWidget {
     return MenuOverlayWidget(
       iconData: Icons.more_vert,
       padding: defaultPadding,
-      items: [
-        OptionMenu(id: 1, name: 'Filtrar'),
-        OptionMenu(id: 2, name: 'Copiar'),
-        OptionMenu(id: 3, name: 'Configurar'),
-      ],
+      items: OptionsEnum.values.map(
+        (e) => OptionMenu(id: e.id, name: e.title),
+      ).toList(),
       onTapItem: onTapItem,
     );
   }

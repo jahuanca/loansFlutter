@@ -7,6 +7,7 @@ import 'package:loands_flutter/src/home/di/navigation_content_binding.dart';
 import 'package:loands_flutter/src/home/di/quota_group_binding.dart';
 import 'package:loands_flutter/src/home/ui/pages/navigation_content/navigation_content_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/quota_group/quota_group_page.dart';
+import 'package:loands_flutter/src/home/ui/pages/quota_group/type_group_enum.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/login/di/login_binding.dart';
 import 'package:loands_flutter/src/login/ui/pages/back_to_sesion/back_to_sesion_page.dart';
@@ -56,7 +57,7 @@ class RoutesApp {
         arguments: {
           getAllQuotasRequestArgument: request,
           titleArgument: 'Cuotas vencidas',
-          isGroupArgument: false,
+          typeGroupArgument: TypeGroupEnum.defeated,
           originArgument: OriginsRoute.login,
         });
   }

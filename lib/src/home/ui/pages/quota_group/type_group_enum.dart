@@ -1,0 +1,4 @@
+
+enum TypeGroupEnum {
+  defeated, week,
+}

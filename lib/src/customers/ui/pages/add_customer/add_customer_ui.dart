@@ -16,6 +16,7 @@ class AddCustomerUi {
       name,
       alias,
       lastName,
+      phone,
       address;
 
   AddCustomerUi({
@@ -30,7 +31,7 @@ class AddCustomerUi {
   });
 
   ValidateResult? validate() {
-    return findErrorInValidations([address, document, lastName, name, idTypeCustomer, idTypeDocument, alias]);
+    return findErrorInValidations([address, document, lastName, name, phone, idTypeCustomer, idTypeDocument, alias]);
   }
 
   CreateCustomerRequest toRequest() {
@@ -42,6 +43,7 @@ class AddCustomerUi {
       idTypeCustomer: idTypeCustomer?.value,
       idTypeDocument: idTypeDocument?.value,
       lastName: lastName?.value,
+      phone: phone?.value,
       name: name?.value,
     );
   }
@@ -53,6 +55,7 @@ class AddCustomerUi {
     alias = ValidateResult.initialize(label: aliasString, value: customer.alias);
     name = ValidateResult.initialize(label: nameString, value: customer.name);
     lastName = ValidateResult.initialize(label: lastNameString, value: customer.lastName);
+    phone = ValidateResult.initialize(label: phoneString, value: customer.phone);
     document = ValidateResult.initialize(label: documentString, value: customer.document);
     address = ValidateResult.initialize(label: addressString, value: customer.address);
   }

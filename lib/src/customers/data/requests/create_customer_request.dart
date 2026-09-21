@@ -7,6 +7,7 @@ class CreateCustomerRequest {
   String? alias;
   String? name;
   String? lastName;
+  String? phone;
   String? document;
   String? address;
 
@@ -16,6 +17,7 @@ class CreateCustomerRequest {
     this.idTypeCustomer,
     this.name,
     this.lastName,
+    this.phone,
     this.document,
     this.address,
     this.alias,
@@ -28,6 +30,7 @@ class CreateCustomerRequest {
         'alias': alias,
         'name': name,
         'lastName': lastName,
+        'phone': phone,
         'document': document,
         'address': address,
       };
@@ -43,6 +46,7 @@ class CreateCustomerRequest {
         alias: json['alias'],
         name: json['name'],
         lastName: json['lastName'],
+        phone: json['phone'],
         document: json['document'],
         address: json['address'],
       );

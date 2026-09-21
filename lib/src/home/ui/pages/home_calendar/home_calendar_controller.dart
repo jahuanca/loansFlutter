@@ -8,6 +8,7 @@ import 'package:loands_flutter/src/home/ui/pages/pay_quota/pay_quota_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/payment_summary/payment_summary_page.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_quotas_by_date_use_case.dart';
 import 'package:loands_flutter/src/home/ui/pages/quota_group/quota_group_page.dart';
+import 'package:loands_flutter/src/home/ui/pages/quota_group/type_group_enum.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/utils/core/source_to_loan_enum.dart';
@@ -41,12 +42,12 @@ class HomeCalendarController extends GetxController {
         await getSummaryOfCalendarUseCase.execute();
 
     switch (resultType) {
-      case Success(): 
+      case Success():
         summaryOfCalendarResponse = resultType.value;
         update([quotasIdGet]);
         break;
       case Error():
-      // showError(context: Get.context!, errorEntity: resultType.error);
+        // showError(context: Get.context!, errorEntity: resultType.error);
         break;
     }
     update([pageIdGet]);
@@ -58,22 +59,20 @@ class HomeCalendarController extends GetxController {
     dateSelected = dateTime;
     update([calendarIdGet]);
     showLoading();
-    GetQuotasByDateRequest request = GetQuotasByDateRequest(
-      fromDate: dateTime,
-      untilDate: dateTime
-    );
+    GetQuotasByDateRequest request =
+        GetQuotasByDateRequest(fromDate: dateTime, untilDate: dateTime);
     Result<List<DashboardQuotaResponse>> resultType =
         await getQuotasByDateUseCase.execute(request);
     switch (resultType) {
       case Success():
-      quotasByDate = resultType.value;
-      update([quotasIdGet]);
+        quotasByDate = resultType.value;
+        update([quotasIdGet]);
         break;
-      case Error(): 
-      showSnackbarWidget(
-          typeSnackbar: TypeSnackbar.error,
-          context: Get.context!,
-          message: resultType.toString());
+      case Error():
+        showSnackbarWidget(
+            typeSnackbar: TypeSnackbar.error,
+            context: Get.context!,
+            message: resultType.toString());
         break;
     }
     hideLoading();
@@ -99,14 +98,13 @@ class HomeCalendarController extends GetxController {
 
   void goToQuotaGroupOfWeek() {
     GetQuotasByDateRequest request = GetQuotasByDateRequest(
-      fromDate: defaultDate.firstDateOfTheWeek(),
-      untilDate: defaultDate.lastDateOfTheWeek()
-    );
-    
+        fromDate: defaultDate.firstDateOfTheWeek(),
+        untilDate: defaultDate.lastDateOfTheWeek());
+
     _goToQuotaGroup(
       request: request,
       title: 'Cuotas de la semana',
-      isGroup: true,
+      typeGroup: TypeGroupEnum.week,
     );
   }
 
@@ -118,22 +116,20 @@ class HomeCalendarController extends GetxController {
     _goToQuotaGroup(
       request: request,
       title: 'Cuotas vencidas',
-      isGroup: false,
+      typeGroup: TypeGroupEnum.defeated,
     );
   }
 
   void _goToQuotaGroup({
-    required GetQuotasByDateRequest request, 
+    required GetQuotasByDateRequest request,
     required String title,
-    required bool isGroup,
+    required TypeGroupEnum typeGroup,
   }) {
-    Get.to(() => QuotaGroupPage(),
-        binding: QuotaGroupBinding(),
-        arguments: {
-          getAllQuotasRequestArgument: request,
-          titleArgument: title,
-          isGroupArgument: isGroup,
-        });
+    Get.to(() => QuotaGroupPage(), binding: QuotaGroupBinding(), arguments: {
+      getAllQuotasRequestArgument: request,
+      titleArgument: title,
+      typeGroupArgument: typeGroup,
+    });
   }
 
   void changeDatePicker(DateTime? dateTime) {

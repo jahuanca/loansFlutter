@@ -18,17 +18,22 @@ import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:utils/utils.dart';
 
 class PayQuotaController extends GetxController {
   late SourceToLoanEnum sourceToLoanEnum;
   late bool isSpecial;
+  FilePickerResult? filePickerResult;
 
   DashboardQuotaResponse? quota;
   PayQuotaUseCase payQuotaUseCase;
   TextEditingController dateToPayTextController = TextEditingController();
 
   PayQuotaRequest payQuotaRequest = PayQuotaRequest();
+
+  SourceImage? get  imageSelected => (filePickerResult == null) 
+    ? null : LocalSourceImage(filePickerResult?.files.first.path ?? emptyString);
 
   PayQuotaController({
     required this.payQuotaUseCase,
@@ -171,6 +176,15 @@ class PayQuotaController extends GetxController {
         context: Get.context!,
         typeSnackbar: TypeSnackbar.success,
         message: 'Información copiada');
+  }
+
+  void pickImage() async {
+    filePickerResult = await FilePicker.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg', 'webp'],
+    );
+    update(['evidencia']);
   }
 
 }

@@ -110,6 +110,16 @@ class AddCustomerPage extends StatelessWidget {
                     hintText: 'Ingrese la dirección del cliente'),
               ),
               GetBuilder<AddCustomerController>(
+                builder: (controller) => InputWidget(
+                    initialValue: controller.ui.phone?.value,
+                    textInputType: TextInputType.phone,
+                    onChanged: controller.onChangedPhone,
+                    maxLength: 9,
+                    isAlignLabel: true,
+                    label: phoneString,
+                    hintText: 'Ingrese el número de celular'),
+              ),
+              GetBuilder<AddCustomerController>(
                 id: typesCustomerIdGet,
                 builder: (controller) => DropdownWidget(
                   isAlignLabel: true,
