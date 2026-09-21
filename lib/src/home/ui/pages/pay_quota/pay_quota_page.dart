@@ -31,8 +31,7 @@ class PayQuotaPage extends StatelessWidget {
             bottomNavigationBar: _bottomNavigation(),
             body: ListView(
               children: [
-                if (controller.isPending) _form(context),
-                _content(),
+                _form(context),
                 if (controller.isPending.not()) _paidQuotaWidget()
               ],
             ),
@@ -51,7 +50,8 @@ class PayQuotaPage extends StatelessWidget {
         children: [
           SubtitleWidget(
             padding: defaultPadding,
-            text: (controller.isPending) ? 'Cuota a pagar:' : 'Cuota pagada',),
+            text: (controller.isPending) ? 'Cuota a pagar:' : 'Cuota pagada',
+          ),
           Padding(
             padding: defaultPadding,
             child: ChildOrElseWidget(
@@ -91,6 +91,7 @@ class PayQuotaPage extends StatelessWidget {
   Widget _form(BuildContext context) {
     return Column(
       children: [
+        if (controller.isPending)
         InputWidget(
           hintText: pickPayDateString,
           label: paymentDateString,
@@ -106,9 +107,18 @@ class PayQuotaPage extends StatelessWidget {
           textEditingController: controller.dateToPayTextController,
           enabled: false,
         ),
-        InputWidget(
-          hintText: 'Evidencia',
-          label: 'Evidencia',
+        _content(),
+        if (controller.isPending)
+        GetBuilder<PayQuotaController>(
+          id: 'evidencia',
+          builder: (controller) => ImageActionWidget(
+            onTapIcon: controller.pickImage,
+            iconData: Icons.add,
+            shape: BoxShape.rectangle,
+            sourceImage: controller.imageSelected,
+            label: 'Evidencia', 
+            height: 150, 
+            width: 150),
         ),
       ],
     );

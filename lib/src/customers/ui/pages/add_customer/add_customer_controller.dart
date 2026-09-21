@@ -151,6 +151,18 @@ class AddCustomerController extends GetxController {
     update();
   }
 
+  void onChangedPhone(String value) {
+    ui.phone = validateText<String>(
+      rules: {
+        RuleValidator.isRequired: true,
+        RuleValidator.minLength: 9,
+        RuleValidator.maxLength: 9,
+      },
+      text: value,
+      label: phoneString,
+    );
+  }
+
   void onChangedAddress(String value) {
     ui.address = validateText<String>(
       rules: {RuleValidator.isRequired: true},
@@ -164,6 +176,7 @@ class AddCustomerController extends GetxController {
     onChangedName(ui.name!.value.orEmpty());
     onChangedLastname(ui.lastName!.value.orEmpty());
     onChangedAddress(ui.address!.value.orEmpty());
+    onChangedPhone(ui.phone!.value.orEmpty());
     return ui.validate()?.error;
   }
 
