@@ -30,12 +30,12 @@ class AddRenewalRequest {
   }
 
   Map<String, dynamic> toJson() => {
-    'id_customer': idCustomer,
-    'id_new_loan': idNewLoan,
-    'id_previous_loan': idPreviousLoan,
+    'idCustomer': idCustomer,
+    'idNewLoan': idNewLoan,
+    'idPreviousLoan': idPreviousLoan,
     'date': date?.toServer(),
-    'variation_in_amount': variationInAmount,
-    'id_type_renewal': idTypeRenewal,
+    'variationInAmount': variationInAmount,
+    'idTypeRenewal': idTypeRenewal,
     'observation': observation,
   };
 

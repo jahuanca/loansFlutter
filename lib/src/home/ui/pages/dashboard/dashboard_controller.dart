@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/home/data/responses/dashboard_quota_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
+import 'package:loands_flutter/src/home/di/capital_movements_binding.dart';
 import 'package:loands_flutter/src/home/di/customers_withou_loan_binding.dart';
 import 'package:loands_flutter/src/home/di/injections_binding.dart';
 import 'package:loands_flutter/src/home/di/next_renewal_binding.dart';
 import 'package:loands_flutter/src/home/di/payment_summary_binding.dart';
 import 'package:loands_flutter/src/home/domain/use_cases/get_summary_of_dasboard_use_case.dart';
+import 'package:loands_flutter/src/home/ui/pages/capital_movements/capital_movements_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/customers_without_loan/customers_without_loan_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/injections/injections_page.dart';
 import 'package:loands_flutter/src/home/ui/pages/next_renewal/next_renewal_page.dart';
@@ -118,6 +120,10 @@ class DashboardController extends GetxController {
 
   void goToCustomersWithoutLoan() {
     Get.to(() => CustomersWithoutLoanPage(), binding: CustomersWithouLoanBinding());
+  }
+
+  void goToCapitalMovements() {
+    Get.to(() => CapitalMovementsPage(), binding: CapitalMovementsBinding());
   }
 
   void changeDatePicker(DateTime? dateTime) {

@@ -51,14 +51,14 @@ class AddLoanRequest {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'id_customer': idCustomer,
-    'id_payment_frequency': idPaymentFrequency,
-    'id_payment_method': idPaymentMethod,
+    'idCustomer': idCustomer,
+    'idPaymentFrequency': idPaymentFrequency,
+    'idPaymentMethod': idPaymentMethod,
     'percentage': percentage,
     'amount': amount,
     'ganancy': ganancy,
-    'start_date': startDate?.toIso8601String(),
-    'id_loan_to_renew': idLoanToRenew,
+    'startDate': startDate?.toIso8601String(),
+    'idLoanToRenew': idLoanToRenew,
 
     'customerEntity': customerEntity?.toJson(),
     'paymentFrequencyEntity': paymentFrequencyEntity?.toJson(),

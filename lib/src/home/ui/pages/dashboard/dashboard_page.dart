@@ -79,6 +79,7 @@ class DashboardPage extends StatelessWidget {
                 size: size,
                 title: 'Lucro',
                 value: response?.ganancy,
+                onTap: controller.goToCapitalMovements,
               ),
               ItemActionWidget(
                 size: size,

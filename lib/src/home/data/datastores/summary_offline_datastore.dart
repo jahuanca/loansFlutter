@@ -7,6 +7,7 @@ import 'package:loands_flutter/src/home/data/responses/injection_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_month_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_calendar_response.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
+import 'package:loands_flutter/src/home/domain/entities/capital_movement_entity.dart';
 import 'package:loands_flutter/src/loans/data/requests/get_quotas_by_date_request.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
@@ -54,6 +55,12 @@ class SummaryOfflineDatastore extends SummaryDatastore {
   @override
   Future<Result<QuotaEntity>> payQuota(PayQuotaRequest payQuotaRequest) {
     // TODO: implement payQuota
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<List<CapitalMovementEntity>>> getCapitalMovementsGroup() {
+    // TODO: implement getCapitalMovementsGroup
     throw UnimplementedError();
   }
 }

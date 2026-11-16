@@ -43,7 +43,7 @@ class LoanEntity {
     @HiveField(13)
     DateTime updatedAt;
     @HiveField(14)
-    int installmentsNumber;
+    int numberOfInstallments;
     @HiveField(15)
     int daysBetweenInstallments;
 
@@ -67,7 +67,7 @@ class LoanEntity {
         required this.evidence,
         required this.createdAt,
         required this.updatedAt,
-        required this.installmentsNumber,
+        required this.numberOfInstallments,
         required this.daysBetweenInstallments,
         this.customerEntity,
         this.paymentFrequencyEntity,
@@ -83,45 +83,44 @@ class LoanEntity {
 
     factory LoanEntity.fromJson(Map<String, dynamic> json) => LoanEntity(
         id: json["id"],
-        idCustomer: json["id_customer"],
-        idUser: json["id_user"],
-        idPaymentFrequency: json["id_payment_frequency"],
+        idCustomer: json["idCustomer"],
+        idUser: json["idUser"],
+        idPaymentFrequency: json["idPaymentFrequency"],
         amount: (json["amount"] as num).toDouble(),
         percentage: (json["percentage"] as num).toDouble(),
-        startDate: DateTime.parse(json["start_date"]),
+        startDate: DateTime.parse(json["startDate"]),
         ganancy: (json["ganancy"] as num).toDouble(),
-        idPaymentMethod: json["id_payment_method"],
+        idPaymentMethod: json["idPaymentMethod"],
         observation: json["observation"],
-        idStateLoan: json["id_state_loan"],
+        idStateLoan: json["idStateLoan"],
         evidence: json["evidence"],
-        installmentsNumber: json['number_of_installments'],
-        daysBetweenInstallments: json['days_between_installments'],
+        numberOfInstallments: json['numberOfInstallments'],
+        daysBetweenInstallments: json['daysBetweenInstallments'],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         customerEntity: json['Customer'] == null ? null : CustomerEntity.fromJson(json['Customer']),
-        paymentFrequencyEntity: json['Payment_Frequency'] == null ? null : PaymentFrequencyEntity.fromJson(json['Payment_Frequency']),
+        paymentFrequencyEntity: json['PaymentFrequency'] == null ? null : PaymentFrequencyEntity.fromJson(json['PaymentFrequency']),
     );
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "id_customer": idCustomer,
-        "id_user": idUser,
-        "id_payment_frequency": idPaymentFrequency,
+        "idCustomer": idCustomer,
+        "idUser": idUser,
+        "idPaymentFrequency": idPaymentFrequency,
         "amount": amount,
         "percentage": percentage,
-        "start_date": startDate.toServer(),
+        "startDate": startDate.toServer(),
         "ganancy": ganancy,
-        "id_payment_method": idPaymentMethod,
+        "idPaymentMethod": idPaymentMethod,
         "observation": observation,
-        "id_state_loan": idStateLoan,
+        "idStateLoan": idStateLoan,
         "evidence": evidence,
-        'number_of_installments': installmentsNumber,
-        'days_between_installments': daysBetweenInstallments,
+        'numberOfInstallments': numberOfInstallments,
+        'daysBetweenInstallments': daysBetweenInstallments,
         "createdAt": createdAt.toServer(),
         "updatedAt": updatedAt.toServer(),
         'Customer': customerEntity?.toJson(),
-        'Payment_Frequency': paymentFrequencyEntity?.toJson(),
-
+        'PaymentFrequency': paymentFrequencyEntity?.toJson(),
         'name': name,
     };
 }

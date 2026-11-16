@@ -1,4 +1,6 @@
+import 'package:get/get_utils/get_utils.dart';
 import 'package:get/state_manager.dart';
+import 'package:utils/utils.dart';
 
 class CreateCustomerRequest {
   int? id;
@@ -25,9 +27,9 @@ class CreateCustomerRequest {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> squema = {
-        'id_type_document': idTypeDocument,
-        'id_type_customer': idTypeCustomer,
-        'alias': alias,
+        'idTypeDocument': idTypeDocument,
+        'idTypeCustomer': idTypeCustomer,
+        'alias': alias.isBlank.orFalse() ? null : alias,
         'name': name,
         'lastName': lastName,
         'phone': phone,
@@ -41,8 +43,8 @@ class CreateCustomerRequest {
   factory CreateCustomerRequest.fromJson(Map<String, dynamic> json) =>
       CreateCustomerRequest(
         id: json['id'],
-        idTypeDocument: json['id_type_document'],
-        idTypeCustomer: json['id_type_customer'],
+        idTypeDocument: json['idTypeDocument'],
+        idTypeCustomer: json['idTypeCustomer'],
         alias: json['alias'],
         name: json['name'],
         lastName: json['lastName'],

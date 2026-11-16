@@ -19,10 +19,10 @@ class ValidateLoanRequest {
   });
 
   Map<String, dynamic> toJson() => {
-    'id_customer': idCustomer,
-    'id_payment_frequency': idPaymentFrequency,
+    'idCustomer': idCustomer,
+    'idPaymentFrequency': idPaymentFrequency,
     'percentage': percentage,
     'amount': amount,
-    'start_date': startDate.toServer(),
+    'startDate': startDate.toServer(),
   }; 
 }

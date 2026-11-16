@@ -34,7 +34,7 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   Future<Result<GetMetadataRenewalResponse>> getMetadata(int idCustomer) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response =
-        await appHttpManager.get(url: '/renewal/metadata', query: {'id_customer': idCustomer});
+        await appHttpManager.get(url: '/renewal/metadata', query: {'idCustomer': idCustomer});
     
     return executeResponseObject<GetMetadataRenewalResponse>(
         response: response, convert: GetMetadataRenewalResponse.fromJson);

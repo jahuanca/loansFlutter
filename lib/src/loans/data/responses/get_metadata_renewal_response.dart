@@ -11,12 +11,12 @@ class GetMetadataRenewalResponse {
 
   factory GetMetadataRenewalResponse.fromJson(Map<String, dynamic> json) =>
       GetMetadataRenewalResponse(
-        previousLoans: List<LoanEntity>.from(json['previous_loans'].map((e) => LoanEntity.fromJson(e))).toList(),
-        newLoans: List<LoanEntity>.from(json['new_loans'].map((e) => LoanEntity.fromJson(e))).toList(),
+        previousLoans: List<LoanEntity>.from(json['previousLoans'].map((e) => LoanEntity.fromJson(e))).toList(),
+        newLoans: List<LoanEntity>.from(json['newLoans'].map((e) => LoanEntity.fromJson(e))).toList(),
       );
 
   Map<String, dynamic> toJson() => {
-        'previous_loans': previousLoans.map((e) => e.toJson()).toList(),
-        'new_loans': newLoans.map((e) => e.toJson()).toList(),
+        'previousLoans': previousLoans.map((e) => e.toJson()).toList(),
+        'newLoans': newLoans.map((e) => e.toJson()).toList(),
       };
 }

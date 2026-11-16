@@ -180,7 +180,7 @@ class QuotaGroupController extends GetxController {
             totalAmount += amount;
             totalSendMe += sendMe;
             data +=
-                'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}, envíame: ${sendMe.formatDecimals()}\n';            
+                'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}\n';            
           }
           if (value.length > 1 && totalAmount > 0) {
             data += "Total: ${totalAmount.formatDecimals()} \tA caja: ${totalSendMe.formatDecimals()}\n";         

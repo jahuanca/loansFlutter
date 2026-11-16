@@ -14,12 +14,12 @@ class SummaryOfCalendarResponse {
     });
 
     factory SummaryOfCalendarResponse.fromJson(Map<String, dynamic> json) => SummaryOfCalendarResponse(
-        overduePayments: json["overdue_payments"],
-        paymentsOfToday: json["payments_of_today"],
+        overduePayments: json["overduePayments"],
+        paymentsOfToday: json["paymentsOfToday"],
     );
 
     Map<String, dynamic> toJson() => {
-        "overdue_payments": overduePayments,
-        'payments_of_today': paymentsOfToday,        
+        "overduePayments": overduePayments,
+        'paymentsOfToday': paymentsOfToday,        
     };
 }

@@ -49,27 +49,27 @@ class PaymentFrequencyEntity {
   factory PaymentFrequencyEntity.fromJson(Map<String, dynamic> json) =>
       PaymentFrequencyEntity(
         id: json["id"],
-        idTypeCustomer: json["id_type_customer"],
+        idTypeCustomer: json["idTypeCustomer"],
         name: json["name"],
         description: json["description"],
         recommendedPercentage:
-            (json["recommended_percentage"] as num).toDouble(),
-        monthlyInstallments: json["monthly_installments"],
-        daysInstallment: json["days_installment"],
+            (json["recommendedPercentage"] as num).toDouble(),
+        monthlyInstallments: json["monthlyInstallments"],
+        daysInstallment: json["daysInstallment"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "id_type_customer": idTypeCustomer,
+        "idTypeCustomer": idTypeCustomer,
         "name": name,
         "description": description,
-        "recommended_percentage": recommendedPercentage,
+        "recommendedPercentage": recommendedPercentage,
         "createdAt": createdAt.toServer(),
         "updatedAt": updatedAt.toServer(),
         "titleItem": titleItem,
-        'monthly_installments': monthlyInstallments,
-        'days_installment': daysInstallment,
+        'monthlyInstallments': monthlyInstallments,
+        'daysInstallment': daysInstallment,
       };
 }

@@ -40,7 +40,7 @@ class CustomerOnlineDatastore extends CustomerDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response =
         await appHttpManager.get(url: '/customer/analytics', query: {
-      'id_customer': idOfCustomer,
+      'idCustomer': idOfCustomer,
     });
 
     return executeResponseObject<CustomerAnalyticsResponse>(

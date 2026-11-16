@@ -18,12 +18,12 @@ class PayQuotaRequest {
   }
 
   factory PayQuotaRequest.fromJson(Map<String, dynamic> json) => PayQuotaRequest(
-    idOfQuota: json['id_of_quota'], 
-    paidDate: json['paid_date'],
+    idOfQuota: json['idOfQuota'], 
+    paidDate: json['paidDate'],
   );
 
   Map<String, dynamic> toJson() => {
-    'id_of_quota': idOfQuota,
-    'paid_date': paidDate?.toServer(),
+    'idOfQuota': idOfQuota,
+    'paidDate': paidDate?.toServer(),
   };
 }

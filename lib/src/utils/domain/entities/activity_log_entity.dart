@@ -32,23 +32,23 @@ class ActivityLogEntity {
 
   factory ActivityLogEntity.fromJson(Map<String, dynamic> json) => ActivityLogEntity(
     id: json['id'], 
-    tableName: json['table_name'], 
-    typeOperation: json['type_operation'], 
+    tableName: json['tableName'], 
+    typeOperation: json['typeOperation'], 
     descriptionOperation: DescriptionOperationOfLog.values
-      .firstWhere((e) => json['description_operation'] == e.title, orElse: () => DescriptionOperationOfLog.none,), 
-    newRegistry: json['new_registry'], 
-    oldRegistry: json['old_registry'], 
-    idUser: json['id_user'], 
+      .firstWhere((e) => json['descriptionOperation'] == e.title, orElse: () => DescriptionOperationOfLog.none,), 
+    newRegistry: json['newRegistry'], 
+    oldRegistry: json['oldRegistry'], 
+    idUser: json['idUser'], 
     createdAt: DateTime.parse(json['createdAt']));
 
   Map<String, dynamic> toJson() => {
     'id': id, 
-    'table_name': tableName,
-    'type_operation': typeOperation,
-    'description_operation': descriptionOperation,
-    'new_registry': newRegistry,
-    'old_registry': oldRegistry,
-    'id_user': idUser,
+    'tableName': tableName,
+    'typeOperation': typeOperation,
+    'descriptionOperation': descriptionOperation,
+    'newRegistry': newRegistry,
+    'oldRegistry': oldRegistry,
+    'idUser': idUser,
     'createdAt': createdAt.toServer(),
   };
 }

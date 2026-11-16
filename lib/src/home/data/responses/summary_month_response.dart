@@ -28,7 +28,7 @@ class SummaryMonthResponse {
       SummaryMonthResponse(
         ganancy: (json['ganancy'] as num).toDouble(),
         amount: (json['amount'] as num).toDouble(),
-        idStateQuota: json['id_state_quota'],
+        idStateQuota: json['idStateQuota'],
         month: json['month'],
         year: json['year'],
       );
@@ -36,7 +36,7 @@ class SummaryMonthResponse {
   Map<String, dynamic> toJson() => {
         'ganancy': ganancy,
         'amount': amount,
-        'id_state_quota': idStateQuota,
+        'idStateQuota': idStateQuota,
         'month': month,
         'year': year,
       };

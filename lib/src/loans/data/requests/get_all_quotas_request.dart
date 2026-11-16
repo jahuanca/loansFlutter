@@ -8,11 +8,11 @@ class GetAllQuotasRequest {
   });
 
   factory GetAllQuotasRequest.fromJson(Map<String, dynamic> json) => GetAllQuotasRequest(
-    idLoan: json['id_loan'],
+    idLoan: json['idLoan'],
   );
 
   Map<String, dynamic> toJson() => {
-    'id_loan': idLoan,
+    'idLoan': idLoan,
   };
 
 }

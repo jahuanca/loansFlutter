@@ -14,15 +14,15 @@ class GetQuotasByDateRequest {
   });
 
   factory GetQuotasByDateRequest.fromJson(Map<String, dynamic> json) => GetQuotasByDateRequest(
-    idStateQuota: json['id_state_quota'],
-    fromDate: json['from_date'],
-    untilDate: json['until_date'],
+    idStateQuota: json['idStateQuota'],
+    fromDate: json['fromDate'],
+    untilDate: json['untilDate'],
   );
 
   Map<String, dynamic> toJson() => {
-    'id_state_quota': idStateQuota,
-    'from_date': fromDate?.toServer(),
-    'until_date': untilDate?.toServer(),
+    'idStateQuota': idStateQuota,
+    'fromDate': fromDate?.toServer(),
+    'untilDate': untilDate?.toServer(),
   };
 
 }

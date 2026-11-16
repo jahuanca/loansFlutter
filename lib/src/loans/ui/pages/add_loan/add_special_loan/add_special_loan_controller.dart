@@ -160,7 +160,7 @@ class AddSpecialLoanController extends GetxController {
     onChangeAmount(loanToRenew.amount.toString());
     String amount = loanToRenew.amount.formatDecimals();
     String percentage = loanToRenew.percentage.formatDecimals();
-    String numberOfInstallments = loanToRenew.installmentsNumber.toString();
+    String numberOfInstallments = loanToRenew.numberOfInstallments.toString();
     String daysBetweenInstallments = loanToRenew.daysBetweenInstallments.toString();
     
 

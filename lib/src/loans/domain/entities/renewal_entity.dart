@@ -21,19 +21,19 @@ class RenewalEntity {
   });
 
   factory RenewalEntity.fromJson(Map<String, dynamic> json) => RenewalEntity(
-    idUser: json['id_user'], 
-    idPreviousLoan: json['id_previous_loan'], 
-    idNewLoan: json['id_new_loan'], 
+    idUser: json['idUser'], 
+    idPreviousLoan: json['idPreviousLoan'], 
+    idNewLoan: json['idNewLoan'], 
     date: DateTime.parse(json['date']), 
-    variationInAmount: (json['variation_in_amount'] as num).toDouble(), 
-    idTypeRenewal: json['id_type_renewal']);
+    variationInAmount: (json['variationInAmount'] as num).toDouble(), 
+    idTypeRenewal: json['idTypeRenewal']);
 
   Map<String, dynamic> toJson() => {
-    'id_user': idUser,
-    'id_previous_loan': idPreviousLoan,
-    'id_new_loan': idNewLoan,
+    'idUser': idUser,
+    'idPreviousLoan': idPreviousLoan,
+    'idNewLoan': idNewLoan,
     'date': date.toServer(),
-    'variation_in_amount': variationInAmount,
-    'id_type_renewal': idTypeRenewal,
+    'variationInAmount': variationInAmount,
+    'idTypeRenewal': idTypeRenewal,
   };
 }

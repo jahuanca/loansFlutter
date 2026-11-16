@@ -31,7 +31,7 @@ class LoanEntityAdapter extends TypeAdapter<LoanEntity> {
       evidence: fields[11] as String,
       createdAt: fields[12] as DateTime,
       updatedAt: fields[13] as DateTime,
-      installmentsNumber: fields[14] as int,
+      numberOfInstallments: fields[14] as int,
       daysBetweenInstallments: fields[15] as int,
       customerEntity: fields[16] as CustomerEntity?,
       paymentFrequencyEntity: fields[17] as PaymentFrequencyEntity?,
@@ -71,7 +71,7 @@ class LoanEntityAdapter extends TypeAdapter<LoanEntity> {
       ..writeByte(13)
       ..write(obj.updatedAt)
       ..writeByte(14)
-      ..write(obj.installmentsNumber)
+      ..write(obj.numberOfInstallments)
       ..writeByte(15)
       ..write(obj.daysBetweenInstallments)
       ..writeByte(16)

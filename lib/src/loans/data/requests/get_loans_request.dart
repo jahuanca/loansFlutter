@@ -9,12 +9,12 @@ class GetLoansRequest {
 
   factory GetLoansRequest.fromJson(Map<String, dynamic> json) =>
       GetLoansRequest(
-        idCustomer: json['id_customer'],
-        idStateLoan: json['id_state_loan'],
+        idCustomer: json['idCustomer'],
+        idStateLoan: json['idStateLoan'],
       );
 
   Map<String, dynamic> toJson() => {
-        'id_customer': idCustomer,
-        'id_state_loan': idStateLoan,
+        'idCustomer': idCustomer,
+        'idStateLoan': idStateLoan,
       };
 }

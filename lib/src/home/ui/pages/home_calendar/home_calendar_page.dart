@@ -5,7 +5,6 @@ import 'package:loands_flutter/src/home/ui/pages/home_calendar/quota_of_calendar
 import 'package:loands_flutter/src/home/ui/widgets/item_action_widget.dart';
 import 'package:loands_flutter/src/utils/core/format_date.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
-import 'package:loands_flutter/src/utils/ui/widgets/utils.dart';
 import 'package:utils/utils.dart';
 
 class HomeCalendarPage extends StatelessWidget {
@@ -123,7 +122,7 @@ class HomeCalendarPage extends StatelessWidget {
     return await showDatePicker(
         context: context,
         initialDate: defaultDate,
-        selectableDayPredicate: disabledSundayPredicate,
+        // selectableDayPredicate: disabledSundayPredicate,
         firstDate: defaultDate.subtract(halfYearDuration),
         lastDate: defaultDate.add(halfYearDuration));
   }

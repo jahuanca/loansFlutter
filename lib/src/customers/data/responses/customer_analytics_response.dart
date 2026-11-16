@@ -23,22 +23,22 @@ class CustomerAnalyticsResponse {
   });
 
   factory CustomerAnalyticsResponse.fromJson(Map<String, dynamic> json) => CustomerAnalyticsResponse(
-    idCustomer: json['id_customer'],
+    idCustomer: json['idCustomer'],
     ganancy: (json['ganancy'] as num).toDouble(),
-    amountOfLoans: json['amount_of_loans'],
-    loansInProgress: json['loans_in_progress'],
-    amountInProgress: (json['amount_in_progress'] as num).toDouble(),
-    startDate: DateTime.parse(json['start_date']),
+    amountOfLoans: json['amountOfLoans'],
+    loansInProgress: json['loansInProgress'],
+    amountInProgress: (json['amountInProgress'] as num).toDouble(),
+    startDate: DateTime.parse(json['startDate']),
     loans: List<LoanEntity>.from(json["loans"].map((x) => LoanEntity.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    'id_customer': idCustomer,
+    'idCustomer': idCustomer,
     'ganancy': ganancy,
-    'amount_of_loans': amountOfLoans,
-    'loans_in_progress': loansInProgress,
-    'amount_in_progress': amountInProgress,
-    'start_date': startDate.toServer(),
+    'amountOfLoans': amountOfLoans,
+    'loansInProgress': loansInProgress,
+    'amountInProgress': amountInProgress,
+    'startDate': startDate.toServer(),
     'loans': List<dynamic>.from(loans.map((x) => x.toJson())),
   };
 }

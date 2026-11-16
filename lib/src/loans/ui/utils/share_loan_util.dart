@@ -28,8 +28,6 @@ String shareInformation({
     information += 'Monto de cuota: S/ ${firstQuota.amount.formatDecimals()}\n';
 
     double amountToSendMe = firstQuota.amount - (firstQuota.ganancy / 2);
-
-    information += 'Envíame: S/ ${amountToSendMe.formatDecimals()} \n';
     information += 'Fechas:';
 
     for (QuotaEntity quota in quotas) {
@@ -78,7 +76,6 @@ String shareInformationSpecial({
 
     double amountToSendMe = firstQuota.amount - (firstQuota.ganancy / 2);
 
-    information += 'Envíame: S/ ${amountToSendMe.formatDecimals()} \n';
     information += 'Fechas:';
 
     for (QuotaEntity quota in quotas) {
@@ -86,5 +83,4 @@ String shareInformationSpecial({
       information += '\n${quotaInformation.toCapitalize()}';
     }
     return information;
-    // TODO: ambos metodos tienen mucho en similitud debe hacerse uno solo.
-  }
+}
