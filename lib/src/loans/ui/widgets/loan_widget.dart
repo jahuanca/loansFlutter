@@ -53,7 +53,7 @@ class LoanWidget extends StatelessWidget {
 
   Widget _iconComplete() => IconWidget(
       padding: const EdgeInsets.only(left: 8.0),
-      color: successColor(),
+      color: successColor,
       iconData: Icons.check);
 
 }

@@ -220,7 +220,7 @@ class QuotaGroupPage extends StatelessWidget {
         ),
         if (quotasPendingOfDay.length > defaultInt)
           CircleAvatar(
-              backgroundColor: dangerColor(),
+              backgroundColor: dangerColor,
               radius: 12,
               child: Text(quotasPendingOfDay.length.toString(),
                   style: const TextStyle(fontSize: 12, color: Colors.white))),

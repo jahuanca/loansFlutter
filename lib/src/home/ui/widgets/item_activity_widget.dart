@@ -63,10 +63,10 @@ class ItemActivityWidget extends StatelessWidget {
   Widget get _iconLeading {
     switch (log.descriptionOperation) {
       case DescriptionOperationOfLog.payQuota:
-        return Icon(Icons.monetization_on_outlined, color: successColor(),);
+        return Icon(Icons.monetization_on_outlined, color: successColor,);
       case DescriptionOperationOfLog.createSpecialLoan:
       case DescriptionOperationOfLog.createLoan:
-        return Icon(Icons.fiber_new_rounded, color: infoColor());
+        return Icon(Icons.fiber_new_rounded, color: infoColor);
       case DescriptionOperationOfLog.createCustomer:
         return const Icon(Icons.person_add_alt);
       default:

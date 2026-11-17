@@ -12,6 +12,7 @@ const String quotasIdGet = 'quotasIdGet';
 const String startDayIdGet = 'startDayIdGet';
 const String typesDocumentIdGet = 'typesDocumentIdGet';
 const String typesCustomerIdGet = 'typesCustomerIdGet';
+const String assignedRecoveryIdGet = 'assignedRecoveryIdGet';
 const String percentageIdGet = 'percentageIdGet';
 const String frequenciesIdGet = 'frequenciesIdGet';
 const String keepSesionIdGet = 'keepSesionIdGet';

@@ -57,11 +57,11 @@ class NextRenewalPage extends StatelessWidget {
       children: [
         TagWidget(
           backgroundColor: Colors.white,
-          textColorAndIcon: successColor(),
+          textColorAndIcon: successColor,
           title: currentAmount, icon: Icons.punch_clock_rounded),
         TagWidget(
           backgroundColor: Colors.white,
-          textColorAndIcon: infoColor(),
+          textColorAndIcon: infoColor,
           title: lastAmount),
       ],
     );

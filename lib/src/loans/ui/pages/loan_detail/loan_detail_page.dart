@@ -83,9 +83,9 @@ class LoanDetailPage extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(
-                  color: primaryColor().withAlpha(100),
+                  color: primaryColor.withAlpha(100),
                 ),
-                borderRadius: BorderRadius.circular(borderRadius())),
+                borderRadius: BorderRadius.circular(borderRadius)),
             height: 120,
             width: size.width,
             child: Row(

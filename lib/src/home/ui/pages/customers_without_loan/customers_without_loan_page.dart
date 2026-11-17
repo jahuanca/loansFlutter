@@ -27,7 +27,7 @@ class CustomersWithoutLoanPage extends StatelessWidget {
               trailing: IconButtonWidget(
                   onPressed: () => RoutesApp.goCustomerAnalytics(
                       customerSelected: controller.customers[index]),
-                  backgroundColor: infoColor(),
+                  backgroundColor: infoColor,
                   iconData: Icons.analytics),
             ),
           ),

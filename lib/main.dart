@@ -17,6 +17,7 @@ import 'package:utils/utils.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
+  UtilConfig.configure(appConfig);
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences().initPrefs();
 
@@ -29,8 +30,6 @@ void main() async {
   Get.put(AnalyticsService());
   Get.put(ErrorService());
 
-  loadConfig(appConfig);
-  UtilConfig.configure(appConfig);
   await Hive.initFlutter();
   Hive.registerAdapter(SummaryOfDashboardResponseAdapter());
   Hive.registerAdapter(LoanEntityAdapter());

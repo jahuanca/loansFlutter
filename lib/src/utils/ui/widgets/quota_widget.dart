@@ -50,7 +50,7 @@ class QuotaWidget extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryColor().withAlpha(126),
+                color: primaryColor.withAlpha(126),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(6),

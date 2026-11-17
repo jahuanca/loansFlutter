@@ -4,6 +4,7 @@ import 'package:utils/utils.dart';
 
 class CreateCustomerRequest {
   int? id;
+  int? idAssignedRecoveryAgent;
   int? idTypeDocument;
   int? idTypeCustomer;
   String? alias;
@@ -15,6 +16,7 @@ class CreateCustomerRequest {
 
   CreateCustomerRequest({
     this.id,
+    this.idAssignedRecoveryAgent,
     this.idTypeDocument,
     this.idTypeCustomer,
     this.name,
@@ -27,6 +29,7 @@ class CreateCustomerRequest {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> squema = {
+        'idAssignedRecoveryAgent': idAssignedRecoveryAgent,
         'idTypeDocument': idTypeDocument,
         'idTypeCustomer': idTypeCustomer,
         'alias': alias.isBlank.orFalse() ? null : alias,
@@ -43,6 +46,7 @@ class CreateCustomerRequest {
   factory CreateCustomerRequest.fromJson(Map<String, dynamic> json) =>
       CreateCustomerRequest(
         id: json['id'],
+        idAssignedRecoveryAgent: json['idAssignedRecoveryAgent'],
         idTypeDocument: json['idTypeDocument'],
         idTypeCustomer: json['idTypeCustomer'],
         alias: json['alias'],

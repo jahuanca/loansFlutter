@@ -9,6 +9,7 @@ class AddCustomerUi {
   ValidateResult<int>? 
       id,
       idTypeDocument,
+      idAssignedRecoveryAgent,
       idTypeCustomer;
     
   ValidateResult<String>? 
@@ -26,6 +27,7 @@ class AddCustomerUi {
     this.name,
     this.alias,
     this.id,
+    this.idAssignedRecoveryAgent,
     this.idTypeCustomer,
     this.idTypeDocument,
   });
@@ -37,6 +39,7 @@ class AddCustomerUi {
   CreateCustomerRequest toRequest() {
     return CreateCustomerRequest(
       id: id?.value,
+      idAssignedRecoveryAgent: idAssignedRecoveryAgent?.value,
       address: address?.value,
       alias: alias?.value,
       document: document?.value,
@@ -51,6 +54,7 @@ class AddCustomerUi {
   void setValuesOfCustomer(CustomerEntity customer) {
     id = ValidateResult.initialize(label: 'Id', value: customer.id);
     idTypeDocument = ValidateResult.initialize(label: typeDocumentString, value: customer.idTypeDocument);
+    idAssignedRecoveryAgent = ValidateResult.initialize(label: assignedRecoveryAgentString, value: customer.idAssignedRecoveryAgent);
     idTypeCustomer = ValidateResult.initialize(label: typeCustomerString, value: customer.idTypeCustomer);
     alias = ValidateResult.initialize(label: aliasString, value: customer.alias);
     name = ValidateResult.initialize(label: nameString, value: customer.name);

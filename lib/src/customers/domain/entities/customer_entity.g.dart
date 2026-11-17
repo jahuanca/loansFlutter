@@ -18,6 +18,7 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
     };
     return CustomerEntity(
       id: fields[0] as int,
+      idAssignedRecoveryAgent: fields[13] as int,
       name: fields[1] as String,
       lastName: fields[3] as String,
       address: fields[4] as String,
@@ -36,7 +37,7 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
   @override
   void write(BinaryWriter writer, CustomerEntity obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       ..writeByte(11)
       ..write(obj.createdAt)
       ..writeByte(12)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(13)
+      ..write(obj.idAssignedRecoveryAgent);
   }
 
   @override

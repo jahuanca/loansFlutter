@@ -126,7 +126,7 @@ class QuotaGroupController extends GetxController {
                 (e) => e.toJson(),
               )
               .toList(),
-          functionKey: (p0) => p0['date_to_pay'],
+          functionKey: (p0) => p0['dateToPay'],
         );
 
         quotasToShow = allQuotas.toList();
@@ -183,7 +183,7 @@ class QuotaGroupController extends GetxController {
                 'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}\n';            
           }
           if (value.length > 1 && totalAmount > 0) {
-            data += "Total: ${totalAmount.formatDecimals()} \tA caja: ${totalSendMe.formatDecimals()}\n";         
+            data += "Total: ${totalAmount.formatDecimals()}\n";         
           }
         },
       );

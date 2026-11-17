@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/chats/domain/entities/user_entity.dart';
+import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/entities/type_customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
@@ -22,16 +24,20 @@ class AddCustomerController extends GetxController {
   CreateCustomerUseCase createCustomerUseCase;
   UpdateCustomerUseCase updateCustomerUseCase;
   GetTypesCustomerUseCase getTypesCustomerUseCase;
+  GetUsersUseCase getUsersUseCase;
 
   List<TypeDocumentEntity> typesDocument = [];
   List<TypeCustomerEntity> typesCustomer = [];
+  List<UserEntity> users = [];
   TypeDocumentEntity? typeDocumentSelected;
   TypeCustomerEntity? typeCustomerSelected;
+  UserEntity? recoverySelected;
 
   AddCustomerUi ui = AddCustomerUi();
   bool isEditing = false;
 
   AddCustomerController({
+    required this.getUsersUseCase,
     required this.getTypesDocumentUseCase,
     required this.createCustomerUseCase,
     required this.updateCustomerUseCase,
@@ -52,14 +58,31 @@ class AddCustomerController extends GetxController {
       ui.setValuesOfCustomer(customerEntity);
       onChangedTypeDocument(ui.idTypeDocument?.value);
       onChangedTypeCustomer(ui.idTypeCustomer?.value);
+      onChangedAssignedRecovery(ui.idAssignedRecoveryAgent?.value);
     }
   }
 
   @override
   void onReady() {
     getTypesDocument();
+    getAssignedRecovery(initialValue: ui.idAssignedRecoveryAgent?.value);
     getTypesCustomer(initialValue: ui.idTypeCustomer?.value);
     super.onReady();
+  }
+
+  void getAssignedRecovery({int? initialValue}) async {
+    showLoading();
+    Result<List<UserEntity>> resultType =
+        await getUsersUseCase.execute();
+    hideLoading();
+    final data = executeResultUI<List<UserEntity>>(resultType);
+    if (data != null) {
+      users = data;
+      if (initialValue != null) {
+        onChangedAssignedRecovery(initialValue);
+      }
+    }
+     update([assignedRecoveryIdGet]);
   }
 
   void getTypesDocument() async {
@@ -88,6 +111,7 @@ class AddCustomerController extends GetxController {
         onChangedTypeCustomer(initialValue ?? typesCustomer.first.id);
       }
     }
+    update([typesCustomerIdGet]);
   }
 
   void onChangedTypeDocument(dynamic value) {
@@ -116,6 +140,20 @@ class AddCustomerController extends GetxController {
       );
     }
     update([typesCustomerIdGet]);
+  }
+
+  void onChangedAssignedRecovery(dynamic value) {
+    int index = users.indexWhere(
+      (e) => e.id == value,
+    );
+    if (index != notFoundPosition) {
+      recoverySelected = users[index];
+      ui.idAssignedRecoveryAgent = ValidateResult.initialize(
+        label: assignedRecoveryAgentString,
+        value: value,
+      );
+    }
+    update([assignedRecoveryIdGet]);
   }
 
   void onChangedDocument(String value) {

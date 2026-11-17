@@ -21,6 +21,7 @@ const String dateString = 'Fecha';
 const String customersString = 'Clientes';
 const String typeDocumentString = 'Tipo de documento';
 const String typeCustomerString = 'Tipo de cliente';
+const String assignedRecoveryAgentString = 'Recuperador asignado';
 const String aliasString = 'Alias';
 const String selectTypeDocumentString = 'Seleccione el tipo de documento';
 const String enterDocumentString = 'Ingrese el documento';

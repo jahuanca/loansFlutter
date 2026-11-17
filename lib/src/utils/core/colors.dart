@@ -4,19 +4,19 @@ import 'package:utils/utils.dart';
 Color colorOfStateQuota(int idStateQuota) {
   switch (idStateQuota) {
     case 1:
-      return alertColor();
+      return alertColor;
     case 2:
-      return successColor();
+      return successColor;
     default:
-      return dangerColor();
+      return dangerColor;
   }
 }
 
 Color colorOfStateLoan(int idStateLoan) {
   switch (idStateLoan) {
     case 1:
-      return dangerColor();
+      return dangerColor;
     default:
-      return successColor();
+      return successColor;
   }
 }

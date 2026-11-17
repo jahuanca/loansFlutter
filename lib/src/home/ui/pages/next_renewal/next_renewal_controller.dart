@@ -54,7 +54,7 @@ class NextRenewalController extends GetxController {
                 (e) => e.toJson(),
               )
               .toList(),
-          functionKey: (p0) => p0['date_to_pay']);
+          functionKey: (p0) => p0['dateToPay']);
 
       groupByDate.forEach(
         (key, value) {

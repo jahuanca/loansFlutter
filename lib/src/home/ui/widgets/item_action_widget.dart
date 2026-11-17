@@ -27,7 +27,7 @@ class ItemActionWidget extends StatelessWidget {
         alignment: Alignment.center,
         width: size.width * 0.5 - 16,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius()),
+          borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(),
         ),
         child: ListTile(

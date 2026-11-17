@@ -32,6 +32,7 @@ class UserEntity {
         'email': email,
         'phoneNumber': phoneNumber,
         'isValidated': isValidated,
+        'fullName': fullName,
       };
 
   factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(

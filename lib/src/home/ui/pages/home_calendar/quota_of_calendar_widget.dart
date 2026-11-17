@@ -44,8 +44,8 @@ class QuotaOfCalendarWidget extends StatelessWidget {
         onLongPress: onLongPress,
         child: Container(
           decoration: BoxDecoration(
-            color: infoColor().withAlpha(isSelected ? 55 : 0),
-            borderRadius: BorderRadius.circular(borderRadius()),
+            color: infoColor.withAlpha(isSelected ? 55 : 0),
+            borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(),
           ),
           padding: defaultPadding,
@@ -55,7 +55,7 @@ class QuotaOfCalendarWidget extends StatelessWidget {
               _contentWidget(),
               ChildOrElseWidget(
                 condition: isLast && idStateQuota != idOfCompleteQuota,
-                child: Icon(Icons.info, color: infoColor()),
+                child: Icon(Icons.info, color: infoColor),
               ),
               stateWidget ?? ChildOrElseWidget(
                       condition: enumOfStateQuota != null,

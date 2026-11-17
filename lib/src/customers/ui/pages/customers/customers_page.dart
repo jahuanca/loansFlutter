@@ -51,7 +51,7 @@ class CustomersPage extends StatelessWidget {
         FloatingActionButton(
           heroTag: analyticsHeroTag,
           onPressed: controller.goToCustomerAnalytic,
-          backgroundColor: infoColor(),
+          backgroundColor: infoColor,
           child: const Icon(
             Icons.analytics,
             color: Colors.white,
@@ -111,7 +111,7 @@ class CustomersPage extends StatelessWidget {
       paddingAll: defaultPadding,
       decorationAll: BoxDecoration(
         border: Border.all(),
-        borderRadius: BorderRadius.circular(borderRadius()),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
       width: size.width,
       height: size.height * 0.16,
@@ -132,7 +132,7 @@ class CustomersPage extends StatelessWidget {
     List<Widget> actions = [
       IconButtonWidget(
         onPressed: () => calling(phone), 
-        backgroundColor: infoColor(),
+        backgroundColor: infoColor,
         iconData: Icons.call,
       ),
       IconButtonWidget(

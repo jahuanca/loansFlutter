@@ -35,9 +35,12 @@ class CustomerEntity {
     DateTime createdAt;
     @HiveField(12)
     DateTime updatedAt;
+    @HiveField(13)
+    int idAssignedRecoveryAgent;
 
     CustomerEntity({
         required this.id,
+        required this.idAssignedRecoveryAgent,
         required this.name,
         required this.lastName,
         required this.address,
@@ -64,6 +67,7 @@ class CustomerEntity {
 
     factory CustomerEntity.fromJson(Map<String, dynamic> json) => CustomerEntity(
         id: json["id"],
+        idAssignedRecoveryAgent: json["idAssignedRecoveryAgent"],
         alias: json["alias"],
         name: json["name"],
         lastName: json["lastName"],
@@ -85,6 +89,7 @@ class CustomerEntity {
 
     Map<String, dynamic> toJson() => {
         "id": id,
+        "idAssignedRecoveryAgent": idAssignedRecoveryAgent,
         "alias": alias,
         "name": name,
         "lastName": lastName,

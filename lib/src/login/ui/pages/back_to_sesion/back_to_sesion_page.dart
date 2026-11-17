@@ -112,7 +112,7 @@ class BackToSesionPage extends StatelessWidget {
             alignmentOfContent: MainAxisAlignment.center,
             title: 'Ingresar con otro usuario',
             backgroundColor: Colors.transparent,
-            textColorAndIcon: infoColor(),
+            textColorAndIcon: infoColor,
           ),
           _buttonsLogin()
         ],
@@ -158,7 +158,7 @@ class BackToSesionPage extends StatelessWidget {
   Widget _itemShortCut(DirectAccessEnum directAccess) {
     return Container(
       color: (controller.directAccessSelected == directAccess)
-          ? infoColor()
+          ? infoColor
           : Colors.transparent,
       child: GestureDetector(
         onTap: () => controller.onChangedDirectAccess(directAccess),

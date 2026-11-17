@@ -64,7 +64,7 @@ class AddLoanChooseTypePage extends StatelessWidget {
       ),
       leading: Icon(
         iconData,
-        color: infoColor(),
+        color: infoColor,
       ),
     );
   }

@@ -37,7 +37,7 @@ class SearchLoanPage extends StatelessWidget {
           decoration: InputDecoration(
             hintText: '¿Qué desea buscar?',
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(borderRadius())
+              borderRadius: BorderRadius.circular(borderRadius)
             ),
             suffixIcon: const Icon(Icons.close),
           )),

@@ -160,7 +160,7 @@ class HomeCalendarPage extends StatelessWidget {
       child: GestureDetector(
         onTap: () => controller.getQuotasByDay(date),
         child: Card(
-          color: isSelected ? successColor() : CardTheme.of(context).color,
+          color: isSelected ? successColor : CardTheme.of(context).color,
           child: Container(
             padding: defaultPadding,
             child: Column(

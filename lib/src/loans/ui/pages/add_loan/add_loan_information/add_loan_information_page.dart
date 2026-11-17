@@ -72,7 +72,7 @@ class AddLoanInformationPage extends StatelessWidget {
                             condition: controller.ui.customerSelected != null,
                             child: IconButtonWidget(
                                 onPressed: controller.goCustomerAnalytics,
-                                backgroundColor: infoColor(),
+                                backgroundColor: infoColor,
                                 iconData: Icons.analytics),
                           ),
                         )
