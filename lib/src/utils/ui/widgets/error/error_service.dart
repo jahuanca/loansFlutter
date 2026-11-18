@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:loands_flutter/src/login/di/login_binding.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_page.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
@@ -17,6 +18,7 @@ class ErrorService extends GetxService {
 
     isShowing = true;
     switch (errorEntity.statusCode) {
+      case 401:
       case 422:
         bool result = await showAlertWidget(
             context: context,
@@ -38,6 +40,7 @@ class ErrorService extends GetxService {
 
   void _goToLogin(BuildContext context) async {
     await UserPreferences().clearAll();
+    await Hive.deleteFromDisk();
     if (!context.mounted) return;
     LoginBinding().dependencies();
     Navigator.of(context).pushAndRemoveUntil(

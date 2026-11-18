@@ -1,0 +1,7 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "Emulador", "request": "launch", "type": "dart", "program": "lib/main.dart", "toolArgs": ["--dart-define-from-file=env.json"] },
+    { "name": "Dispositivo físico", "request": "launch", "type": "dart", "program": "lib/main.dart", "toolArgs": ["--dart-define-from-file=env.device.json"] }
+  ]
+}

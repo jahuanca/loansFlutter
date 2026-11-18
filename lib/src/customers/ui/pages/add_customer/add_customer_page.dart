@@ -45,27 +45,9 @@ class AddCustomerPage extends StatelessWidget {
           child: Column(
             children: [
               _sectionPersonalData(),
-              GetBuilder<AddCustomerController>(
-                builder: (controller) => InputWidget(
-                    focusNode: focusNodeAddress,
-                    initialValue: controller.ui.address?.value,
-                    textInputType: TextInputType.streetAddress,
-                    onChanged: controller.onChangedAddress,
-                    maxLength: 50,
-                    isAlignLabel: true,
-                    label: addressString,
-                    hintText: 'Ingrese la dirección del cliente'),
-              ),
-              GetBuilder<AddCustomerController>(
-                builder: (controller) => InputWidget(
-                    initialValue: controller.ui.phone?.value,
-                    textInputType: TextInputType.phone,
-                    onChanged: controller.onChangedPhone,
-                    maxLength: 9,
-                    isAlignLabel: true,
-                    label: phoneString,
-                    hintText: 'Ingrese el número de celular'),
-              ),
+              _sectionAddressData(),
+              // _sectionPaymentData(),
+              // _sectionManageData(),
               GetBuilder<AddCustomerController>(
                 id: typesCustomerIdGet,
                 builder: (controller) => DropdownWidget(
@@ -96,29 +78,28 @@ class AddCustomerPage extends StatelessWidget {
     );
   }
 
+  Widget _subtitleForm(String title) {
+    return Padding(
+      padding: defaultPadding,
+      child: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
+    );
+  }
+
   Widget _sectionPersonalData() {
-    return Card(
-      color: Colors.white,
+    return Padding(
+      padding: const EdgeInsetsGeometry.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              '1) Datos personales: ',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ),
+          _subtitleForm('Información personal'),
           GetBuilder<AddCustomerController>(
             id: typesDocumentIdGet,
             builder: (controller) => DropdownWidget(
-              wrapperWidget: (Widget child) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: child,
-              ),
-              inputBorderCurrent: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  borderSide: BorderSide(width: 0.25, color: primaryColor)),
+              wrapperWidget: _noWrapper,
+              inputBorderCurrent: currentBorder,
               isAlignLabel: true,
               label: typeDocumentString,
               hintText: 'Seleccione el tipo de documento',
@@ -129,6 +110,8 @@ class AddCustomerPage extends StatelessWidget {
           ),
           GetBuilder<AddCustomerController>(
             builder: (controller) => InputWidget(
+              wrapperWidget: _noWrapper,
+              inputBorderCurrent: currentBorder,
               initialValue: controller.ui.document?.value,
               isAlignLabel: true,
               onChanged: controller.onChangedDocument,
@@ -141,6 +124,8 @@ class AddCustomerPage extends StatelessWidget {
           ),
           GetBuilder<AddCustomerController>(
             builder: (controller) => InputWidget(
+              wrapperWidget: _noWrapper,
+              inputBorderCurrent: currentBorder,
               initialValue: controller.ui.alias?.value,
               textInputType: TextInputType.name,
               onChanged: controller.onChangedAlias,
@@ -153,6 +138,8 @@ class AddCustomerPage extends StatelessWidget {
           ),
           GetBuilder<AddCustomerController>(
             builder: (controller) => InputWidget(
+                wrapperWidget: _noWrapper,
+                inputBorderCurrent: currentBorder,
                 focusNode: focusNodeName,
                 initialValue: controller.ui.name?.value,
                 textInputType: TextInputType.name,
@@ -163,6 +150,8 @@ class AddCustomerPage extends StatelessWidget {
           ),
           GetBuilder<AddCustomerController>(
             builder: (controller) => InputWidget(
+                wrapperWidget: _noWrapper,
+                inputBorderCurrent: currentBorder,
                 focusNode: focusNodeLastName,
                 initialValue: controller.ui.lastName?.value,
                 textInputType: TextInputType.name,
@@ -171,8 +160,105 @@ class AddCustomerPage extends StatelessWidget {
                 label: lastNameString,
                 hintText: enterLastNameOfCustomerString),
           ),
+          GetBuilder<AddCustomerController>(
+            builder: (controller) => InputWidget(
+                wrapperWidget: _noWrapper,
+                inputBorderCurrent: currentBorder,
+                initialValue: controller.ui.phone?.value,
+                textInputType: TextInputType.phone,
+                onChanged: controller.onChangedPhone,
+                maxLength: 9,
+                isAlignLabel: true,
+                label: phoneString,
+                hintText: 'Ingrese el número de celular'),
+          ),
         ],
       ),
     );
   }
+
+  Widget _sectionAddressData() {
+    return Padding(
+      padding: const EdgeInsetsGeometry.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _subtitleForm('Domicilio'),
+          GetBuilder<AddCustomerController>(
+            builder: (controller) => InputWidget(
+                wrapperWidget: _noWrapper,
+                inputBorderCurrent: currentBorder,
+                focusNode: focusNodeAddress,
+                initialValue: controller.ui.address?.value,
+                textInputType: TextInputType.streetAddress,
+                onChanged: controller.onChangedAddress,
+                maxLength: 50,
+                isAlignLabel: true,
+                label: addressString,
+                hintText: 'Ingrese la dirección del cliente'),
+          ),
+          InputWidget(
+            label: 'Referencia',
+            wrapperWidget: _noWrapper,
+            inputBorderCurrent: currentBorder,
+            hintText: 'Referencia',
+            isTextArea: true,
+          ),
+          const LabelWidget(padding: defaultPadding, label: 'Foto de la casa'),
+          Center(child: ImageActionWidget(height: 200, width: 200)),
+          Row(
+            children: [
+              Expanded(
+                child: InputWidget(
+                  label: 'Latitud',
+                  wrapperWidget: _noWrapper,
+                  inputBorderCurrent: currentBorder,
+                  hintText: 'Latitud',
+                  enabled: false,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: InputWidget(
+                  label: 'Longitud',
+                  wrapperWidget: _noWrapper,
+                  inputBorderCurrent: currentBorder,
+                  hintText: 'Longitud',
+                  enabled: false,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16,),
+          Row(
+            children: [
+              Expanded(
+                  child: ButtonWidget(
+                text: 'Capturar',
+                buttonType: ButtonTypeWidget.ghost,
+                buttonStyle: ButtonStyleWidget.success,
+                fontSize: 16,
+              )),
+              const SizedBox(width: 16,),
+              Expanded(
+                  child: ButtonWidget(
+                text: 'Ver en mapa',
+                buttonType: ButtonTypeWidget.link,
+                buttonStyle: ButtonStyleWidget.info,
+                fontSize: 16,
+              )),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _noWrapper(Widget child) {
+    return child;
+  }
+
+  final InputBorder currentBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+      borderSide: BorderSide(width: 0.25, color: primaryColor));
 }

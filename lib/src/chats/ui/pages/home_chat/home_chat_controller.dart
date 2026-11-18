@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:loands_flutter/src/chats/di/user_binding.dart';
 import 'package:loands_flutter/src/chats/ui/pages/list_users/list_users_page.dart';
+import 'package:loands_flutter/src/utils/core/config.dart';
 import 'package:utils/utils.dart';
 
 class HomeChatController extends GetxController {
@@ -21,7 +22,7 @@ class HomeChatController extends GetxController {
 
   Future<void> initSocket() async {
     socket = io.io(
-      'http://10.0.2.2:3002',
+      socketUrl,
       io.OptionBuilder()
           .setTransports(["websocket"])
           .disableAutoConnect()

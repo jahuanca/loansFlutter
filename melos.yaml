@@ -15,3 +15,5 @@ scripts:
   activate_analytic:
     run: adb shell setprop debug.firebase.analytics.app com.example.loands_flutter
     description: Activate analytics for DebugView Firebase
+  dev:
+    run: fvm flutter run --dart-define-from-file=env.json

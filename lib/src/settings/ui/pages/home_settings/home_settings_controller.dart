@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:loands_flutter/src/chats/ui/pages/home_chat/home_chat_page.dart';
 import 'package:loands_flutter/src/login/di/login_binding.dart';
 import 'package:loands_flutter/src/login/ui/pages/login/login_page.dart';
@@ -14,6 +15,7 @@ class HomeSettingsController extends GetxController {
 
   void _logout() async {
     await UserPreferences().clearAll();
+    await Hive.deleteFromDisk();
     Get.offAll(() => LoginPage(), binding: LoginBinding());
   }
 
