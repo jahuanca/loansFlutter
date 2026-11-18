@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/chats/domain/entities/user_entity.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
+import 'package:loands_flutter/src/utils/domain/entities/payment_provider_entity.dart';
 import 'package:loands_flutter/src/customers/domain/entities/type_customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
@@ -29,9 +31,11 @@ class AddCustomerController extends GetxController {
   List<TypeDocumentEntity> typesDocument = [];
   List<TypeCustomerEntity> typesCustomer = [];
   List<UserEntity> users = [];
+  List<PaymentProviderEntity> paymentProviders = PaymentProviderEntity.defaults;
   TypeDocumentEntity? typeDocumentSelected;
   TypeCustomerEntity? typeCustomerSelected;
   UserEntity? recoverySelected;
+  PaymentProviderEntity? paymentProviderSelected;
 
   AddCustomerUi ui = AddCustomerUi();
   bool isEditing = false;
@@ -59,6 +63,7 @@ class AddCustomerController extends GetxController {
       onChangedTypeDocument(ui.idTypeDocument?.value);
       onChangedTypeCustomer(ui.idTypeCustomer?.value);
       onChangedAssignedRecovery(ui.idAssignedRecoveryAgent?.value);
+      onChangedPaymentProvider(ui.idPaymentProvider?.value);
     }
   }
 
@@ -156,6 +161,62 @@ class AddCustomerController extends GetxController {
     update([assignedRecoveryIdGet]);
   }
 
+  void onChangedPaymentProvider(dynamic value) {
+    int index = paymentProviders.indexWhere(
+      (e) => e.id == value,
+    );
+    if (index != notFoundPosition) {
+      paymentProviderSelected = paymentProviders[index];
+      ui.idPaymentProvider = ValidateResult.initialize(
+        label: paymentProviderString,
+        value: value,
+      );
+    }
+    update([paymentProvidersIdGet]);
+  }
+
+  void onChangedAccountNumber(String value) {
+    ui.accountNumber = validateText<String>(
+      rules: {
+        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfAccountNumber,
+      },
+      text: value,
+      label: accountNumberString,
+    );
+  }
+
+  void onChangedCci(String value) {
+    ui.cci = validateText<String>(
+      rules: {
+        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfCci,
+      },
+      text: value,
+      label: cciString,
+    );
+  }
+
+  void onChangedPaymentPhone(String value) {
+    ui.paymentPhone = validateText<String>(
+      rules: {
+        if (value.isNotEmpty)
+          RuleValidator.minLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
+        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
+      },
+      text: value,
+      label: paymentPhoneString,
+    );
+  }
+
+  void onChangedHolderName(String value) {
+    ui.holderName = validateText<String>(
+      rules: {
+        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfHolderName,
+      },
+      text: value,
+      label: holderNameString,
+    );
+  }
+
   void onChangedDocument(String value) {
     ui.document = validateText<String>(
       rules: {RuleValidator.isRequired: true},
@@ -215,6 +276,10 @@ class AddCustomerController extends GetxController {
     onChangedLastname(ui.lastName!.value.orEmpty());
     onChangedAddress(ui.address!.value.orEmpty());
     onChangedPhone(ui.phone!.value.orEmpty());
+    onChangedAccountNumber(ui.accountNumber?.value ?? '');
+    onChangedCci(ui.cci?.value ?? '');
+    onChangedPaymentPhone(ui.paymentPhone?.value ?? '');
+    onChangedHolderName(ui.holderName?.value ?? '');
     return ui.validate()?.error;
   }
 

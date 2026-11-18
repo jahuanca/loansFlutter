@@ -31,13 +31,14 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       alias: fields[2] as String?,
       latitude: fields[5] as String?,
       longitude: fields[6] as String?,
+      customerPaymentAccountEntity: fields[14] as CustomerPaymentAccountEntity?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CustomerEntity obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -65,7 +66,9 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       ..writeByte(12)
       ..write(obj.updatedAt)
       ..writeByte(13)
-      ..write(obj.idAssignedRecoveryAgent);
+      ..write(obj.idAssignedRecoveryAgent)
+      ..writeByte(14)
+      ..write(obj.customerPaymentAccountEntity);
   }
 
   @override

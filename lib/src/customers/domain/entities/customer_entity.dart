@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/utils/core/hive_db_config.dart';
 part 'customer_entity.g.dart';
 
@@ -37,6 +38,9 @@ class CustomerEntity {
     DateTime updatedAt;
     @HiveField(13)
     int idAssignedRecoveryAgent;
+    @HiveField(14)
+    CustomerPaymentAccountEntity? customerPaymentAccountEntity;
+
 
     CustomerEntity({
         required this.id,
@@ -53,6 +57,7 @@ class CustomerEntity {
         this.alias,
         this.latitude,
         this.longitude,
+        this.customerPaymentAccountEntity,
     });
 
     String get aliasOrFullName => alias ?? fullName;
@@ -80,6 +85,9 @@ class CustomerEntity {
         document: json["document"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
+        customerPaymentAccountEntity: json["customerPaymentAccount"] == null
+            ? null
+            : CustomerPaymentAccountEntity.fromJson(json["customerPaymentAccount"]),
     );
 
     Map<String, dynamic> toDropdown() => {
@@ -102,6 +110,7 @@ class CustomerEntity {
         "document": document,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
+        "customerPaymentAccount": customerPaymentAccountEntity?.toJson(),
         "fullName": fullName,
         'aliasOrFullName': aliasOrFullName,
     };

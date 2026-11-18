@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:loands_flutter/firebase_options.dart';
 import 'package:loands_flutter/src/app.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/data_config.dart';
 import 'package:loands_flutter/src/home/data/responses/summary_of_dashboard_response.dart';
 import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
@@ -34,6 +35,7 @@ void main() async {
   Hive.registerAdapter(SummaryOfDashboardResponseAdapter());
   Hive.registerAdapter(LoanEntityAdapter());
   Hive.registerAdapter(CustomerEntityAdapter());
+  Hive.registerAdapter(CustomerPaymentAccountEntityAdapter());
   Hive.registerAdapter(PaymentFrequencyEntityAdapter());
   Hive.registerAdapter(PaymentMethodEntityAdapter());
 

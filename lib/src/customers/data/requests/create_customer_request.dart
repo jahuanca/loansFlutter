@@ -1,5 +1,6 @@
 import 'package:get/get_utils/get_utils.dart';
 import 'package:get/state_manager.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:utils/utils.dart';
 
 class CreateCustomerRequest {
@@ -13,6 +14,7 @@ class CreateCustomerRequest {
   String? phone;
   String? document;
   String? address;
+  CustomerPaymentAccountEntity? customerPaymentAccount;
 
   CreateCustomerRequest({
     this.id,
@@ -25,6 +27,7 @@ class CreateCustomerRequest {
     this.document,
     this.address,
     this.alias,
+    this.customerPaymentAccount,
   });
 
   Map<String, dynamic> toJson() {
@@ -38,6 +41,7 @@ class CreateCustomerRequest {
         'phone': phone,
         'document': document,
         'address': address,
+        'customerPaymentAccount': customerPaymentAccount?.toJson(),
       };
     squema.addIf( id != null , 'id', id);
     return squema;
@@ -55,5 +59,8 @@ class CreateCustomerRequest {
         phone: json['phone'],
         document: json['document'],
         address: json['address'],
+        customerPaymentAccount: json['customerPaymentAccount'] == null
+            ? null
+            : CustomerPaymentAccountEntity.fromJson(json['customerPaymentAccount']),
       );
 }

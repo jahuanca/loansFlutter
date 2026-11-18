@@ -14,3 +14,4 @@ const int loanEntityIdAdapter = 1;
 const int customerIdAdapter = 2;
 const int paymentFrequencyIdAdapter = 3;
 const int paymentMethodIdAdapter = 4;
+const int customerPaymentAccountIdAdapter = 5;

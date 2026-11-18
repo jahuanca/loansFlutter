@@ -19,3 +19,4 @@ const String keepSesionIdGet = 'keepSesionIdGet';
 const String numberOfInstallmentsIdGet = 'numberOfInstallmentsIdGet';
 const String daysBetweenInstallmentsIdGet = 'daysBetweenInstallmentsIdGet';
 const String directAccessIdGet = 'directAccessIdGet';
+const String paymentProvidersIdGet = 'paymentProvidersIdGet';
