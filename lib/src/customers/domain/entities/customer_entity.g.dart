@@ -29,8 +29,6 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       updatedAt: fields[12] as DateTime,
       phone: fields[7] as String?,
       alias: fields[2] as String?,
-      latitude: fields[5] as String?,
-      longitude: fields[6] as String?,
       customerPaymentAccounts:
           (fields[15] as List?)?.cast<CustomerPaymentAccountEntity>(),
     );
@@ -39,7 +37,7 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
   @override
   void write(BinaryWriter writer, CustomerEntity obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,10 +48,6 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       ..write(obj.lastName)
       ..writeByte(4)
       ..write(obj.address)
-      ..writeByte(5)
-      ..write(obj.latitude)
-      ..writeByte(6)
-      ..write(obj.longitude)
       ..writeByte(7)
       ..write(obj.phone)
       ..writeByte(8)

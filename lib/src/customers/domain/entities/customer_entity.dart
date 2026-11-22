@@ -20,10 +20,8 @@ class CustomerEntity {
     String lastName;
     @HiveField(4)
     String address;
-    @HiveField(5)
-    String? latitude;
-    @HiveField(6)
-    String? longitude;
+    // Los indices 5 y 6 (antes latitude/longitude) quedan reservados: la ubicacion
+    // ahora vive en customer_addresses. No reutilizarlos.
     @HiveField(7)
     String? phone;
     @HiveField(8)
@@ -57,8 +55,6 @@ class CustomerEntity {
         required this.updatedAt,
         this.phone,
         this.alias,
-        this.latitude,
-        this.longitude,
         List<CustomerPaymentAccountEntity>? customerPaymentAccounts,
     }) : customerPaymentAccounts = customerPaymentAccounts ?? [];
 
@@ -80,8 +76,6 @@ class CustomerEntity {
         lastName: json["lastName"],
         address: json["address"],
         phone: json["phone"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
         idTypeCustomer: json["idTypeCustomer"],
         idTypeDocument: json["idTypeDocument"],
         document: json["document"],
@@ -106,8 +100,6 @@ class CustomerEntity {
         "lastName": lastName,
         "address": address,
         "phone": phone,
-        "latitude": latitude,
-        "longitude": longitude,
         "idTypeCustomer": idTypeCustomer,
         "idTypeDocument": idTypeDocument,
         "document": document,
