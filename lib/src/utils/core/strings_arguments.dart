@@ -13,3 +13,4 @@ const String sourceToLoanArgument = 'sourceToLoanArgument';
 const String createRenewalRequestArgument = 'createRenewalRequestArgument';
 const String quotasSelectedArgument = 'quotasSelectedArgument';
 const String originArgument = 'originArgument';
+const String customerPaymentAccountArgument = 'customerPaymentAccountArgument';

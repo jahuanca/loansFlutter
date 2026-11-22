@@ -15,10 +15,6 @@ class AddCustomerPage extends StatelessWidget {
   final FocusNode focusNodeName = FocusNode();
   final FocusNode focusNodeLastName = FocusNode();
   final FocusNode focusNodeAddress = FocusNode();
-  final FocusNode focusNodeAccountNumber = FocusNode();
-  final FocusNode focusNodeCci = FocusNode();
-  final FocusNode focusNodePaymentPhone = FocusNode();
-  final FocusNode focusNodeHolderName = FocusNode();
 
   final AddCustomerController controller = AddCustomerController(
     getUsersUseCase: Get.find(),
@@ -26,6 +22,10 @@ class AddCustomerPage extends StatelessWidget {
     createCustomerUseCase: Get.find(),
     updateCustomerUseCase: Get.find(),
     getTypesCustomerUseCase: Get.find(),
+    getCustomerPaymentAccountsUseCase: Get.find(),
+    createCustomerPaymentAccountUseCase: Get.find(),
+    updateCustomerPaymentAccountUseCase: Get.find(),
+    deleteCustomerPaymentAccountUseCase: Get.find(),
   );
 
   @override
@@ -240,83 +240,51 @@ class AddCustomerPage extends StatelessWidget {
     );
   }
 
+  // La edicion de cada cuenta vive en AddCustomerPaymentAccountPage; aqui solo la lista.
   Widget _sectionPaymentData() {
     return Padding(
       padding: const EdgeInsetsGeometry.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _subtitleForm(paymentDataString),
-          GetBuilder<AddCustomerController>(
-            id: paymentProvidersIdGet,
-            builder: (controller) => DropdownWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              isAlignLabel: true,
-              label: paymentProviderString,
-              hintText: selectPaymentProviderString,
-              items: controller.paymentProviders,
-              value: controller.ui.idPaymentProvider?.value,
-              onChanged: controller.onChangedPaymentProvider,
+      child: GetBuilder<AddCustomerController>(
+        id: paymentAccountsIdGet,
+        builder: (controller) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _subtitleForm(paymentDataString),
+            if (controller.ui.paymentAccounts.isEmpty)
+              const Padding(
+                padding: defaultPadding,
+                child: Text(noPaymentAccountsString),
+              ),
+            ...List.generate(
+              controller.ui.paymentAccounts.length,
+              (index) => _paymentAccountTile(controller, index),
             ),
-          ),
-          GetBuilder<AddCustomerController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodeAccountNumber,
-              initialValue: controller.ui.accountNumber?.value,
-              textInputType: TextInputType.number,
-              onChanged: controller.onChangedAccountNumber,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfAccountNumber,
-              isAlignLabel: true,
-              label: accountNumberString,
-              hintText: enterAccountNumberString,
+            ButtonWidget(
+              padding: defaultPadding,
+              text: addPaymentAccountString,
+              buttonType: ButtonTypeWidget.ghost,
+              fontSize: 16,
+              onTap: controller.goAddPaymentAccount,
             ),
-          ),
-          GetBuilder<AddCustomerController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodeCci,
-              initialValue: controller.ui.cci?.value,
-              textInputType: TextInputType.number,
-              onChanged: controller.onChangedCci,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfCci,
-              isAlignLabel: true,
-              label: cciString,
-              hintText: enterCciString,
-            ),
-          ),
-          GetBuilder<AddCustomerController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodePaymentPhone,
-              initialValue: controller.ui.paymentPhone?.value,
-              textInputType: TextInputType.phone,
-              onChanged: controller.onChangedPaymentPhone,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
-              isAlignLabel: true,
-              label: paymentPhoneString,
-              hintText: enterPaymentPhoneString,
-            ),
-          ),
-          GetBuilder<AddCustomerController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodeHolderName,
-              initialValue: controller.ui.holderName?.value,
-              textInputType: TextInputType.name,
-              onChanged: controller.onChangedHolderName,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfHolderName,
-              isAlignLabel: true,
-              label: holderNameString,
-              hintText: enterHolderNameString,
-            ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _paymentAccountTile(AddCustomerController controller, int index) {
+    final CustomerPaymentAccountEntity account = controller.ui.paymentAccounts[index];
+    final String providerName = account.paymentProvider?.name ?? paymentProviderString;
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(account.isDefault ? Icons.star : Icons.account_balance_wallet_outlined,
+          color: primaryColor),
+      title: Text('$providerName · ${account.identifier}'),
+      subtitle: Text(account.holderName ?? ''),
+      onTap: () => controller.goEditPaymentAccount(index),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete_outline),
+        onPressed: () => controller.removePaymentAccount(index),
       ),
     );
   }

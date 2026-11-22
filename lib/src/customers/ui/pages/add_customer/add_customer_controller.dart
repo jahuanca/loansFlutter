@@ -3,7 +3,12 @@ import 'package:loands_flutter/src/chats/domain/entities/user_entity.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
-import 'package:loands_flutter/src/utils/domain/entities/payment_provider_entity.dart';
+import 'package:loands_flutter/src/customers/data/requests/customer_payment_account_request.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/create_customer_payment_account_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/delete_customer_payment_account_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/get_customer_payment_accounts_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/update_customer_payment_account_use_case.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer_payment_account/add_customer_payment_account_page.dart';
 import 'package:loands_flutter/src/customers/domain/entities/type_customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
@@ -27,15 +32,17 @@ class AddCustomerController extends GetxController {
   UpdateCustomerUseCase updateCustomerUseCase;
   GetTypesCustomerUseCase getTypesCustomerUseCase;
   GetUsersUseCase getUsersUseCase;
+  GetCustomerPaymentAccountsUseCase getCustomerPaymentAccountsUseCase;
+  CreateCustomerPaymentAccountUseCase createCustomerPaymentAccountUseCase;
+  UpdateCustomerPaymentAccountUseCase updateCustomerPaymentAccountUseCase;
+  DeleteCustomerPaymentAccountUseCase deleteCustomerPaymentAccountUseCase;
 
   List<TypeDocumentEntity> typesDocument = [];
   List<TypeCustomerEntity> typesCustomer = [];
   List<UserEntity> users = [];
-  List<PaymentProviderEntity> paymentProviders = PaymentProviderEntity.defaults;
   TypeDocumentEntity? typeDocumentSelected;
   TypeCustomerEntity? typeCustomerSelected;
   UserEntity? recoverySelected;
-  PaymentProviderEntity? paymentProviderSelected;
 
   AddCustomerUi ui = AddCustomerUi();
   bool isEditing = false;
@@ -46,6 +53,10 @@ class AddCustomerController extends GetxController {
     required this.createCustomerUseCase,
     required this.updateCustomerUseCase,
     required this.getTypesCustomerUseCase,
+    required this.getCustomerPaymentAccountsUseCase,
+    required this.createCustomerPaymentAccountUseCase,
+    required this.updateCustomerPaymentAccountUseCase,
+    required this.deleteCustomerPaymentAccountUseCase,
   });
 
   @override
@@ -63,7 +74,6 @@ class AddCustomerController extends GetxController {
       onChangedTypeDocument(ui.idTypeDocument?.value);
       onChangedTypeCustomer(ui.idTypeCustomer?.value);
       onChangedAssignedRecovery(ui.idAssignedRecoveryAgent?.value);
-      onChangedPaymentProvider(ui.idPaymentProvider?.value);
     }
   }
 
@@ -72,6 +82,7 @@ class AddCustomerController extends GetxController {
     getTypesDocument();
     getAssignedRecovery(initialValue: ui.idAssignedRecoveryAgent?.value);
     getTypesCustomer(initialValue: ui.idTypeCustomer?.value);
+    if (isEditing) getPaymentAccounts();
     super.onReady();
   }
 
@@ -161,60 +172,78 @@ class AddCustomerController extends GetxController {
     update([assignedRecoveryIdGet]);
   }
 
-  void onChangedPaymentProvider(dynamic value) {
-    int index = paymentProviders.indexWhere(
-      (e) => e.id == value,
-    );
-    if (index != notFoundPosition) {
-      paymentProviderSelected = paymentProviders[index];
-      ui.idPaymentProvider = ValidateResult.initialize(
-        label: paymentProviderString,
-        value: value,
-      );
+  // ---------------- Cuentas de pago ----------------
+  // Cliente nuevo: la lista vive en memoria y viaja en POST /customer/create.
+  // Edicion: cada cambio se guarda al momento contra /customer-payment-account.
+
+  void getPaymentAccounts() async {
+    final int? idCustomer = ui.id?.value;
+    if (idCustomer == null) return;
+    Result<List<CustomerPaymentAccountEntity>> result =
+        await getCustomerPaymentAccountsUseCase.execute(idCustomer);
+    final data = executeResultUI<List<CustomerPaymentAccountEntity>>(result);
+    if (data != null) ui.paymentAccounts = data;
+    update([paymentAccountsIdGet]);
+  }
+
+  void goAddPaymentAccount() async {
+    final account = await Get.to<CustomerPaymentAccountEntity>(
+        () => AddCustomerPaymentAccountPage());
+    if (account == null) return;
+    if (isEditing) {
+      showLoading();
+      final result = await createCustomerPaymentAccountUseCase.execute(
+          ui.id!.value!, CustomerPaymentAccountRequest(account));
+      hideLoading();
+      if (executeResultUI<CustomerPaymentAccountEntity>(result) == null) return;
+      getPaymentAccounts(); // recarga: el backend pudo desmarcar la principal anterior
+      return;
     }
-    update([paymentProvidersIdGet]);
+    _setLocalDefault(account);
+    ui.paymentAccounts.add(account);
+    update([paymentAccountsIdGet]);
   }
 
-  void onChangedAccountNumber(String value) {
-    ui.accountNumber = validateText<String>(
-      rules: {
-        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfAccountNumber,
-      },
-      text: value,
-      label: accountNumberString,
-    );
+  void goEditPaymentAccount(int index) async {
+    final account = await Get.to<CustomerPaymentAccountEntity>(
+        () => AddCustomerPaymentAccountPage(),
+        arguments: {customerPaymentAccountArgument: ui.paymentAccounts[index]});
+    if (account == null) return;
+    if (isEditing && account.id != null) {
+      showLoading();
+      final result = await updateCustomerPaymentAccountUseCase
+          .execute(CustomerPaymentAccountRequest(account));
+      hideLoading();
+      if (executeResultUI<CustomerPaymentAccountEntity>(result) == null) return;
+      getPaymentAccounts();
+      return;
+    }
+    _setLocalDefault(account);
+    ui.paymentAccounts[index] = account;
+    update([paymentAccountsIdGet]);
   }
 
-  void onChangedCci(String value) {
-    ui.cci = validateText<String>(
-      rules: {
-        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfCci,
-      },
-      text: value,
-      label: cciString,
-    );
+  void removePaymentAccount(int index) async {
+    bool confirm = await showDialogWidget(
+        context: Get.context!, message: areSureToDeletePaymentAccount);
+    if (!confirm) return;
+    final account = ui.paymentAccounts[index];
+    if (isEditing && account.id != null) {
+      showLoading();
+      final result = await deleteCustomerPaymentAccountUseCase.execute(account.id!);
+      hideLoading();
+      if (executeResultUI<CustomerPaymentAccountEntity>(result) == null) return;
+    }
+    ui.paymentAccounts.removeAt(index);
+    update([paymentAccountsIdGet]);
   }
 
-  void onChangedPaymentPhone(String value) {
-    ui.paymentPhone = validateText<String>(
-      rules: {
-        if (value.isNotEmpty)
-          RuleValidator.minLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
-        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
-      },
-      text: value,
-      label: paymentPhoneString,
-    );
-  }
-
-  void onChangedHolderName(String value) {
-    ui.holderName = validateText<String>(
-      rules: {
-        RuleValidator.maxLength: CustomerPaymentAccountEntity.maxLengthOfHolderName,
-      },
-      text: value,
-      label: holderNameString,
-    );
+  /// En memoria replicamos la regla del backend: una sola cuenta principal.
+  void _setLocalDefault(CustomerPaymentAccountEntity account) {
+    if (!account.isDefault) return;
+    for (final other in ui.paymentAccounts) {
+      other.isDefault = false;
+    }
   }
 
   void onChangedDocument(String value) {
@@ -276,10 +305,6 @@ class AddCustomerController extends GetxController {
     onChangedLastname(ui.lastName!.value.orEmpty());
     onChangedAddress(ui.address!.value.orEmpty());
     onChangedPhone(ui.phone!.value.orEmpty());
-    onChangedAccountNumber(ui.accountNumber?.value ?? '');
-    onChangedCci(ui.cci?.value ?? '');
-    onChangedPaymentPhone(ui.paymentPhone?.value ?? '');
-    onChangedHolderName(ui.holderName?.value ?? '');
     return ui.validate()?.error;
   }
 

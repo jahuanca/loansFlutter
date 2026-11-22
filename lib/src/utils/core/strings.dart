@@ -44,3 +44,13 @@ const String paymentPhoneString = 'Celular de pago';
 const String enterPaymentPhoneString = 'Ingrese el celular asociado al pago';
 const String holderNameString = 'Nombre del titular';
 const String enterHolderNameString = 'Ingrese el nombre del titular';
+
+const String addPaymentAccountString = 'Agregar cuenta de pago';
+const String editPaymentAccountString = 'Editar cuenta de pago';
+const String noPaymentAccountsString = 'El cliente no tiene cuentas de pago';
+const String isDefaultAccountString = 'Cuenta principal';
+const String observationString = 'Observación';
+const String enterObservationString = 'Ingrese una observación (opcional)';
+const String areSureToDeletePaymentAccount = '¿Está seguro de eliminar la cuenta de pago?';
+const String bankRequiresAccountString = 'Una cuenta bancaria requiere CCI o número de cuenta';
+const String walletRequiresPhoneString = 'Una billetera digital requiere celular de pago';

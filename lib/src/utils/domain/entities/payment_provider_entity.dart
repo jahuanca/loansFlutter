@@ -31,15 +31,22 @@ class PaymentProviderEntity {
         "category": category,
       };
 
+  // Mismos valores que paymentProviderCategories en loans_node (default_values.js).
+  static const String bankCategory = 'BANCO';
+  static const String walletCategory = 'BILLETERA DIGITAL';
+
+  bool get isBank => category == bankCategory;
+  bool get isWallet => category == walletCategory;
+
   // TODO: Lista local de proveedores de pago. Reemplazar por un endpoint
   // (p. ej. /utils/payment-providers) cuando exista en loans_node.
   static List<PaymentProviderEntity> get defaults => [
-        PaymentProviderEntity(id: 1, name: 'Yape', category: 'Billetera digital'),
-        PaymentProviderEntity(id: 2, name: 'Plin', category: 'Billetera digital'),
-        PaymentProviderEntity(id: 3, name: 'BCP', category: 'Banco'),
-        PaymentProviderEntity(id: 4, name: 'Interbank', category: 'Banco'),
-        PaymentProviderEntity(id: 5, name: 'BBVA', category: 'Banco'),
-        PaymentProviderEntity(id: 6, name: 'Scotiabank', category: 'Banco'),
+        PaymentProviderEntity(id: 1, name: 'Yape', category: walletCategory),
+        PaymentProviderEntity(id: 2, name: 'Plin', category: walletCategory),
+        PaymentProviderEntity(id: 3, name: 'BCP', category: bankCategory),
+        PaymentProviderEntity(id: 4, name: 'Interbank', category: bankCategory),
+        PaymentProviderEntity(id: 5, name: 'BBVA', category: bankCategory),
+        PaymentProviderEntity(id: 6, name: 'Scotiabank', category: bankCategory),
         PaymentProviderEntity(id: 7, name: 'Otro', category: 'Otro'),
       ];
 }

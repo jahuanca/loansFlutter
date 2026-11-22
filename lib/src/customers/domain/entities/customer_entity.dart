@@ -38,8 +38,10 @@ class CustomerEntity {
     DateTime updatedAt;
     @HiveField(13)
     int idAssignedRecoveryAgent;
-    @HiveField(14)
-    CustomerPaymentAccountEntity? customerPaymentAccountEntity;
+    // El indice 14 (antes una sola cuenta) queda reservado: reutilizarlo con otro tipo
+    // romperia la lectura de clientes ya guardados en Hive.
+    @HiveField(15)
+    List<CustomerPaymentAccountEntity> customerPaymentAccounts;
 
 
     CustomerEntity({
@@ -57,8 +59,8 @@ class CustomerEntity {
         this.alias,
         this.latitude,
         this.longitude,
-        this.customerPaymentAccountEntity,
-    });
+        List<CustomerPaymentAccountEntity>? customerPaymentAccounts,
+    }) : customerPaymentAccounts = customerPaymentAccounts ?? [];
 
     String get aliasOrFullName => alias ?? fullName;
 
@@ -85,9 +87,10 @@ class CustomerEntity {
         document: json["document"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        customerPaymentAccountEntity: json["customerPaymentAccount"] == null
-            ? null
-            : CustomerPaymentAccountEntity.fromJson(json["customerPaymentAccount"]),
+        customerPaymentAccounts: json["customerPaymentAccounts"] == null
+            ? []
+            : List<CustomerPaymentAccountEntity>.from(json["customerPaymentAccounts"]
+                .map((x) => CustomerPaymentAccountEntity.fromJson(x))),
     );
 
     Map<String, dynamic> toDropdown() => {
@@ -110,7 +113,7 @@ class CustomerEntity {
         "document": document,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
-        "customerPaymentAccount": customerPaymentAccountEntity?.toJson(),
+        "customerPaymentAccounts": customerPaymentAccounts.map((x) => x.toJson()).toList(),
         "fullName": fullName,
         'aliasOrFullName': aliasOrFullName,
     };

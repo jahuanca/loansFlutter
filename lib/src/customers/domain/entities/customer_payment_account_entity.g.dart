@@ -27,13 +27,15 @@ class CustomerPaymentAccountEntityAdapter
       holderName: fields[6] as String?,
       createdAt: fields[7] as DateTime?,
       updatedAt: fields[8] as DateTime?,
+      isDefault: fields[9] as bool,
+      observation: fields[10] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CustomerPaymentAccountEntity obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -51,7 +53,11 @@ class CustomerPaymentAccountEntityAdapter
       ..writeByte(7)
       ..write(obj.createdAt)
       ..writeByte(8)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(9)
+      ..write(obj.isDefault)
+      ..writeByte(10)
+      ..write(obj.observation);
   }
 
   @override

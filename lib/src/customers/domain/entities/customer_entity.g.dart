@@ -31,7 +31,8 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       alias: fields[2] as String?,
       latitude: fields[5] as String?,
       longitude: fields[6] as String?,
-      customerPaymentAccountEntity: fields[14] as CustomerPaymentAccountEntity?,
+      customerPaymentAccounts:
+          (fields[15] as List?)?.cast<CustomerPaymentAccountEntity>(),
     );
   }
 
@@ -67,8 +68,8 @@ class CustomerEntityAdapter extends TypeAdapter<CustomerEntity> {
       ..write(obj.updatedAt)
       ..writeByte(13)
       ..write(obj.idAssignedRecoveryAgent)
-      ..writeByte(14)
-      ..write(obj.customerPaymentAccountEntity);
+      ..writeByte(15)
+      ..write(obj.customerPaymentAccounts);
   }
 
   @override

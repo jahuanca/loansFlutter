@@ -1,6 +1,6 @@
 import 'package:get/get_utils/get_utils.dart';
 import 'package:get/state_manager.dart';
-import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
+import 'package:loands_flutter/src/customers/data/requests/customer_payment_account_request.dart';
 import 'package:utils/utils.dart';
 
 class CreateCustomerRequest {
@@ -14,7 +14,7 @@ class CreateCustomerRequest {
   String? phone;
   String? document;
   String? address;
-  CustomerPaymentAccountEntity? customerPaymentAccount;
+  List<CustomerPaymentAccountRequest> customerPaymentAccounts;
 
   CreateCustomerRequest({
     this.id,
@@ -27,7 +27,7 @@ class CreateCustomerRequest {
     this.document,
     this.address,
     this.alias,
-    this.customerPaymentAccount,
+    this.customerPaymentAccounts = const [],
   });
 
   Map<String, dynamic> toJson() {
@@ -41,26 +41,15 @@ class CreateCustomerRequest {
         'phone': phone,
         'document': document,
         'address': address,
-        'customerPaymentAccount': customerPaymentAccount?.toJson(),
       };
     squema.addIf( id != null , 'id', id);
+    // Solo en create: el Joi de /customer/update no acepta cuentas
+    // (en edicion se gestionan con /customer-payment-account).
+    squema.addIf(
+      id == null && customerPaymentAccounts.isNotEmpty,
+      'customerPaymentAccounts',
+      customerPaymentAccounts.map((x) => x.toNestedJson()).toList(),
+    );
     return squema;
   }
-
-  factory CreateCustomerRequest.fromJson(Map<String, dynamic> json) =>
-      CreateCustomerRequest(
-        id: json['id'],
-        idAssignedRecoveryAgent: json['idAssignedRecoveryAgent'],
-        idTypeDocument: json['idTypeDocument'],
-        idTypeCustomer: json['idTypeCustomer'],
-        alias: json['alias'],
-        name: json['name'],
-        lastName: json['lastName'],
-        phone: json['phone'],
-        document: json['document'],
-        address: json['address'],
-        customerPaymentAccount: json['customerPaymentAccount'] == null
-            ? null
-            : CustomerPaymentAccountEntity.fromJson(json['customerPaymentAccount']),
-      );
 }

@@ -6,6 +6,14 @@ import 'package:loands_flutter/src/chats/data/repositories/user_repository_imple
 import 'package:loands_flutter/src/chats/domain/repositories/user_repository.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer_payment_account/customer_payment_account_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer_payment_account/customer_payment_account_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/repositories/customer_payment_account_repository_implementation.dart';
+import 'package:loands_flutter/src/customers/domain/repositories/customer_payment_account_repository.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/create_customer_payment_account_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/delete_customer_payment_account_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/get_customer_payment_accounts_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/update_customer_payment_account_use_case.dart';
 import 'package:loands_flutter/src/customers/data/datastores/type_customer/type_customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
 import 'package:loands_flutter/src/customers/data/repositories/type_customer_repository_implementation.dart';
@@ -43,6 +51,15 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut(() => UpdateCustomerUseCase(repository: Get.find()));
     Get.lazyPut(() => GetTypesCustomerUseCase(Get.find()));
     Get.lazyPut(() => GetUsersUseCase(Get.find()));
+
+    // Cuentas de pago: en edicion se guardan directo contra /customer-payment-account
+    Get.lazyPut<CustomerPaymentAccountDatastore>(() => CustomerPaymentAccountOnlineDatastore());
+    Get.lazyPut<CustomerPaymentAccountRepository>(
+        () => CustomerPaymentAccountRepositoryImplementation(datastore: Get.find()));
+    Get.lazyPut(() => GetCustomerPaymentAccountsUseCase(repository: Get.find()));
+    Get.lazyPut(() => CreateCustomerPaymentAccountUseCase(repository: Get.find()));
+    Get.lazyPut(() => UpdateCustomerPaymentAccountUseCase(repository: Get.find()));
+    Get.lazyPut(() => DeleteCustomerPaymentAccountUseCase(repository: Get.find()));
   }
 
 }
