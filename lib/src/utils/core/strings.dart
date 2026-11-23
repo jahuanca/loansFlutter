@@ -54,3 +54,5 @@ const String enterObservationString = 'Ingrese una observación (opcional)';
 const String areSureToDeletePaymentAccount = '¿Está seguro de eliminar la cuenta de pago?';
 const String bankRequiresAccountString = 'Una cuenta bancaria requiere CCI o número de cuenta';
 const String walletRequiresPhoneString = 'Una billetera digital requiere celular de pago';
+const String nextString = 'Siguiente';
+const String previousString = 'Anterior';

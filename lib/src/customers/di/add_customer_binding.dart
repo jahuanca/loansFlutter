@@ -24,6 +24,11 @@ import 'package:loands_flutter/src/customers/domain/repositories/type_customer_r
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/update_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer_address_data/add_customer_address_data_controller.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer_manage_data/add_customer_manage_data_controller.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer_payment_data/add_customer_payment_data_controller.dart';
+import 'package:loands_flutter/src/customers/ui/pages/add_customer_personal_data/add_customer_personal_data_controller.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_datastore.dart';
@@ -60,6 +65,34 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut(() => CreateCustomerPaymentAccountUseCase(repository: Get.find()));
     Get.lazyPut(() => UpdateCustomerPaymentAccountUseCase(repository: Get.find()));
     Get.lazyPut(() => DeleteCustomerPaymentAccountUseCase(repository: Get.find()));
+
+    // Controllers del formulario por pasos. Se usa Get.put (no lazyPut) para que vivan
+    // mientras dure la ruta: el PageView destruye las paginas que no se ven y, con lazyPut,
+    // el GetBuilder borraria el controller al salir de su pagina.
+    // El padre va primero porque los pasos lo reciben por constructor.
+    Get.put(AddCustomerController(
+      createCustomerUseCase: Get.find(),
+      updateCustomerUseCase: Get.find(),
+    ));
+    Get.put(AddCustomerPersonalDataController(
+      addCustomerController: Get.find(),
+      getTypesDocumentUseCase: Get.find(),
+    ));
+    Get.put(AddCustomerAddressDataController(
+      addCustomerController: Get.find(),
+    ));
+    Get.put(AddCustomerPaymentDataController(
+      addCustomerController: Get.find(),
+      getCustomerPaymentAccountsUseCase: Get.find(),
+      createCustomerPaymentAccountUseCase: Get.find(),
+      updateCustomerPaymentAccountUseCase: Get.find(),
+      deleteCustomerPaymentAccountUseCase: Get.find(),
+    ));
+    Get.put(AddCustomerManageDataController(
+      addCustomerController: Get.find(),
+      getTypesCustomerUseCase: Get.find(),
+      getUsersUseCase: Get.find(),
+    ));
   }
 
 }

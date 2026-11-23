@@ -15,7 +15,7 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   Future<Result<PayAndRenewalResponse>> payAndRenewal(PayAndRenewalRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response =
-        await appHttpManager.post(url: '/renewal/pay_and_renewal', body: request.toApi());
+        await appHttpManager.post(url: '/renewal/payAndRenewal', body: request.toApi());
 
     return executeResponseObject<PayAndRenewalResponse>(
         response: response, convert: PayAndRenewalResponse.fromJson);
@@ -45,7 +45,7 @@ class RenewalOnlineDatastore extends RenewalDataStore {
   Future<Result<PayAndRenewalResponse>> payAndRenewalSpecial(PayAndRenewalSpecialRequest request) async {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response =
-        await appHttpManager.post(url: '/renewal/pay_and_renewal_special', body: request.toApi());
+        await appHttpManager.post(url: '/renewal/payAndRenewalSpecial', body: request.toApi());
 
     return executeResponseObject<PayAndRenewalResponse>(
         response: response, convert: PayAndRenewalResponse.fromJson);
