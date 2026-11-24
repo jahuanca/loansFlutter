@@ -17,9 +17,6 @@ class AddCustomerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String titleAppbar =
-        controller.isEditing ? editCustomerString : addCustomerString;
-
     return GetBuilder<AddCustomerController>(
       id: pageIdGet,
       builder: (controller) => PopScope(
@@ -27,7 +24,7 @@ class AddCustomerPage extends StatelessWidget {
         onPopInvokedWithResult: (didPop, _) => controller.onPopInvoked(didPop),
         child: Scaffold(
           appBar: appBarWidget(
-            text: titleAppbar,
+            text: addCustomerString,
             hasArrowBack: true,
           ),
           bottomNavigationBar: _bottomButtons(controller),

@@ -1,6 +1,8 @@
 
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
 import 'package:loands_flutter/src/customers/data/requests/customer_payment_account_request.dart';
+import 'package:loands_flutter/src/customers/data/requests/update_customer_manage_data_request.dart';
+import 'package:loands_flutter/src/customers/data/requests/update_customer_personal_data_request.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
@@ -54,6 +56,28 @@ class AddCustomerUi {
       phone: phone?.value,
       name: name?.value,
       customerPaymentAccounts: paymentAccounts.map(CustomerPaymentAccountRequest.new).toList(),
+    );
+  }
+
+  /// Solo para edicion: `id` viene cargado por setValuesOfCustomer.
+  UpdateCustomerPersonalDataRequest toPersonalDataRequest() {
+    return UpdateCustomerPersonalDataRequest(
+      id: id!.value!,
+      idTypeDocument: idTypeDocument?.value,
+      document: document?.value,
+      alias: alias?.value,
+      name: name?.value,
+      lastName: lastName?.value,
+      phone: phone?.value,
+    );
+  }
+
+  /// Solo para edicion: `id` viene cargado por setValuesOfCustomer.
+  UpdateCustomerManageDataRequest toManageDataRequest() {
+    return UpdateCustomerManageDataRequest(
+      id: id!.value!,
+      idTypeCustomer: idTypeCustomer?.value,
+      idAssignedRecoveryAgent: idAssignedRecoveryAgent?.value,
     );
   }
 

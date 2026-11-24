@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/di/add_customer_binding.dart';
 import 'package:loands_flutter/src/customers/di/customer_analytics_binding.dart';
+import 'package:loands_flutter/src/customers/di/customer_detail_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/get_customers_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_page.dart';
 import 'package:loands_flutter/src/customers/ui/pages/customer_analytics/customer_analytics_page.dart';
+import 'package:loands_flutter/src/customers/ui/pages/customer_detail/customer_detail_page.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
@@ -56,31 +58,26 @@ class CustomersController extends GetxController {
         arguments: {customersArgument: customers});
   }
 
-  void goToEditCustomer(CustomerEntity customer) {
-    Get.to(() => AddCustomerPage(),
-        binding: AddCustomerBinding(), arguments: {customerArgument: customer});
-  }
-
   void goToDeleteCustomer() async {
     bool result = await showDialogWidget(
         context: Get.context!, message: '¿Está seguro de eliminar el cliente?');
     if (result) {}
   }
 
+  /// Abre el detalle; si alli se edito el cliente, vuelve actualizado y se reemplaza en la lista.
   void goToDetail(CustomerEntity customer) async {
+    final result = await Get.to<CustomerEntity>(
+      () => CustomerDetailPage(),
+      binding: CustomerDetailBinding(),
+      arguments: {customerArgument: customer},
+    );
+    if (result == null) return;
 
-    final int index = customers.indexWhere((e) => customer.id == e.id);
-    if (index == notFoundPosition) return;
-
-    final result = await Get.to<CustomerEntity>(() => AddCustomerPage(), binding: AddCustomerBinding(), arguments: {
-      customerArgument: customer,
-    });
-
-    if (result != null) {
-      customers[index] = result;
-      update([pageIdGet]);
-    }
-
+    final int index = customers.indexWhere((e) => e.id == result.id);
+    if (index != notFoundPosition) customers[index] = result;
+    final int indexToShow = customersToShow.indexWhere((e) => e.id == result.id);
+    if (indexToShow != notFoundPosition) customersToShow[indexToShow] = result;
+    update([pageIdGet]);
   }
 
   void onChangedSearch(String value) {

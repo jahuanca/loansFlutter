@@ -31,6 +31,7 @@ dependencies:
   cloud_firestore: ^6.7.1
   firebase_analytics: ^12.4.5
   file_picker: ^11.0.3
+  geolocator: ^14.0.2
 
 dev_dependencies:
   melos: ^6.3.3

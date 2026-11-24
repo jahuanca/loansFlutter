@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_ui.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -11,18 +10,18 @@ import 'package:utils/utils.dart';
 
 /// Paso 1: tipo de documento, documento, alias, nombre, apellido y celular.
 class AddCustomerPersonalDataController extends GetxController {
-  AddCustomerController addCustomerController;
+  /// Estado compartido del formulario. Lo inyecta el binding: en alta es el de
+  /// AddCustomerController y en edicion uno cargado con los datos del cliente.
+  AddCustomerUi ui;
   GetTypesDocumentUseCase getTypesDocumentUseCase;
 
   List<TypeDocumentEntity> typesDocument = [];
   TypeDocumentEntity? typeDocumentSelected;
 
   AddCustomerPersonalDataController({
-    required this.addCustomerController,
+    required this.ui,
     required this.getTypesDocumentUseCase,
   });
-
-  AddCustomerUi get ui => addCustomerController.ui;
 
   @override
   void onReady() {
@@ -39,7 +38,7 @@ class AddCustomerPersonalDataController extends GetxController {
     if (data != null) {
       typesDocument = data;
       if (typesDocument.isNotEmpty) {
-        // En edicion se respeta el tipo guardado del cliente.
+        // Si el cliente ya tiene un tipo (edicion desde el detalle), se respeta.
         onChangedTypeDocument(initialValue ?? typesDocument.first.id);
       }
     }

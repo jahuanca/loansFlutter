@@ -1,4 +1,6 @@
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
+import 'package:loands_flutter/src/customers/data/requests/update_customer_manage_data_request.dart';
+import 'package:loands_flutter/src/customers/data/requests/update_customer_personal_data_request.dart';
 import 'package:loands_flutter/src/customers/data/responses/customer_analytics_response.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
@@ -30,6 +32,26 @@ class CustomerOnlineDatastore extends CustomerDatastore {
     final AppHttpManager appHttpManager = AppHttpManager();
     final Result<AppResponseHttp> response = await appHttpManager.put(
         url: '/customer/update', body: request.toJson());
+    return executeResponseObject(
+        response: response, convert: CustomerEntity.fromJson);
+  }
+
+  @override
+  Future<Result<CustomerEntity>> updatePersonalData(
+      UpdateCustomerPersonalDataRequest request) async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final Result<AppResponseHttp> response = await appHttpManager.put(
+        url: '/customer/update-personal-data', body: request.toJson());
+    return executeResponseObject(
+        response: response, convert: CustomerEntity.fromJson);
+  }
+
+  @override
+  Future<Result<CustomerEntity>> updateManageData(
+      UpdateCustomerManageDataRequest request) async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final Result<AppResponseHttp> response = await appHttpManager.put(
+        url: '/customer/update-manage-data', body: request.toJson());
     return executeResponseObject(
         response: response, convert: CustomerEntity.fromJson);
   }

@@ -31,6 +31,21 @@ Future<void> calling(String phoneNumber) async {
   }
 }
 
+/// Abre la ubicacion en Google Maps (app o navegador). Con coordenadas va al punto exacto;
+/// sin ellas, busca el texto de la direccion.
+Future<void> openMap({double? latitude, double? longitude, String? address}) async {
+  final String query = (latitude != null && longitude != null)
+      ? '$latitude,$longitude'
+      : (address ?? '');
+  final Uri url = Uri.https('www.google.com', '/maps/search/', {
+    'api': '1',
+    'query': query,
+  });
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $url');
+  }
+}
+
 Future<String?> getAndroidId() async {
   var deviceInfo = DeviceInfoPlugin();
   if (Platform.isIOS) {

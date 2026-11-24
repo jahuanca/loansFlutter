@@ -3,7 +3,6 @@ import 'package:loands_flutter/src/chats/domain/entities/user_entity.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/entities/type_customer_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_ui.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
@@ -13,7 +12,9 @@ import 'package:utils/utils.dart';
 
 /// Paso 4: tipo de cliente y recuperador asignado.
 class AddCustomerManageDataController extends GetxController {
-  AddCustomerController addCustomerController;
+  /// Estado compartido del formulario. Lo inyecta el binding: en alta es el de
+  /// AddCustomerController y en edicion uno cargado con los datos del cliente.
+  AddCustomerUi ui;
   GetTypesCustomerUseCase getTypesCustomerUseCase;
   GetUsersUseCase getUsersUseCase;
 
@@ -23,12 +24,10 @@ class AddCustomerManageDataController extends GetxController {
   UserEntity? recoverySelected;
 
   AddCustomerManageDataController({
-    required this.addCustomerController,
+    required this.ui,
     required this.getTypesCustomerUseCase,
     required this.getUsersUseCase,
   });
-
-  AddCustomerUi get ui => addCustomerController.ui;
 
   @override
   void onReady() {

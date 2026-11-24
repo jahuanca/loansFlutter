@@ -1,5 +1,7 @@
 
 import 'package:loands_flutter/src/customers/data/requests/create_customer_request.dart';
+import 'package:loands_flutter/src/customers/data/requests/update_customer_manage_data_request.dart';
+import 'package:loands_flutter/src/customers/data/requests/update_customer_personal_data_request.dart';
 import 'package:loands_flutter/src/customers/data/responses/customer_analytics_response.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_datastore.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
@@ -29,6 +31,16 @@ class CustomerRepositoryImplementation extends CustomerRepository {
     return datastore.update(request);
   }
   
+  @override
+  Future<Result<CustomerEntity>> updatePersonalData(UpdateCustomerPersonalDataRequest request) {
+    return datastore.updatePersonalData(request);
+  }
+
+  @override
+  Future<Result<CustomerEntity>> updateManageData(UpdateCustomerManageDataRequest request) {
+    return datastore.updateManageData(request);
+  }
+
   @override
   Future<Result<CustomerAnalyticsResponse>> getAnalytics(int idOfCustomer) {
     return datastore.getAnalytics(idOfCustomer);
