@@ -27,7 +27,6 @@ String shareInformation({
     information += 'Cantidad de cuotas: ${quotas.length}\n';
     information += 'Monto de cuota: S/ ${firstQuota.amount.formatDecimals()}\n';
 
-    double amountToSendMe = firstQuota.amount - (firstQuota.ganancy / 2);
     information += 'Fechas:';
 
     for (QuotaEntity quota in quotas) {
@@ -74,7 +73,6 @@ String shareInformationSpecial({
     information += 'Cantidad de cuotas: ${quotas.length}\n';
     information += 'Monto de cuota: S/ ${firstQuota.amount.formatDecimals()}\n';
 
-    double amountToSendMe = firstQuota.amount - (firstQuota.ganancy / 2);
 
     information += 'Fechas:';
 

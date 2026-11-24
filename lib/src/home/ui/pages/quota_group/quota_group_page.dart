@@ -80,10 +80,6 @@ class QuotaGroupPage extends StatelessWidget {
   Widget _bottomNavigationMultiple() {
     if (controller.quotasSelected.isEmpty) return const SizedBox();
 
-    List<DashboardQuotaResponse> quotas = controller.quotasSelected;
-    List<double> ganancys = quotas.map((e) => e.ganancy).toList();
-    List<double> capitals = quotas.map((e) => (e.amount - e.ganancy)).toList();
-
     // TODO: mejorar la pantalla resumen
     // todos seran marcados como pagados en la fecha que les toca 
     // en el resumen mostrar cantidad 

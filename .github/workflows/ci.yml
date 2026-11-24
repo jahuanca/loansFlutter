@@ -1,0 +1,45 @@
+# CI de la app: analiza el código y corre los tests en cada PR y en cada push a main.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Si subes otro commit al mismo PR, cancela la corrida anterior.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze-and-test:
+    name: Analyze y tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Flutter 3.35.6 (misma versión que .fvmrc, con caché)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.35.6
+          channel: stable
+          cache: true          # cachea el SDK de Flutter
+          pub-cache: true      # cachea los paquetes de pub (~/.pub-cache)
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      # Falla si hay errores o warnings. Los "info" (sugerencias de estilo) no bloquean.
+      - name: Analizar código
+        run: flutter analyze --no-fatal-infos
+
+      # Todavía no hay carpeta test/: el paso se salta hasta que exista.
+      - name: Tests
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "No hay carpeta test/ todavía; se omiten los tests."
+          fi
