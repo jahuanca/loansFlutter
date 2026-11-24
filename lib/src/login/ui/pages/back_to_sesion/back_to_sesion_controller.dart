@@ -71,7 +71,6 @@ class BackToSesionController extends GetxController {
         await loginUseCase.execute(ui.loginRequest);
     final data = executeResultUI<LoginEntity>(resultType);
     if (data != null) {
-      String? androidId = await getAndroidId();
       LoginEntity loginEntity = data;
       await LocalPreferences().setKeepSesion(ui.keepSesion!.value.orFalse());
       await UserPreferences().setToken(loginEntity.token);
@@ -87,13 +86,15 @@ class BackToSesionController extends GetxController {
       final List<BiometricType> availableBiometrics =
           await auth.getAvailableBiometrics();
 
-      if (availableBiometrics.isNotEmpty) {
-        final bool didAuthenticate = await auth.authenticate(
-          localizedReason: 'Please authenticate to show account balance',
-          biometricOnly: true,
-          persistAcrossBackgrounding: true,
-        );
-      }
+      if (availableBiometrics.isEmpty) return;
+
+      final bool didAuthenticate = await auth.authenticate(
+        localizedReason: 'Please authenticate to show account balance',
+        biometricOnly: true,
+        persistAcrossBackgrounding: true,
+      );
+      // Si la huella falla o se cancela, no se entra a la app.
+      if (didAuthenticate.not()) return;
 
       if (availableBiometrics.contains(BiometricType.strong) ||
           availableBiometrics.contains(BiometricType.face)) {

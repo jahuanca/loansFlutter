@@ -165,7 +165,6 @@ class QuotaGroupController extends GetxController {
               .toCapitalize();
           bool hasTitle = false;
           double totalAmount = 0;
-          double totalSendMe = 0;
           for (Map<String, dynamic> element in value) {
             DashboardQuotaResponse quota =
                 DashboardQuotaResponse.fromJson(element);
@@ -176,9 +175,7 @@ class QuotaGroupController extends GetxController {
               hasTitle = true;
             }
             double amount = quota.amount;
-            double sendMe = amount - (quota.ganancy / 2);
             totalAmount += amount;
-            totalSendMe += sendMe;
             data +=
                 'P#${quota.idLoan} ${quota.aliasOrName}, cuota ${quota.name}, monto: ${amount.formatDecimals()}\n';            
           }

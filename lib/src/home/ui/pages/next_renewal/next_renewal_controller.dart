@@ -70,7 +70,6 @@ class NextRenewalController extends GetxController {
             if (quota.idStateQuota != idOfPendingQuota) continue;
             if (quota.isSpecial) continue;
             double amount = quota.amount;
-            double sendMe = amount - (quota.ganancy / 2);
             data += 'P#${quota.idLoan} ${quota.aliasOrName}'
                 ', cuota ${quota.name}, monto: ${amount.formatDecimals()}'
                 '\nActual: S/${quota.amountOfLoan?.formatDecimals()}, Anterior: S/${quota.amountOfLastLoan?.formatDecimals()}\n';
