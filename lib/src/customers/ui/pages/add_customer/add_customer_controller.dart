@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
+import 'package:loands_flutter/src/customers/data/requests/customer_payment_account_request.dart';
+import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/create_customer_payment_account_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_step_enum.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_ui.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_address_data/add_customer_address_data_controller.dart';
@@ -22,6 +25,7 @@ import 'package:utils/utils.dart';
 /// La validacion de cada paso vive en el controller de ese paso.
 class AddCustomerController extends GetxController {
   CreateCustomerUseCase createCustomerUseCase;
+  CreateCustomerPaymentAccountUseCase createCustomerPaymentAccountUseCase;
 
   AddCustomerUi ui = AddCustomerUi();
 
@@ -31,6 +35,7 @@ class AddCustomerController extends GetxController {
 
   AddCustomerController({
     required this.createCustomerUseCase,
+    required this.createCustomerPaymentAccountUseCase,
   });
 
   AddCustomerStep get currentStepType => steps[currentStep];
@@ -114,8 +119,12 @@ class AddCustomerController extends GetxController {
     showLoading();
     final Result<CustomerEntity> resultType =
         await createCustomerUseCase.execute(ui.toRequest());
-    hideLoading();
     final data = executeResultUI<CustomerEntity>(resultType);
+    if (data != null) {
+      // Las cuentas tienen su propio servicio: se crean despues del cliente.
+      data.customerPaymentAccounts = await _createPaymentAccounts(data.id);
+    }
+    hideLoading();
     if (data != null) {
       trackEvent(AnalyticsConstants.createCustomerSuccess());
       showSnackbarWidget(
@@ -124,6 +133,29 @@ class AddCustomerController extends GetxController {
           message: 'Éxito');
       Get.back(result: data);
     }
+  }
+
+  /// Crea en /customer-payment-account las cuentas agregadas en el paso 3.
+  /// No es atomico: si alguna falla, el cliente ya existe y se avisa para
+  /// agregarla desde el detalle del cliente.
+  Future<List<CustomerPaymentAccountEntity>> _createPaymentAccounts(int idCustomer) async {
+    final List<CustomerPaymentAccountEntity> created = [];
+    int failed = 0;
+    for (final account in ui.paymentAccounts) {
+      final result = await createCustomerPaymentAccountUseCase.execute(
+          idCustomer, CustomerPaymentAccountRequest(account));
+      switch (result) {
+        case Success():
+          created.add(result.value);
+        case Error():
+          failed++;
+      }
+    }
+    if (failed > 0) {
+      _showError('Cliente creado, pero $failed cuenta(s) de pago no se guardaron. '
+          'Agréguelas desde el detalle del cliente.');
+    }
+    return created;
   }
 
   void _showError(String message) {

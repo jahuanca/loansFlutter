@@ -8,8 +8,7 @@ class CustomerPaymentAccountRequest {
 
   CustomerPaymentAccountRequest(this.account);
 
-  /// Cuenta anidada en POST /customer/create (aun no existe idCustomer).
-  Map<String, dynamic> toNestedJson() => {
+  Map<String, dynamic> _baseJson() => {
         'idPaymentProvider': account.idPaymentProvider,
         'accountNumber': account.accountNumber,
         'cci': account.cci,
@@ -21,13 +20,13 @@ class CustomerPaymentAccountRequest {
 
   /// POST /customer-payment-account/create
   Map<String, dynamic> toCreateJson(int idCustomer) => {
-        ...toNestedJson(),
+        ..._baseJson(),
         'idCustomer': idCustomer,
       };
 
   /// PUT /customer-payment-account/update (idCustomer no se envia: no cambia de cliente)
   Map<String, dynamic> toUpdateJson() => {
-        ...toNestedJson(),
+        ..._baseJson(),
         'id': account.id,
       };
 }

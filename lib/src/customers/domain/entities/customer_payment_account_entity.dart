@@ -41,7 +41,7 @@ class CustomerPaymentAccountEntity {
   @HiveField(10)
   String? observation;
 
-  // Sin @HiveField: viene del include `paymentProvider` de la API y no se guarda en Hive.
+  // Sin @HiveField: viene del include de Sequelize, que llega en PascalCase (`PaymentProvider`), y no se guarda en Hive.
   PaymentProviderEntity? paymentProvider;
 
   CustomerPaymentAccountEntity({
@@ -73,9 +73,9 @@ class CustomerPaymentAccountEntity {
         holderName: json["holderName"],
         isDefault: json["isDefault"] ?? false,
         observation: json["observation"],
-        paymentProvider: json["paymentProvider"] == null
+        paymentProvider: json["PaymentProvider"] == null
             ? null
-            : PaymentProviderEntity.fromJson(json["paymentProvider"]),
+            : PaymentProviderEntity.fromJson(json["PaymentProvider"]),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.tryParse(json["createdAt"]),
@@ -94,7 +94,7 @@ class CustomerPaymentAccountEntity {
         "holderName": holderName,
         "isDefault": isDefault,
         "observation": observation,
-        "paymentProvider": paymentProvider?.toJson(),
+        "PaymentProvider": paymentProvider?.toJson(),
         "createdAt": createdAt?.toServer(),
         "updatedAt": updatedAt?.toServer(),
       };
