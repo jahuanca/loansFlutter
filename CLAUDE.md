@@ -98,7 +98,12 @@ Ejemplos de referencia: `customers/` (`type_customer` es el más simple) y `loan
 
 - `.claude/skills/loans-flutter-feature/` — paso a paso para conectar un endpoint nuevo (las 8 piezas de arriba). Usarla al crear funcionalidades de datos.
 - `../.claude/skills/loans-api-contract-sync/` (raíz del repo) — comparar el contrato `loans_node` ↔ Flutter cuando cambia una ruta, un body o un JSON.
+- `.claude/skills/pre-review/` — revisa el diff (rama vs `main` + cambios sin commit) buscando bugs, seguridad y tests faltantes. Usarla antes de push/PR (`/pre-review`).
 - Reglas de sincronización de contrato: `../AGENTS.md`.
+
+## Hooks
+
+- `.claude/settings.json` → `PostToolUse` en `Edit|Write|MultiEdit` corre `.claude/hooks/check_edited_dart.js`: `dart analyze` solo del `.dart` editado (vía `fvm` si existe). Si hay errores/warnings sale con código 2 y Claude ve el detalle para corregirlo. Se salta los `*.g.dart`.
 
 ## Al trabajar en este repo
 
