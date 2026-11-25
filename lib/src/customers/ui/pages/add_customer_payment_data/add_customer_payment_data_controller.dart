@@ -8,7 +8,8 @@ import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:utils/utils.dart';
 
 /// Paso 3: cuentas de pago. La edicion de cada cuenta vive en AddCustomerPaymentAccountPage.
-/// Las cuentas se guardan en memoria y viajan con el create del cliente.
+/// Las cuentas se guardan en memoria y, al confirmar, AddCustomerController las crea
+/// con su propio servicio (/customer-payment-account) despues de crear el cliente.
 /// (Las de un cliente existente se gestionan desde el detalle del cliente.)
 class AddCustomerPaymentDataController extends GetxController {
   /// Estado compartido del formulario (el de AddCustomerController, via binding).

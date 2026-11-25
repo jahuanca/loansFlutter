@@ -6,6 +6,11 @@ import 'package:loands_flutter/src/chats/data/repositories/user_repository_imple
 import 'package:loands_flutter/src/chats/domain/repositories/user_repository.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer_payment_account/customer_payment_account_datastore.dart';
+import 'package:loands_flutter/src/customers/data/datastores/customer_payment_account/customer_payment_account_online_datastore.dart';
+import 'package:loands_flutter/src/customers/data/repositories/customer_payment_account_repository_implementation.dart';
+import 'package:loands_flutter/src/customers/domain/repositories/customer_payment_account_repository.dart';
+import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/create_customer_payment_account_use_case.dart';
 import 'package:loands_flutter/src/customers/data/datastores/type_customer/type_customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
 import 'package:loands_flutter/src/customers/data/repositories/type_customer_repository_implementation.dart';
@@ -47,12 +52,20 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut(() => GetTypesCustomerUseCase(Get.find()));
     Get.lazyPut(() => GetUsersUseCase(Get.find()));
 
+    // Las cuentas de pago usan su propio servicio (/customer-payment-account):
+    // se crean una por una despues de crear el cliente.
+    Get.lazyPut<CustomerPaymentAccountDatastore>(() => CustomerPaymentAccountOnlineDatastore());
+    Get.lazyPut<CustomerPaymentAccountRepository>(
+        () => CustomerPaymentAccountRepositoryImplementation(datastore: Get.find()));
+    Get.lazyPut(() => CreateCustomerPaymentAccountUseCase(repository: Get.find()));
+
     // Controllers del formulario por pasos. Se usa Get.put (no lazyPut) para que vivan
     // mientras dure la ruta: el PageView destruye las paginas que no se ven y, con lazyPut,
     // el GetBuilder borraria el controller al salir de su pagina.
     // El padre va primero: los pasos reciben su `ui` (estado compartido) por constructor.
     final AddCustomerController addCustomerController = Get.put(AddCustomerController(
       createCustomerUseCase: Get.find(),
+      createCustomerPaymentAccountUseCase: Get.find(),
     ));
     Get.put(AddCustomerPersonalDataController(
       ui: addCustomerController.ui,
