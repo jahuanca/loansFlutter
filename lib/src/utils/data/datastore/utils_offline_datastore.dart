@@ -5,6 +5,7 @@ import 'package:loands_flutter/src/utils/data/datastore/utils_datastore.dart';
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
+import 'package:loands_flutter/src/utils/domain/entities/payment_provider_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/type_document_entity.dart';
 import 'package:utils/utils.dart';
 
@@ -29,6 +30,13 @@ class UtilsOfflineDatastore extends UtilsDatastore  {
     List<PaymentFrequencyEntity> data = box.values.toList();
     await box.close();
     return Result.success(data);
+  }
+
+  // Sin caja Hive para proveedores todavia: el formulario de cuenta de pago
+  // solo se usa con conexion (crea/edita contra la API).
+  @override
+  Future<Result<List<PaymentProviderEntity>>> getPaymentProviders() {
+    throw UnimplementedError();
   }
 
   @override

@@ -2,21 +2,38 @@ import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_payment_account/add_customer_payment_account_ui.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
+import 'package:loands_flutter/src/utils/core/helpers.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_provider_entity.dart';
+import 'package:loands_flutter/src/utils/domain/use_cases/get_payment_providers_use_case.dart';
+import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
 /// Formulario de una cuenta de pago. No llama a la API: valida y devuelve la
 /// entidad con Get.back(result: ...). Quien la abre (AddCustomerController)
 /// decide si la guarda en memoria (cliente nuevo) o contra el endpoint (edicion).
+///
+/// Los proveedores vienen de /utils/payment-provider. Segun la categoria del
+/// proveedor elegido se muestran (y validan) solo sus campos:
+/// - BANK: numero de cuenta y CCI.
+/// - WALLET: celular de pago.
 class AddCustomerPaymentAccountController extends GetxController {
-  List<PaymentProviderEntity> paymentProviders = PaymentProviderEntity.defaults;
+  GetPaymentProvidersUseCase getPaymentProvidersUseCase;
+
+  List<PaymentProviderEntity> paymentProviders = [];
   PaymentProviderEntity? paymentProviderSelected;
 
   AddCustomerPaymentAccountUi ui = AddCustomerPaymentAccountUi();
   bool isEditing = false;
+
+  AddCustomerPaymentAccountController({
+    required this.getPaymentProvidersUseCase,
+  });
+
+  bool get showBankFields => paymentProviderSelected?.isBank ?? false;
+  bool get showWalletFields => paymentProviderSelected?.isWallet ?? false;
 
   @override
   void onInit() {
@@ -24,13 +41,34 @@ class AddCustomerPaymentAccountController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onReady() {
+    getPaymentProviders();
+    super.onReady();
+  }
+
   void setInitialValues() {
     CustomerPaymentAccountEntity? account = Get.setArgument(customerPaymentAccountArgument);
     if (account != null) {
       isEditing = true;
       ui.setValuesOfAccount(account);
-      onChangedPaymentProvider(ui.idPaymentProvider?.value);
     }
+  }
+
+  Future<void> getPaymentProviders() async {
+    showLoading();
+    final result = await getPaymentProvidersUseCase.execute();
+    final data = executeResultUI<List<PaymentProviderEntity>>(result);
+    hideLoading();
+    if (data != null) {
+      paymentProviders = data;
+      // En edicion ya hay un proveedor: se resuelve contra la lista recien cargada
+      // para saber su categoria y mostrar los campos correctos.
+      if (ui.idPaymentProvider?.value != null) {
+        onChangedPaymentProvider(ui.idPaymentProvider?.value);
+      }
+    }
+    update([paymentProvidersIdGet]);
   }
 
   void onChangedPaymentProvider(dynamic value) {
@@ -119,13 +157,20 @@ class AddCustomerPaymentAccountController extends GetxController {
     return null;
   }
 
+  /// Solo se validan los campos visibles: si el usuario escribio un celular y
+  /// luego cambio a un banco, ese celular oculto no debe bloquear el formulario.
   String? validate() {
-    onChangedAccountNumber(ui.accountNumber?.value ?? '');
-    onChangedCci(ui.cci?.value ?? '');
-    onChangedPaymentPhone(ui.paymentPhone?.value ?? '');
+    if (showBankFields) {
+      onChangedAccountNumber(ui.accountNumber?.value ?? '');
+      onChangedCci(ui.cci?.value ?? '');
+    }
+    if (showWalletFields) {
+      onChangedPaymentPhone(ui.paymentPhone?.value ?? '');
+    }
     onChangedHolderName(ui.holderName?.value ?? '');
     onChangedObservation(ui.observation?.value ?? '');
-    return ui.validate()?.error ?? _validateByCategory();
+    return ui.validate(isBank: showBankFields, isWallet: showWalletFields)?.error ??
+        _validateByCategory();
   }
 
   void goConfirm() {
@@ -137,7 +182,8 @@ class AddCustomerPaymentAccountController extends GetxController {
           message: message);
       return;
     }
-    final account = ui.toEntity()..paymentProvider = paymentProviderSelected;
+    final account = ui.toEntity(isBank: showBankFields, isWallet: showWalletFields)
+      ..paymentProvider = paymentProviderSelected;
     Get.back(result: account);
   }
 }

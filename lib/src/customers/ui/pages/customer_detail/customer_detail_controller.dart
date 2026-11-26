@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/customers/di/add_customer_payment_account_binding.dart';
 import 'package:loands_flutter/src/chats/domain/entities/user_entity.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/di/edit_customer_address_binding.dart';
@@ -181,7 +182,8 @@ class CustomerDetailController extends GetxController {
   /// y aqui se guarda contra /customer-payment-account/create.
   void goAddPaymentAccount() async {
     final CustomerPaymentAccountEntity? account =
-        await Get.to<CustomerPaymentAccountEntity>(() => AddCustomerPaymentAccountPage());
+        await Get.to<CustomerPaymentAccountEntity>(() => AddCustomerPaymentAccountPage(),
+            binding: AddCustomerPaymentAccountBinding());
     if (account == null) return;
     showLoading();
     final result = await createCustomerPaymentAccountUseCase.execute(

@@ -3,6 +3,7 @@ import 'package:loands_flutter/src/utils/data/datastore/utils_datastore.dart';
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
+import 'package:loands_flutter/src/utils/domain/entities/payment_provider_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/type_document_entity.dart';
 import 'package:utils/utils.dart';
 
@@ -40,5 +41,14 @@ class UtilsOnlineDatastore extends UtilsDatastore {
 
     return executeResponseList<ActivityLogEntity>(
         response: response, convert: activityLogEntityFromJson);
+  }
+
+  @override
+  Future<Result<List<PaymentProviderEntity>>> getPaymentProviders() async {
+    final AppHttpManager appHttpManager = AppHttpManager();
+    final response = await appHttpManager.get(url: '/utils/payment-provider');
+
+    return executeResponseList<PaymentProviderEntity>(
+        response: response, convert: paymentProviderEntityFromJson);
   }
 }

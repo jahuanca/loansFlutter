@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loands_flutter/src/customers/di/add_customer_payment_account_binding.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_ui.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_payment_account/add_customer_payment_account_page.dart';
@@ -19,7 +20,8 @@ class AddCustomerPaymentDataController extends GetxController {
 
   void goAddPaymentAccount() async {
     final account = await Get.to<CustomerPaymentAccountEntity>(
-        () => AddCustomerPaymentAccountPage());
+        () => AddCustomerPaymentAccountPage(),
+        binding: AddCustomerPaymentAccountBinding());
     if (account == null) return;
     _setLocalDefault(account);
     ui.paymentAccounts.add(account);
@@ -29,6 +31,7 @@ class AddCustomerPaymentDataController extends GetxController {
   void goEditPaymentAccount(int index) async {
     final account = await Get.to<CustomerPaymentAccountEntity>(
         () => AddCustomerPaymentAccountPage(),
+        binding: AddCustomerPaymentAccountBinding(),
         arguments: {customerPaymentAccountArgument: ui.paymentAccounts[index]});
     if (account == null) return;
     _setLocalDefault(account);

@@ -13,21 +13,29 @@ class AddCustomerPaymentAccountUi {
   int? _id;
   int? _idCustomer;
 
-  ValidateResult? validate() {
-    return findErrorInValidations(
-        [idPaymentProvider, accountNumber, cci, paymentPhone, holderName, observation]);
+  /// Solo revisa los campos de la categoria elegida (los demas estan ocultos).
+  ValidateResult? validate({required bool isBank, required bool isWallet}) {
+    return findErrorInValidations([
+      idPaymentProvider,
+      if (isBank) ...[accountNumber, cci],
+      if (isWallet) paymentPhone,
+      holderName,
+      observation,
+    ]);
   }
 
-  CustomerPaymentAccountEntity toEntity() {
+  /// Los campos que no son de la categoria se mandan en null (el backend hace
+  /// lo mismo en normalizeAccountByCategory).
+  CustomerPaymentAccountEntity toEntity({required bool isBank, required bool isWallet}) {
     String? orNull(String? value) =>
         (value == null || value.trim().isEmpty) ? null : value.trim();
     return CustomerPaymentAccountEntity(
       id: _id,
       idCustomer: _idCustomer,
       idPaymentProvider: idPaymentProvider!.value!,
-      accountNumber: orNull(accountNumber?.value),
-      cci: orNull(cci?.value),
-      phone: orNull(paymentPhone?.value),
+      accountNumber: isBank ? orNull(accountNumber?.value) : null,
+      cci: isBank ? orNull(cci?.value) : null,
+      phone: isWallet ? orNull(paymentPhone?.value) : null,
       holderName: orNull(holderName?.value),
       observation: orNull(observation?.value),
       isDefault: isDefault,
