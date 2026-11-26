@@ -118,7 +118,7 @@ class CustomersPage extends StatelessWidget {
       path: 'packages/utils/assets/images/image_not_found.png',
       storageType: StorageType.localStorage,
       title: customer.fullName,
-      subtitle: customer.address,
+      subtitle: customer.phone,
       detail: customer.alias,
       alignmentOfActions: MainAxisAlignment.spaceEvenly,
       actions: actionsOfCustomer(customer),

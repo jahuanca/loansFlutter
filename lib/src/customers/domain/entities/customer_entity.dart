@@ -18,10 +18,8 @@ class CustomerEntity {
     String? alias;
     @HiveField(3)
     String lastName;
-    @HiveField(4)
-    String address;
-    // Los indices 5 y 6 (antes latitude/longitude) quedan reservados: la ubicacion
-    // ahora vive en customer_addresses. No reutilizarlos.
+    // Los indices 4 (antes address), 5 y 6 (antes latitude/longitude) quedan reservados:
+    // la direccion y la ubicacion ahora viven en customer_addresses. No reutilizarlos.
     @HiveField(7)
     String? phone;
     @HiveField(8)
@@ -47,7 +45,6 @@ class CustomerEntity {
         required this.idAssignedRecoveryAgent,
         required this.name,
         required this.lastName,
-        required this.address,
         required this.idTypeCustomer,
         required this.idTypeDocument,
         required this.document,
@@ -74,7 +71,6 @@ class CustomerEntity {
         alias: json["alias"],
         name: json["name"],
         lastName: json["lastName"],
-        address: json["address"],
         phone: json["phone"],
         idTypeCustomer: json["idTypeCustomer"],
         idTypeDocument: json["idTypeDocument"],
@@ -98,7 +94,6 @@ class CustomerEntity {
         "alias": alias,
         "name": name,
         "lastName": lastName,
-        "address": address,
         "phone": phone,
         "idTypeCustomer": idTypeCustomer,
         "idTypeDocument": idTypeDocument,
