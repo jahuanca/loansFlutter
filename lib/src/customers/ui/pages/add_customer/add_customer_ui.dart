@@ -3,7 +3,6 @@ import 'package:loands_flutter/src/customers/data/requests/create_customer_reque
 import 'package:loands_flutter/src/customers/data/requests/update_customer_manage_data_request.dart';
 import 'package:loands_flutter/src/customers/data/requests/update_customer_personal_data_request.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
-import 'package:loands_flutter/src/customers/domain/entities/customer_payment_account_entity.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
@@ -20,14 +19,9 @@ class AddCustomerUi {
       name,
       alias,
       lastName,
-      phone,
-      address;
-
-  // Las cuentas se editan en AddCustomerPaymentAccountPage; aqui solo se guarda la lista.
-  List<CustomerPaymentAccountEntity> paymentAccounts = [];
+      phone;
 
   AddCustomerUi({
-    this.address,
     this.document,
     this.lastName,
     this.name,
@@ -39,14 +33,13 @@ class AddCustomerUi {
   });
 
   ValidateResult? validate() {
-    return findErrorInValidations([address, document, lastName, name, phone, idTypeCustomer, idTypeDocument, alias]);
+    return findErrorInValidations([document, lastName, name, phone, idTypeCustomer, idTypeDocument, alias]);
   }
 
   CreateCustomerRequest toRequest() {
     return CreateCustomerRequest(
       id: id?.value,
       idAssignedRecoveryAgent: idAssignedRecoveryAgent?.value,
-      address: address?.value,
       alias: alias?.value,
       document: document?.value,
       idTypeCustomer: idTypeCustomer?.value,
@@ -89,8 +82,6 @@ class AddCustomerUi {
     lastName = ValidateResult.initialize(label: lastNameString, value: customer.lastName);
     phone = ValidateResult.initialize(label: phoneString, value: customer.phone);
     document = ValidateResult.initialize(label: documentString, value: customer.document);
-    address = ValidateResult.initialize(label: addressString, value: customer.address);
-    paymentAccounts = [...customer.customerPaymentAccounts];
   }
 
 }

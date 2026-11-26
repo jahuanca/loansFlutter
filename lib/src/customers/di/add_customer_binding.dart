@@ -6,11 +6,6 @@ import 'package:loands_flutter/src/chats/data/repositories/user_repository_imple
 import 'package:loands_flutter/src/chats/domain/repositories/user_repository.dart';
 import 'package:loands_flutter/src/chats/domain/use_cases/get_users_use_case.dart';
 import 'package:loands_flutter/src/customers/data/datastores/customer/customer_online_datastore.dart';
-import 'package:loands_flutter/src/customers/data/datastores/customer_payment_account/customer_payment_account_datastore.dart';
-import 'package:loands_flutter/src/customers/data/datastores/customer_payment_account/customer_payment_account_online_datastore.dart';
-import 'package:loands_flutter/src/customers/data/repositories/customer_payment_account_repository_implementation.dart';
-import 'package:loands_flutter/src/customers/domain/repositories/customer_payment_account_repository.dart';
-import 'package:loands_flutter/src/customers/domain/use_cases/customer_payment_account/create_customer_payment_account_use_case.dart';
 import 'package:loands_flutter/src/customers/data/datastores/type_customer/type_customer_online_datastore.dart';
 import 'package:loands_flutter/src/customers/data/repositories/customer_repository_implementation.dart';
 import 'package:loands_flutter/src/customers/data/repositories/type_customer_repository_implementation.dart';
@@ -21,9 +16,7 @@ import 'package:loands_flutter/src/customers/domain/repositories/type_customer_r
 import 'package:loands_flutter/src/customers/domain/use_cases/customer/create_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/domain/use_cases/type_customer/get_types_customer_use_case.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer_address_data/add_customer_address_data_controller.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_manage_data/add_customer_manage_data_controller.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer_payment_data/add_customer_payment_data_controller.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_personal_data/add_customer_personal_data_controller.dart';
 import 'package:loands_flutter/src/utils/data/datastore/utils_online_datastore.dart';
 import 'package:loands_flutter/src/utils/data/repositories/utils_repository_implementation.dart';
@@ -52,30 +45,15 @@ class AddCustomerBinding extends Bindings {
     Get.lazyPut(() => GetTypesCustomerUseCase(Get.find()));
     Get.lazyPut(() => GetUsersUseCase(Get.find()));
 
-    // Las cuentas de pago usan su propio servicio (/customer-payment-account):
-    // se crean una por una despues de crear el cliente.
-    Get.lazyPut<CustomerPaymentAccountDatastore>(() => CustomerPaymentAccountOnlineDatastore());
-    Get.lazyPut<CustomerPaymentAccountRepository>(
-        () => CustomerPaymentAccountRepositoryImplementation(datastore: Get.find()));
-    Get.lazyPut(() => CreateCustomerPaymentAccountUseCase(repository: Get.find()));
-
-    // Controllers del formulario por pasos. Se usa Get.put (no lazyPut) para que vivan
-    // mientras dure la ruta: el PageView destruye las paginas que no se ven y, con lazyPut,
-    // el GetBuilder borraria el controller al salir de su pagina.
-    // El padre va primero: los pasos reciben su `ui` (estado compartido) por constructor.
+    // Controllers del formulario (padre + una seccion cada uno). Se usa Get.put para
+    // crearlos ya: el padre va primero porque las secciones reciben su `ui`
+    // (estado compartido) por constructor.
     final AddCustomerController addCustomerController = Get.put(AddCustomerController(
       createCustomerUseCase: Get.find(),
-      createCustomerPaymentAccountUseCase: Get.find(),
     ));
     Get.put(AddCustomerPersonalDataController(
       ui: addCustomerController.ui,
       getTypesDocumentUseCase: Get.find(),
-    ));
-    Get.put(AddCustomerAddressDataController(
-      ui: addCustomerController.ui,
-    ));
-    Get.put(AddCustomerPaymentDataController(
-      ui: addCustomerController.ui,
     ));
     Get.put(AddCustomerManageDataController(
       ui: addCustomerController.ui,

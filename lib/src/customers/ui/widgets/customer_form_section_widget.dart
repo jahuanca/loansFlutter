@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:utils/utils.dart';
 
-/// Bloque comun de cada paso del formulario de cliente: titulo + campos.
+/// Bloque comun de cada seccion del formulario de cliente: titulo + campos.
+/// `isScrollable: false` cuando varias secciones van dentro de un mismo scroll
+/// (AddCustomerPage); un scroll dentro de otro no tiene altura definida y falla.
 class CustomerFormSectionWidget extends StatelessWidget {
   final String title;
   final List<Widget> children;
+  final bool isScrollable;
 
   const CustomerFormSectionWidget({
     super.key,
     required this.title,
     required this.children,
+    this.isScrollable = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    final Widget content = Padding(
       padding: const EdgeInsetsGeometry.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,6 +34,7 @@ class CustomerFormSectionWidget extends StatelessWidget {
         ],
       ),
     );
+    return isScrollable ? SingleChildScrollView(child: content) : content;
   }
 }
 

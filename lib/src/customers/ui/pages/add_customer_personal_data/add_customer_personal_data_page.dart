@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/domain/entities/customer_entity.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_step_enum.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_personal_data/add_customer_personal_data_controller.dart';
 import 'package:loands_flutter/src/customers/ui/widgets/customer_form_section_widget.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
-/// Paso 1 del formulario de cliente (antes _sectionPersonalData).
+/// Seccion del formulario de cliente. Se usa en AddCustomerPage (junto a la otra
+/// seccion, sin scroll propio) y sola en EditCustomerPage.
 class AddCustomerPersonalDataPage extends StatelessWidget {
-  AddCustomerPersonalDataPage({super.key});
+  AddCustomerPersonalDataPage({super.key, this.isScrollable = true});
+
+  final bool isScrollable;
 
   final FocusNode focusNodeDocument = FocusNode();
   final FocusNode focusNodeAlias = FocusNode();
@@ -23,7 +25,8 @@ class AddCustomerPersonalDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomerFormSectionWidget(
-      title: AddCustomerStep.personalData.title,
+      title: personalInformationString,
+      isScrollable: isScrollable,
       children: [
         GetBuilder<AddCustomerPersonalDataController>(
           id: typesDocumentIdGet,

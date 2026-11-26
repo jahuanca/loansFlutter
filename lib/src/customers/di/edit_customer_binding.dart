@@ -45,7 +45,7 @@ class EditCustomerBinding extends Bindings {
 
     final AddCustomerUi ui = AddCustomerUi()..setValuesOfCustomer(customer);
 
-    // Solo se registra el controller del paso que se edita (cada uno carga sus catalogos).
+    // Solo se registra el controller de la seccion que se edita (cada uno carga sus catalogos).
     switch (section) {
       case EditCustomerSection.personalData:
         Get.lazyPut<UtilsDatastore>(() => UtilsOnlineDatastore());

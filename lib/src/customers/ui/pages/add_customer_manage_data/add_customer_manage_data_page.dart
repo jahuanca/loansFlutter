@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_step_enum.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_manage_data/add_customer_manage_data_controller.dart';
 import 'package:loands_flutter/src/customers/ui/widgets/customer_form_section_widget.dart';
 import 'package:loands_flutter/src/utils/core/ids_get.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
-/// Paso 4 del formulario de cliente (antes _sectionManageData).
+/// Seccion del formulario de cliente. Se usa en AddCustomerPage (junto a la otra
+/// seccion, sin scroll propio) y sola en EditCustomerPage.
 class AddCustomerManageDataPage extends StatelessWidget {
-  AddCustomerManageDataPage({super.key});
+  AddCustomerManageDataPage({super.key, this.isScrollable = true});
+
+  final bool isScrollable;
 
   final AddCustomerManageDataController controller =
       Get.find<AddCustomerManageDataController>();
@@ -17,7 +19,8 @@ class AddCustomerManageDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomerFormSectionWidget(
-      title: AddCustomerStep.manageData.title,
+      title: manageCustomerString,
+      isScrollable: isScrollable,
       children: [
         GetBuilder<AddCustomerManageDataController>(
           id: typesCustomerIdGet,

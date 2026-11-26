@@ -8,7 +8,7 @@ import 'package:loands_flutter/src/utils/domain/use_cases/get_types_document_use
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
-/// Paso 1: tipo de documento, documento, alias, nombre, apellido y celular.
+/// Seccion del formulario de cliente: tipo de documento, documento, alias, nombre, apellido y celular.
 class AddCustomerPersonalDataController extends GetxController {
   /// Estado compartido del formulario. Lo inyecta el binding: en alta es el de
   /// AddCustomerController y en edicion uno cargado con los datos del cliente.
@@ -104,7 +104,7 @@ class AddCustomerPersonalDataController extends GetxController {
     );
   }
 
-  /// Devuelve el primer error del paso, o null si todo es valido.
+  /// Devuelve el primer error de la seccion, o null si todo es valido.
   String? validate() {
     // `?.` + orEmpty: si el usuario nunca escribio en un campo, su ValidateResult es null.
     onChangedDocument(ui.document?.value.orEmpty() ?? '');

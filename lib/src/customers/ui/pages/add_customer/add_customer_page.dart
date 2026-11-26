@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer/add_customer_controller.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer_address_data/add_customer_address_data_page.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_manage_data/add_customer_manage_data_page.dart';
-import 'package:loands_flutter/src/customers/ui/pages/add_customer_payment_data/add_customer_payment_data_page.dart';
 import 'package:loands_flutter/src/customers/ui/pages/add_customer_personal_data/add_customer_personal_data_page.dart';
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
-/// Contenedor del formulario por pasos. Cada paso es una pagina con su propio controller;
-/// el PageView no se desliza con el dedo: solo se avanza con "Siguiente" (que valida el paso).
+/// Alta de cliente en un solo formulario con dos secciones (informacion personal y
+/// manejo de cliente). Direcciones y cuentas de pago se agregan luego desde el detalle,
+/// al que se llega automaticamente al crear.
 class AddCustomerPage extends StatelessWidget {
   AddCustomerPage({super.key});
 
@@ -17,83 +16,26 @@ class AddCustomerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AddCustomerController>(
-      id: pageIdGet,
-      builder: (controller) => PopScope(
-        canPop: controller.isFirstStep,
-        onPopInvokedWithResult: (didPop, _) => controller.onPopInvoked(didPop),
-        child: Scaffold(
-          appBar: appBarWidget(
-            text: addCustomerString,
-            hasArrowBack: true,
-          ),
-          bottomNavigationBar: _bottomButtons(controller),
-          body: Column(
-            children: [
-              _stepHeader(controller),
-              Expanded(
-                child: PageView(
-                  controller: controller.pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    AddCustomerPersonalDataPage(),
-                    AddCustomerAddressDataPage(),
-                    AddCustomerPaymentDataPage(),
-                    AddCustomerManageDataPage(),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: appBarWidget(
+        text: addCustomerString,
+        hasArrowBack: true,
+      ),
+      bottomNavigationBar: Padding(
+        padding: defaultPadding,
+        child: ButtonWidget(
+          text: createString,
+          onTap: controller.goCreate,
         ),
       ),
-    );
-  }
-
-  Widget _stepHeader(AddCustomerController controller) {
-    final int total = controller.steps.length;
-    final int position = controller.currentStep + 1;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Paso $position de $total · ${controller.currentStepType.title}',
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: position / total,
-            color: primaryColor,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _bottomButtons(AddCustomerController controller) {
-    return Padding(
-      padding: defaultPadding,
-      child: Row(
-        children: [
-          if (!controller.isFirstStep) ...[
-            Expanded(
-              child: ButtonWidget(
-                text: previousString,
-                buttonType: ButtonTypeWidget.ghost,
-                onTap: controller.goPreviousStep,
-              ),
-            ),
-            const SizedBox(width: 16),
+      // Un solo scroll para las dos secciones: por eso van con isScrollable: false.
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            AddCustomerPersonalDataPage(isScrollable: false),
+            AddCustomerManageDataPage(isScrollable: false),
           ],
-          Expanded(
-            child: ButtonWidget(
-              text: controller.isLastStep ? confirmString : nextString,
-              onTap: controller.goNextStep,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

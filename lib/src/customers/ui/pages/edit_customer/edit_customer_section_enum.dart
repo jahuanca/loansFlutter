@@ -1,6 +1,6 @@
 import 'package:loands_flutter/src/utils/core/strings.dart';
 
-/// Secciones del cliente que se editan desde su detalle reutilizando los pasos del alta.
+/// Secciones del cliente que se editan desde su detalle reutilizando las secciones del alta.
 enum EditCustomerSection {
   personalData(editPersonalInformationString),
   manageData(editTypeOfCustomerString);

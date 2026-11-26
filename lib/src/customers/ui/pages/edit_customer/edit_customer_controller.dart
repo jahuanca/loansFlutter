@@ -11,7 +11,7 @@ import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
-/// Edita una seccion del cliente. Los campos y su validacion son los del paso del alta
+/// Edita una seccion del cliente. Los campos y su validacion son los de la seccion del alta
 /// (AddCustomerPersonalDataController / AddCustomerManageDataController); este controller
 /// solo guarda. Cada seccion tiene su endpoint (/customer/update-personal-data y
 /// /customer/update-manage-data) que recibe solo los campos de esa seccion.
