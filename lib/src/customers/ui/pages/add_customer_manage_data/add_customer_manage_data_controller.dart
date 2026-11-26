@@ -10,7 +10,7 @@ import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:utils/utils.dart';
 
-/// Paso 4: tipo de cliente y recuperador asignado.
+/// Seccion del formulario de cliente: tipo de cliente y recuperador asignado.
 class AddCustomerManageDataController extends GetxController {
   /// Estado compartido del formulario. Lo inyecta el binding: en alta es el de
   /// AddCustomerController y en edicion uno cargado con los datos del cliente.

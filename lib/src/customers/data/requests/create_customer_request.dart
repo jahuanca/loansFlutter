@@ -2,8 +2,9 @@ import 'package:get/get_utils/get_utils.dart';
 import 'package:get/state_manager.dart';
 import 'package:utils/utils.dart';
 
-/// Body de POST /customer/create. Las cuentas de pago NO van aqui:
-/// usan su propio servicio (/customer-payment-account).
+/// Body de POST /customer/create. Direcciones y cuentas de pago NO van aqui:
+/// usan sus propios servicios (/customer-address, /customer-payment-account)
+/// y se agregan desde el detalle del cliente.
 class CreateCustomerRequest {
   int? id;
   int? idAssignedRecoveryAgent;
@@ -14,7 +15,6 @@ class CreateCustomerRequest {
   String? lastName;
   String? phone;
   String? document;
-  String? address;
 
   CreateCustomerRequest({
     this.id,
@@ -25,7 +25,6 @@ class CreateCustomerRequest {
     this.lastName,
     this.phone,
     this.document,
-    this.address,
     this.alias,
   });
 
@@ -39,7 +38,6 @@ class CreateCustomerRequest {
         'lastName': lastName,
         'phone': phone,
         'document': document,
-        'address': address,
       };
     squema.addIf( id != null , 'id', id);
     return squema;

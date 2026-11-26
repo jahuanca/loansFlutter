@@ -48,8 +48,11 @@ class CustomersController extends GetxController {
     update([pageIdGet]);
   }
 
-  void goToAddCustomer() {
-    Get.to(() => AddCustomerPage(), binding: AddCustomerBinding());
+  /// Al crear, el formulario se reemplaza por el detalle del cliente y este await
+  /// termina: se recarga la lista para que aparezca el cliente nuevo.
+  Future<void> goToAddCustomer() async {
+    await Get.to(() => AddCustomerPage(), binding: AddCustomerBinding());
+    getCustomers();
   }
 
   void goToCustomerAnalytic() {

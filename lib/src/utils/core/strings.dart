@@ -56,6 +56,8 @@ const String bankRequiresAccountString = 'Una cuenta bancaria requiere CCI o nú
 const String walletRequiresPhoneString = 'Una billetera digital requiere celular de pago';
 const String nextString = 'Siguiente';
 const String previousString = 'Anterior';
+const String manageCustomerString = 'Manejo de cliente';
+const String createString = 'Crear';
 
 // Detalle de cliente
 const String customerDetailString = 'Detalle del cliente';

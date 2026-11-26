@@ -7,7 +7,7 @@ import 'package:loands_flutter/src/customers/ui/pages/edit_customer/edit_custome
 import 'package:loands_flutter/src/utils/core/strings.dart';
 import 'package:utils/utils.dart';
 
-/// Reutiliza la pagina del paso del alta como cuerpo y agrega el boton Guardar.
+/// Reutiliza la pagina de la seccion del alta como cuerpo y agrega el boton Guardar.
 class EditCustomerPage extends StatelessWidget {
   EditCustomerPage({super.key});
 
