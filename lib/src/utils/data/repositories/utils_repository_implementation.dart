@@ -5,6 +5,7 @@
 import 'package:loands_flutter/src/utils/domain/entities/activity_log_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_frequency_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/payment_method_entity.dart';
+import 'package:loands_flutter/src/utils/domain/entities/payment_provider_entity.dart';
 import 'package:loands_flutter/src/utils/domain/entities/type_document_entity.dart';
 import 'package:loands_flutter/src/utils/domain/repositories/utils_repository.dart';
 import 'package:utils/utils.dart';
@@ -35,5 +36,10 @@ class UtilsRepositoryImplementation extends UtilsRepository {
   @override
   Future<Result<List<ActivityLogEntity>>> getLastsLog() {
     return datastore.getLastsLog();
+  }
+
+  @override
+  Future<Result<List<PaymentProviderEntity>>> getPaymentProviders() {
+    return datastore.getPaymentProviders();
   }
 }

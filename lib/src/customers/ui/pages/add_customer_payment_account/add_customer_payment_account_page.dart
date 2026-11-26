@@ -17,7 +17,7 @@ class AddCustomerPaymentAccountPage extends StatelessWidget {
   final FocusNode focusNodeObservation = FocusNode();
 
   final AddCustomerPaymentAccountController controller =
-      AddCustomerPaymentAccountController();
+      Get.find<AddCustomerPaymentAccountController>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,6 @@ class AddCustomerPaymentAccountPage extends StatelessWidget {
         controller.isEditing ? editPaymentAccountString : addPaymentAccountString;
 
     return GetBuilder<AddCustomerPaymentAccountController>(
-      init: controller,
       id: pageIdGet,
       builder: (controller) => Scaffold(
         appBar: appBarWidget(
@@ -59,50 +58,22 @@ class AddCustomerPaymentAccountPage extends StatelessWidget {
               label: paymentProviderString,
               hintText: selectPaymentProviderString,
               items: controller.paymentProviders,
-              value: controller.ui.idPaymentProvider?.value,
+              // Hasta que llega la lista, el valor es null: un DropdownButton
+              // falla si su value no esta entre los items.
+              value: controller.paymentProviderSelected?.id,
               onChanged: controller.onChangedPaymentProvider,
             ),
           ),
+          // Se reconstruye al cambiar de proveedor (mismo id que el dropdown):
+          // banco -> numero de cuenta + CCI; billetera -> solo celular.
           GetBuilder<AddCustomerPaymentAccountController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodeAccountNumber,
-              initialValue: controller.ui.accountNumber?.value,
-              textInputType: TextInputType.number,
-              onChanged: controller.onChangedAccountNumber,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfAccountNumber,
-              isAlignLabel: true,
-              label: accountNumberString,
-              hintText: enterAccountNumberString,
-            ),
-          ),
-          GetBuilder<AddCustomerPaymentAccountController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodeCci,
-              initialValue: controller.ui.cci?.value,
-              textInputType: TextInputType.number,
-              onChanged: controller.onChangedCci,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfCci,
-              isAlignLabel: true,
-              label: cciString,
-              hintText: enterCciString,
-            ),
-          ),
-          GetBuilder<AddCustomerPaymentAccountController>(
-            builder: (controller) => InputWidget(
-              wrapperWidget: _noWrapper,
-              inputBorderCurrent: currentBorder,
-              focusNode: focusNodePaymentPhone,
-              initialValue: controller.ui.paymentPhone?.value,
-              textInputType: TextInputType.phone,
-              onChanged: controller.onChangedPaymentPhone,
-              maxLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
-              isAlignLabel: true,
-              label: paymentPhoneString,
-              hintText: enterPaymentPhoneString,
+            id: paymentProvidersIdGet,
+            builder: (controller) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (controller.showBankFields) ..._bankFields(controller),
+                if (controller.showWalletFields) _walletField(controller),
+              ],
             ),
           ),
           GetBuilder<AddCustomerPaymentAccountController>(
@@ -144,6 +115,50 @@ class AddCustomerPaymentAccountPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  List<Widget> _bankFields(AddCustomerPaymentAccountController controller) {
+    return [
+      InputWidget(
+        wrapperWidget: _noWrapper,
+        inputBorderCurrent: currentBorder,
+        focusNode: focusNodeAccountNumber,
+        initialValue: controller.ui.accountNumber?.value,
+        textInputType: TextInputType.number,
+        onChanged: controller.onChangedAccountNumber,
+        maxLength: CustomerPaymentAccountEntity.maxLengthOfAccountNumber,
+        isAlignLabel: true,
+        label: accountNumberString,
+        hintText: enterAccountNumberString,
+      ),
+      InputWidget(
+        wrapperWidget: _noWrapper,
+        inputBorderCurrent: currentBorder,
+        focusNode: focusNodeCci,
+        initialValue: controller.ui.cci?.value,
+        textInputType: TextInputType.number,
+        onChanged: controller.onChangedCci,
+        maxLength: CustomerPaymentAccountEntity.maxLengthOfCci,
+        isAlignLabel: true,
+        label: cciString,
+        hintText: enterCciString,
+      ),
+    ];
+  }
+
+  Widget _walletField(AddCustomerPaymentAccountController controller) {
+    return InputWidget(
+      wrapperWidget: _noWrapper,
+      inputBorderCurrent: currentBorder,
+      focusNode: focusNodePaymentPhone,
+      initialValue: controller.ui.paymentPhone?.value,
+      textInputType: TextInputType.phone,
+      onChanged: controller.onChangedPaymentPhone,
+      maxLength: CustomerPaymentAccountEntity.maxLengthOfPhone,
+      isAlignLabel: true,
+      label: paymentPhoneString,
+      hintText: enterPaymentPhoneString,
     );
   }
 
