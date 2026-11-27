@@ -7,12 +7,14 @@ import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_special_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/pay_and_renewal_special_use_case.dart';
+import 'package:loands_flutter/src/loans/ui/pages/loan_created/loan_created_summary.dart';
 import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
 import 'package:loands_flutter/src/utils/core/routes_name.dart';
 import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart';
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
+import 'package:loands_flutter/src/utils/ui/navigation_to.dart';
 import 'package:utils/utils.dart';
 
 class AddSpecialLoanQuotasController extends GetxController {
@@ -119,7 +121,6 @@ class AddSpecialLoanQuotasController extends GetxController {
       case Success():
       LoanEntity newLoan = resultType.value;
       _successCreate(newLoan);
-      Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
         break;
       case Error(): 
       showSnackbarWidget(
@@ -130,18 +131,22 @@ class AddSpecialLoanQuotasController extends GetxController {
     }
   }
 
-  void _successCreate(LoanEntity newLoan) async {
+  void _successCreate(LoanEntity newLoan) {
     addLoanSpecialRequest.id = newLoan.id;
-    String information = shareInformationSpecial(
-      request: addLoanSpecialRequest,
-      quotas: quotas,
-    );
-    await copyToClipboard(information);
-    showSnackbarWidget(
-        context: Get.context!,
-        typeSnackbar: TypeSnackbar.success,
-        message: 'Información copiada');
-    Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
+    NavigationTo.goToLoanCreated({
+      loanCreatedSummaryArgument: LoanCreatedSummary(
+        idLoan: newLoan.id,
+        customerName:
+            addLoanSpecialRequest.customerEntity?.aliasOrFullName ?? emptyString,
+        phone: addLoanSpecialRequest.customerEntity?.phone,
+        amount: addLoanSpecialRequest.amount ?? defaultDouble,
+        quotas: quotas,
+        information: shareInformationSpecial(
+          request: addLoanSpecialRequest,
+          quotas: quotas,
+        ),
+      ),
+    });
   }
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {

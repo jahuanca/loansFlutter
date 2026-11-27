@@ -21,6 +21,44 @@ Future<void> sendingSMS(String phoneNumber) async {
   }
 }
 
+/// Abre la app de SMS con el número y el mensaje ya escritos.
+/// Se arma la query a mano para que los espacios viajen como %20 (con
+/// `queryParameters` salen como "+" y algunas apps de SMS los muestran así).
+Future<void> sendingSMSWithMessage({
+  required String phoneNumber,
+  required String message,
+}) async {
+  Uri url = Uri(
+    scheme: 'sms',
+    path: '+${phoneWithCountryCode(phoneNumber)}',
+    query: 'body=${Uri.encodeComponent(message)}',
+  );
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $url');
+  }
+}
+
+/// Abre el chat de WhatsApp del número con el mensaje ya escrito (wa.me).
+Future<void> sendingWhatsApp({
+  required String phoneNumber,
+  required String message,
+}) async {
+  Uri url = Uri.parse(
+    'https://wa.me/${phoneWithCountryCode(phoneNumber)}?text=${Uri.encodeComponent(message)}',
+  );
+  if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    throw Exception('Could not launch $url');
+  }
+}
+
+/// Deja solo dígitos y antepone el código de Perú (51) si el número no lo trae.
+String phoneWithCountryCode(String phoneNumber) {
+  const String peruCountryCode = '51';
+  final String digits = phoneNumber.replaceAll(RegExp(r'\D'), '');
+  if (digits.length > 9 && digits.startsWith(peruCountryCode)) return digits;
+  return '$peruCountryCode$digits';
+}
+
 Future<void> calling(String phoneNumber) async {
   Uri url = Uri(
     scheme: 'tel',
