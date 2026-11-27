@@ -133,6 +133,7 @@ class AddLoanQuotasController extends GetxController {
 
   void _successCreate(LoanEntity newLoan) {
     addLoanRequest.id = newLoan.id;
+    goShareInformation();
     NavigationTo.goToLoanCreated({
       loanCreatedSummaryArgument: LoanCreatedSummary(
         idLoan: newLoan.id,
