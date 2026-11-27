@@ -12,6 +12,9 @@ class LoanCreatedSummary {
   /// Texto listo para compartir (lo arma `share_loan_util.dart`).
   final String information;
 
+  /// true cuando viene de una renovación (cambia el título de la pantalla).
+  final bool isRenewal;
+
   LoanCreatedSummary({
     required this.idLoan,
     required this.customerName,
@@ -19,6 +22,7 @@ class LoanCreatedSummary {
     required this.amount,
     required this.quotas,
     required this.information,
+    this.isRenewal = false,
   });
 
   bool get hasPhone => phone != null && phone!.trim().isNotEmpty;

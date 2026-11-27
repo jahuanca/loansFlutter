@@ -99,6 +99,7 @@ const String locationPermissionForeverString = 'El permiso de ubicación está b
 const String locationErrorString = 'No se pudo obtener la ubicación. Intente de nuevo';
 const String captureAtAddressHintString = 'Capture la ubicación estando en el domicilio';
 const String loanCreatedSuccessString = 'Préstamo creado con éxito';
+const String loanRenewedSuccessString = 'Préstamo renovado con éxito';
 const String quantityOfQuotasString = 'Cantidad de cuotas';
 const String amountOfQuotaString = 'Monto de cuota';
 const String datesOfQuotasString = 'Fechas de las cuotas';
