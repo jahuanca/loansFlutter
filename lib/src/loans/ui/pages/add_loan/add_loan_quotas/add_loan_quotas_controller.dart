@@ -7,6 +7,7 @@ import 'package:loands_flutter/src/loans/domain/entities/loan_entity.dart';
 import 'package:loands_flutter/src/loans/domain/entities/quota_entity.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/create_loan_use_case.dart';
 import 'package:loands_flutter/src/loans/domain/use_cases/pay_and_renewal_use_case.dart';
+import 'package:loands_flutter/src/loans/ui/pages/loan_created/loan_created_summary.dart';
 import 'package:loands_flutter/src/loans/ui/utils/share_loan_util.dart';
 import 'package:loands_flutter/src/utils/core/analytics/analytics_service.dart';
 import 'package:loands_flutter/src/utils/core/helpers.dart';
@@ -15,6 +16,7 @@ import 'package:loands_flutter/src/utils/ui/widgets/loading/loading_service.dart
 import 'package:loands_flutter/src/utils/core/default_values_of_app.dart';
 import 'package:loands_flutter/src/utils/core/extensions.dart';
 import 'package:loands_flutter/src/utils/core/strings_arguments.dart';
+import 'package:loands_flutter/src/utils/ui/navigation_to.dart';
 import 'package:utils/utils.dart';
 
 class AddLoanQuotasController extends GetxController {
@@ -129,10 +131,21 @@ class AddLoanQuotasController extends GetxController {
         message: 'Información copiada');
   }
 
-  void _successCreate(LoanEntity newLoan) async {
+  void _successCreate(LoanEntity newLoan) {
     addLoanRequest.id = newLoan.id;
-    goShareInformation();
-    Get.until((route) => route.settings.name == RoutesName.bottomNavigationContent.route);
+    NavigationTo.goToLoanCreated({
+      loanCreatedSummaryArgument: LoanCreatedSummary(
+        idLoan: newLoan.id,
+        customerName: addLoanRequest.customerEntity?.aliasOrFullName ?? emptyString,
+        phone: addLoanRequest.customerEntity?.phone,
+        amount: addLoanRequest.amount ?? defaultDouble,
+        quotas: quotas,
+        information: shareInformation(
+          addLoanRequest: addLoanRequest,
+          quotas: quotas,
+        ),
+      ),
+    });
   }
 
   void _successCreateRenewal(LoanEntity newLoan, QuotaEntity quota) async {
