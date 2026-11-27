@@ -44,14 +44,16 @@ class LoanCreatedPage extends StatelessWidget {
   }
 
   Widget _header() {
-    return const Column(
+    return Column(
       children: [
-        Icon(Icons.check_circle, color: Colors.green, size: 72),
-        SizedBox(height: 8),
+        const Icon(Icons.check_circle, color: Colors.green, size: 72),
+        const SizedBox(height: 8),
         Text(
-          loanCreatedSuccessString,
+          controller.summary.isRenewal
+              ? loanRenewedSuccessString
+              : loanCreatedSuccessString,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
       ],
     );
